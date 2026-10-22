@@ -1,0 +1,51 @@
+{%- comment -%}
+  WALLY DOMO: one element's full type rule for sections/wd-type.liquid.
+  Params: s = section.settings, el = element key, sel = CSS selector.
+  Font keys: body / broadacre (Regular under 450, Medium 450+), arsenica-variable(-italic),
+  arsenica-text (snaps to 400 or 700).
+{%- endcomment -%}
+{%- liquid
+  assign k_font = el | append: '_font'
+  assign k_size = el | append: '_size'
+  assign k_weight = el | append: '_weight'
+  assign k_lh = el | append: '_lh'
+  assign k_trk = el | append: '_tracking'
+  assign k_case = el | append: '_case'
+  assign font = s[k_font] | default: 'body'
+  assign w = s[k_weight] | default: 400
+  assign style = 'normal'
+  case font
+    when 'arsenica-variable'
+      assign stack = 'var(--wd-font-arsenica)'
+    when 'arsenica-variable-italic'
+      assign stack = 'var(--wd-font-arsenica)'
+      assign style = 'italic'
+    when 'arsenica-text'
+      assign stack = 'var(--wd-font-arsenica-text)'
+      if w >= 550
+        assign w = 700
+      else
+        assign w = 400
+      endif
+    else
+      if w >= 450
+        assign stack = 'var(--wd-font-broadacre-small)'
+        assign w = 500
+      else
+        assign stack = 'var(--wd-font-broadacre)'
+        assign w = 300
+      endif
+  endcase
+  assign lh = s[k_lh] | default: 120 | divided_by: 100.0
+  assign trk = s[k_trk] | default: 0 | divided_by: 1000.0
+-%}
+html body {{ sel }} {
+  font-family: {{ stack }} !important;
+  font-style: {{ style }} !important;
+  font-size: {{ s[k_size] }}px !important;
+  font-weight: {{ w }} !important;
+  font-variation-settings: "wght" {{ w }};
+  line-height: {{ lh }} !important;
+  letter-spacing: {{ trk }}em !important;
+  text-transform: {{ s[k_case] | default: 'none' }} !important;
+}
