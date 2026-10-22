@@ -1,0 +1,39 @@
+{%- comment -%}
+  WALLY DOMO: type loader for Horizon. Our file, not Horizon's.
+  Rendered by one line in layout/theme.liquid and layout/password.liquid,
+  right after Horizon's own font variables, so ours win.
+
+  Adobe kit gag8aux (Marc's account; domains wallydomo.com, www, wallydomo.myshopify.com, localhost):
+    arsenica-variable     100-800, roman + italic   (display)
+    arsenica-text         400 / 700
+    broadacre-regular-0   Typekit declares it at weight 300 (everything else)
+    broadacre-medium-0    500 (very small type only, Marc's rule)
+  Typekit names each static Broadacre cut as its own family:
+  the CSS family is "broadacre-regular-0", never "broadacre".
+  Quicksand 500 (Google) sits behind Broadacre so a kit outage never drops to Helvetica.
+
+  What this changes: FONT FAMILIES ONLY, on Horizon's four roles.
+  Sizes, weights, line heights, spacing and case stay Horizon's own settings
+  (Theme settings > Typography). The font pickers there still show a Shopify
+  font; what renders is the family below.
+    body, subheading  -> Broadacre Regular 0
+    heading, accent   -> Arsenica Variable
+{%- endcomment -%}
+<link rel="preconnect" href="https://use.typekit.net" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://use.typekit.net/gag8aux.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap">
+<style>
+  :root {
+    --wd-font-broadacre: 'broadacre-regular-0', 'Quicksand', system-ui, sans-serif;
+    --wd-font-broadacre-small: 'broadacre-medium-0', 'broadacre-regular-0', 'Quicksand', system-ui, sans-serif;
+    --wd-font-arsenica: 'arsenica-variable', 'arsenica-text', Georgia, serif;
+    --wd-font-arsenica-text: 'arsenica-text', 'arsenica-variable', Georgia, serif;
+
+    --font-body--family: var(--wd-font-broadacre);
+    --font-subheading--family: var(--wd-font-broadacre);
+    --font-heading--family: var(--wd-font-arsenica);
+    --font-accent--family: var(--wd-font-arsenica);
+  }
+</style>
