@@ -87,7 +87,9 @@ solid. Buttons are square (radius 0, as on Dawn). Add class `wd-cta` to any
 
 ## Product type eyebrow (2026-10-22)
 Every product shows its Shopify **Product type** (Print, Tee, Kids Tee, Tote) above the
-title: a Horizon text block named "Product type" (`{{ closest.product.type }}`, small
-tracked caps, graphite) in every product card template and above the product page title,
-plus `.wd-ed__eyebrow` in WD Editions (per-print override available). Marc sets the
+title: a "Custom Liquid" block named "Product type" (`<p class="wd-type-eyebrow">`) in every
+product card template and above the product page title, plus `.wd-ed__eyebrow` in WD Editions
+(per-print override available). Look: Header > Wally Domo fonts and type > "Product type label".
+Why Custom Liquid: Shopify rejects `{{ closest.product.type }}` inside a Text block
+("Dynamic source is invalid"); only some product fields are allowed as dynamic sources. Marc sets the
 type in Shopify admin > Products > Type, so titles can just be the piece's name.
