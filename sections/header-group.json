@@ -196,11 +196,23 @@
         "sweep_min": 300,
         "sweep_max": 450
       }
+    },
+    "wd_logo": {
+      "type": "wd-logo",
+      "settings": {
+        "enabled": true,
+        "color": "",
+        "d_version": "line",
+        "d_height": 22,
+        "m_version": "stacked",
+        "m_height": 38
+      }
     }
   },
   "order": [
     "header_announcements_9jGBFp",
     "header_section",
-    "wd_type"
+    "wd_type",
+    "wd_logo"
   ]
 }

@@ -40,6 +40,9 @@ near-white (series 1: #EDE7DF). Titles in the drop colour still pass AA.
   size, edition line, price, button label, spacing; one "Print" block per card.
 - `sections/wd-studio-note.liquid` ("WD Studio note"): portrait + note + email sign-up
   (customer tags) + link, flat controls.
+- `sections/wd-logo.liquid` ("Wally Domo logo", header group): WD26 wordmark drawn as a CSS mask over
+  Horizon's logo link. Desktop one line, phones stacked (Marc), each with its own height; colour follows
+  the header text colour unless set. Horizon's Theme settings > Logo stays empty (text fallback = store name for SEO).
 - Rule (Marc, 2026-10-22): build our own flat sections instead of nesting Horizon's
   generic groups. Every control on one screen, named plainly.
 

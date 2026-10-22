@@ -1,0 +1,73 @@
+{%- comment -%}
+  WALLY DOMO: header logo. Our section (2026-10-22), lives in the header group, renders only CSS.
+  Horizon allows one logo image for every screen size. This draws the WD26 wordmark instead:
+  one line on desktop, stacked on phones (Marc). Each screen size picks its own version and height.
+  Drawn as a CSS mask, so it is crisp at any size and takes the header's text colour (including
+  the inverse colour on a transparent header) unless a colour is set below.
+  The store name stays in the link as text (font-size 0) for screen readers and search.
+  Wordmark files: assets/wd26-wordmark-line.svg (988.92 x 115.09), assets/wd26-wordmark.svg (761.45 x 361.37).
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign url_line = 'wd26-wordmark-line.svg' | asset_url
+  assign url_stacked = 'wd26-wordmark.svg' | asset_url
+  assign ratio_line = 988.92 | divided_by: 115.09
+  assign ratio_stacked = 761.45 | divided_by: 361.37
+
+  if s.d_version == 'stacked'
+    assign d_url = url_stacked
+    assign d_w = s.d_height | times: ratio_stacked | ceil
+  else
+    assign d_url = url_line
+    assign d_w = s.d_height | times: ratio_line | ceil
+  endif
+  if s.m_version == 'line'
+    assign m_url = url_line
+    assign m_w = s.m_height | times: ratio_line | ceil
+  else
+    assign m_url = url_stacked
+    assign m_w = s.m_height | times: ratio_stacked | ceil
+  endif
+-%}
+{%- if s.enabled -%}
+<style>
+  html body .header-logo :is([data-testid='header-logo'], [data-testid='header-logo-inverse']) {
+    display: block;
+    width: {{ d_w }}px;
+    height: {{ s.d_height }}px;
+    font-size: 0 !important;
+    line-height: 0;
+    background-color: {% if s.color != blank %}{{ s.color }}{% else %}var(--color-foreground){% endif %};
+    -webkit-mask: url('{{ d_url }}') center / contain no-repeat;
+    mask: url('{{ d_url }}') center / contain no-repeat;
+  }
+  html body .header-logo :is([data-testid='header-logo'], [data-testid='header-logo-inverse']) > * { display: none !important; }
+  @media screen and (max-width: 749px) {
+    html body .header-logo :is([data-testid='header-logo'], [data-testid='header-logo-inverse']) {
+      width: {{ m_w }}px;
+      height: {{ s.m_height }}px;
+      -webkit-mask-image: url('{{ m_url }}');
+      mask-image: url('{{ m_url }}');
+    }
+  }
+  .wd-logo-section { display: contents; }
+</style>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Wally Domo logo",
+  "class": "wd-logo-section",
+  "settings": [
+    { "type": "checkbox", "id": "enabled", "label": "Use the Wally Domo wordmark", "default": true, "info": "Off = Horizon's own logo (Theme settings > Logo and favicon)." },
+    { "type": "color", "id": "color", "label": "Colour", "info": "Empty = the header's text colour." },
+    { "type": "header", "content": "Desktop" },
+    { "type": "select", "id": "d_version", "label": "Version", "options": [ { "value": "line", "label": "One line (WALLY DOMO)" }, { "value": "stacked", "label": "Stacked (WALLY over DOMO)" } ], "default": "line" },
+    { "type": "range", "id": "d_height", "label": "Height", "min": 10, "max": 120, "step": 1, "unit": "px", "default": 22 },
+    { "type": "header", "content": "Phones" },
+    { "type": "select", "id": "m_version", "label": "Version", "options": [ { "value": "stacked", "label": "Stacked (WALLY over DOMO)" }, { "value": "line", "label": "One line (WALLY DOMO)" } ], "default": "stacked" },
+    { "type": "range", "id": "m_height", "label": "Height", "min": 10, "max": 100, "step": 1, "unit": "px", "default": 38 }
+  ],
+  "enabled_on": { "groups": ["header"] }
+}
+{% endschema %}
