@@ -417,7 +417,8 @@
           "block_order": [
             "ed_head",
             "ed_body"
-          ]
+          ],
+          "name": "Intro"
         },
         "ed_row": {
           "type": "group",
@@ -434,93 +435,113 @@
               "type": "group",
               "settings": {
                 "content_direction": "column",
-                "gap": 16,
+                "gap": 24,
                 "width": "fill",
-                "height": "fit",
+                "height": "fill",
                 "background_color": "#E4E8EF",
                 "padding-block-start": 32,
                 "padding-block-end": 40,
                 "padding-inline-start": 32,
-                "padding-inline-end": 32
+                "padding-inline-end": 32,
+                "vertical_alignment_flex_direction_column": "space-between"
               },
               "blocks": {
-                "pg_mat": {
+                "pg_top": {
                   "type": "group",
+                  "name": "Print and details",
                   "settings": {
                     "content_direction": "column",
-                    "gap": 0,
+                    "gap": 16,
                     "width": "fill",
-                    "height": "fit",
-                    "background_color": "#FFFFFF",
-                    "padding-block-start": 20,
-                    "padding-block-end": 20,
-                    "padding-inline-start": 20,
-                    "padding-inline-end": 20
+                    "height": "fit"
                   },
                   "blocks": {
-                    "pg_img": {
-                      "type": "image",
+                    "pg_mat": {
+                      "type": "group",
                       "settings": {
-                        "image": "shopify://shop_images/PigeonGoneWest_SantaMonica_WIP.png",
-                        "image_ratio": "adapt",
+                        "content_direction": "column",
+                        "gap": 0,
                         "width": "fill",
                         "height": "fit",
-                        "link": "shopify://products/pigeon-gone-west-studio-print"
+                        "background_color": "#FFFFFF",
+                        "padding-block-start": 20,
+                        "padding-block-end": 20,
+                        "padding-inline-start": 20,
+                        "padding-inline-end": 20
+                      },
+                      "blocks": {
+                        "pg_img": {
+                          "type": "image",
+                          "settings": {
+                            "image": "shopify://shop_images/PigeonGoneWest_SantaMonica_WIP.png",
+                            "image_ratio": "portrait",
+                            "width": "fill",
+                            "height": "fit",
+                            "link": "shopify://products/pigeon-gone-west-studio-print"
+                          },
+                          "blocks": {}
+                        }
+                      },
+                      "block_order": [
+                        "pg_img"
+                      ],
+                      "name": "Mat"
+                    },
+                    "pg_title": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<h3>Pigeon Gone West</h3>",
+                        "type_preset": "custom",
+                        "width": "100%",
+                        "alignment": "left",
+                        "case": "none",
+                        "font_size": "1.5rem",
+                        "wrap": "pretty",
+                        "text_color": "#3F63B8",
+                        "font": "var(--font-accent--family)",
+                        "letter_spacing": "normal",
+                        "line_height": "normal"
+                      },
+                      "blocks": {}
+                    },
+                    "pg_note": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p><em>Summer 2026, before the drive west.</em></p>",
+                        "type_preset": "paragraph",
+                        "width": "100%",
+                        "alignment": "left",
+                        "case": "none",
+                        "font_size": "1rem",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}"
+                      },
+                      "blocks": {}
+                    },
+                    "pg_ed": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Edition of 15. Signed, numbered and dated by hand.</p>",
+                        "type_preset": "custom",
+                        "width": "100%",
+                        "alignment": "left",
+                        "case": "uppercase",
+                        "font_size": "0.75rem",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "font": "var(--font-subheading--family)",
+                        "letter_spacing": "loose",
+                        "line_height": "normal"
                       },
                       "blocks": {}
                     }
                   },
                   "block_order": [
-                    "pg_img"
+                    "pg_mat",
+                    "pg_title",
+                    "pg_note",
+                    "pg_ed"
                   ]
-                },
-                "pg_title": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<h3>Pigeon Gone West</h3>",
-                    "type_preset": "custom",
-                    "width": "100%",
-                    "alignment": "left",
-                    "case": "none",
-                    "font_size": "1.5rem",
-                    "wrap": "pretty",
-                    "text_color": "#3F63B8",
-                    "font": "var(--font-accent--family)",
-                    "letter_spacing": "normal",
-                    "line_height": "normal"
-                  },
-                  "blocks": {}
-                },
-                "pg_note": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p><em>Summer 2026, before the drive west.</em></p>",
-                    "type_preset": "paragraph",
-                    "width": "100%",
-                    "alignment": "left",
-                    "case": "none",
-                    "font_size": "1rem",
-                    "wrap": "pretty",
-                    "text_color": "{{ settings.color_palette.color1 }}"
-                  },
-                  "blocks": {}
-                },
-                "pg_ed": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p>Edition of 15. Signed, numbered and dated by hand.</p>",
-                    "type_preset": "custom",
-                    "width": "100%",
-                    "alignment": "left",
-                    "case": "uppercase",
-                    "font_size": "0.75rem",
-                    "wrap": "pretty",
-                    "text_color": "{{ settings.color_palette.color1 }}",
-                    "font": "var(--font-subheading--family)",
-                    "letter_spacing": "loose",
-                    "line_height": "normal"
-                  },
-                  "blocks": {}
                 },
                 "pg_btn": {
                   "type": "button",
@@ -537,90 +558,107 @@
                 }
               },
               "block_order": [
-                "pg_mat",
-                "pg_title",
-                "pg_note",
-                "pg_ed",
+                "pg_top",
                 "pg_btn"
-              ]
+              ],
+              "name": "Pigeon card"
             },
             "ed_brooklyn": {
               "type": "group",
               "settings": {
                 "content_direction": "column",
-                "gap": 16,
+                "gap": 24,
                 "width": "fill",
-                "height": "fit",
+                "height": "fill",
                 "background_color": "#EDE7DF",
                 "padding-block-start": 32,
                 "padding-block-end": 40,
                 "padding-inline-start": 32,
-                "padding-inline-end": 32
+                "padding-inline-end": 32,
+                "vertical_alignment_flex_direction_column": "space-between"
               },
               "blocks": {
-                "bk_mat": {
+                "bk_top": {
                   "type": "group",
+                  "name": "Print and details",
                   "settings": {
                     "content_direction": "column",
-                    "gap": 0,
+                    "gap": 16,
                     "width": "fill",
-                    "height": "fit",
-                    "background_color": "#FFFFFF",
-                    "padding-block-start": 20,
-                    "padding-block-end": 20,
-                    "padding-inline-start": 20,
-                    "padding-inline-end": 20
+                    "height": "fit"
                   },
                   "blocks": {
-                    "bk_img": {
-                      "type": "image",
+                    "bk_mat": {
+                      "type": "group",
                       "settings": {
-                        "image": "shopify://shop_images/WeLivedInBrooklyn_WaterTower_flat.png",
-                        "image_ratio": "adapt",
+                        "content_direction": "column",
+                        "gap": 0,
                         "width": "fill",
                         "height": "fit",
-                        "link": "shopify://products/we-lived-in-brooklyn-print"
+                        "background_color": "#FFFFFF",
+                        "padding-block-start": 20,
+                        "padding-block-end": 20,
+                        "padding-inline-start": 20,
+                        "padding-inline-end": 20
+                      },
+                      "blocks": {
+                        "bk_img": {
+                          "type": "image",
+                          "settings": {
+                            "image": "shopify://shop_images/WeLivedInBrooklyn_WaterTower_flat.png",
+                            "image_ratio": "portrait",
+                            "width": "fill",
+                            "height": "fit",
+                            "link": "shopify://products/we-lived-in-brooklyn-print"
+                          },
+                          "blocks": {}
+                        }
+                      },
+                      "block_order": [
+                        "bk_img"
+                      ],
+                      "name": "Mat"
+                    },
+                    "bk_title": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<h3>We Lived in Brooklyn, Baby</h3>",
+                        "type_preset": "custom",
+                        "width": "100%",
+                        "alignment": "left",
+                        "case": "none",
+                        "font_size": "1.5rem",
+                        "wrap": "pretty",
+                        "text_color": "#8A5A2B",
+                        "font": "var(--font-accent--family)",
+                        "letter_spacing": "normal",
+                        "line_height": "normal"
+                      },
+                      "blocks": {}
+                    },
+                    "bk_ed": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Edition of 15. Signed, numbered and dated by hand.</p>",
+                        "type_preset": "custom",
+                        "width": "100%",
+                        "alignment": "left",
+                        "case": "uppercase",
+                        "font_size": "0.75rem",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "font": "var(--font-subheading--family)",
+                        "letter_spacing": "loose",
+                        "line_height": "normal"
                       },
                       "blocks": {}
                     }
                   },
                   "block_order": [
-                    "bk_img"
+                    "bk_mat",
+                    "bk_title",
+                    "bk_ed"
                   ]
-                },
-                "bk_title": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<h3>We Lived in Brooklyn, Baby</h3>",
-                    "type_preset": "custom",
-                    "width": "100%",
-                    "alignment": "left",
-                    "case": "none",
-                    "font_size": "1.5rem",
-                    "wrap": "pretty",
-                    "text_color": "#8A5A2B",
-                    "font": "var(--font-accent--family)",
-                    "letter_spacing": "normal",
-                    "line_height": "normal"
-                  },
-                  "blocks": {}
-                },
-                "bk_ed": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p>Edition of 15. Signed, numbered and dated by hand.</p>",
-                    "type_preset": "custom",
-                    "width": "100%",
-                    "alignment": "left",
-                    "case": "uppercase",
-                    "font_size": "0.75rem",
-                    "wrap": "pretty",
-                    "text_color": "{{ settings.color_palette.color1 }}",
-                    "font": "var(--font-subheading--family)",
-                    "letter_spacing": "loose",
-                    "line_height": "normal"
-                  },
-                  "blocks": {}
                 },
                 "bk_btn": {
                   "type": "button",
@@ -637,23 +675,24 @@
                 }
               },
               "block_order": [
-                "bk_mat",
-                "bk_title",
-                "bk_ed",
+                "bk_top",
                 "bk_btn"
-              ]
+              ],
+              "name": "Brooklyn card"
             }
           },
           "block_order": [
             "ed_pigeon",
             "ed_brooklyn"
-          ]
+          ],
+          "name": "Cards row"
         }
       },
       "block_order": [
         "ed_intro",
         "ed_row"
-      ]
+      ],
+      "name": "Editions"
     },
     "wd_artist": {
       "type": "section",
