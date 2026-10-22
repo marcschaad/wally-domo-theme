@@ -387,12 +387,15 @@
               "type": "text",
               "settings": {
                 "text": "<h2><em>Signed prints, in small numbers.</em></h2>",
-                "type_preset": "h2",
+                "type_preset": "custom",
                 "width": "100%",
                 "alignment": "left",
                 "case": "none",
-                "font_size": "1rem",
-                "wrap": "pretty"
+                "font_size": "3rem",
+                "wrap": "pretty",
+                "font": "var(--font-heading--family)",
+                "letter_spacing": "tight",
+                "line_height": "tight"
               },
               "blocks": {}
             },
@@ -475,13 +478,16 @@
                   "type": "text",
                   "settings": {
                     "text": "<h3>Pigeon Gone West</h3>",
-                    "type_preset": "h3",
+                    "type_preset": "custom",
                     "width": "100%",
                     "alignment": "left",
                     "case": "none",
-                    "font_size": "1rem",
+                    "font_size": "1.5rem",
                     "wrap": "pretty",
-                    "text_color": "#3F63B8"
+                    "text_color": "#3F63B8",
+                    "font": "var(--font-accent--family)",
+                    "letter_spacing": "normal",
+                    "line_height": "normal"
                   },
                   "blocks": {}
                 },
@@ -503,13 +509,16 @@
                   "type": "text",
                   "settings": {
                     "text": "<p>Edition of 15. Signed, numbered and dated by hand.</p>",
-                    "type_preset": "paragraph",
+                    "type_preset": "custom",
                     "width": "100%",
                     "alignment": "left",
                     "case": "uppercase",
                     "font_size": "0.75rem",
                     "wrap": "pretty",
-                    "text_color": "{{ settings.color_palette.color1 }}"
+                    "text_color": "{{ settings.color_palette.color1 }}",
+                    "font": "var(--font-subheading--family)",
+                    "letter_spacing": "loose",
+                    "line_height": "normal"
                   },
                   "blocks": {}
                 },
@@ -583,13 +592,16 @@
                   "type": "text",
                   "settings": {
                     "text": "<h3>We Lived in Brooklyn, Baby</h3>",
-                    "type_preset": "h3",
+                    "type_preset": "custom",
                     "width": "100%",
                     "alignment": "left",
                     "case": "none",
-                    "font_size": "1rem",
+                    "font_size": "1.5rem",
                     "wrap": "pretty",
-                    "text_color": "#8A5A2B"
+                    "text_color": "#8A5A2B",
+                    "font": "var(--font-accent--family)",
+                    "letter_spacing": "normal",
+                    "line_height": "normal"
                   },
                   "blocks": {}
                 },
@@ -597,13 +609,16 @@
                   "type": "text",
                   "settings": {
                     "text": "<p>Edition of 15. Signed, numbered and dated by hand.</p>",
-                    "type_preset": "paragraph",
+                    "type_preset": "custom",
                     "width": "100%",
                     "alignment": "left",
                     "case": "uppercase",
                     "font_size": "0.75rem",
                     "wrap": "pretty",
-                    "text_color": "{{ settings.color_palette.color1 }}"
+                    "text_color": "{{ settings.color_palette.color1 }}",
+                    "font": "var(--font-subheading--family)",
+                    "letter_spacing": "loose",
+                    "line_height": "normal"
                   },
                   "blocks": {}
                 },
@@ -695,13 +710,16 @@
               "type": "text",
               "settings": {
                 "text": "<p>A note from the studio</p>",
-                "type_preset": "paragraph",
+                "type_preset": "custom",
                 "width": "100%",
                 "alignment": "left",
                 "case": "uppercase",
                 "font_size": "0.75rem",
                 "wrap": "pretty",
-                "text_color": "{{ settings.color_palette.color1 }}"
+                "text_color": "{{ settings.color_palette.color1 }}",
+                "font": "var(--font-subheading--family)",
+                "letter_spacing": "loose",
+                "line_height": "normal"
               },
               "blocks": {}
             },

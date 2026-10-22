@@ -16,8 +16,12 @@
   Sizes, weights, line heights, spacing and case stay Horizon's own settings
   (Theme settings > Typography). The font pickers there still show a Shopify
   font; what renders is the family below.
-    body, subheading  -> Broadacre Regular 0
-    heading, accent   -> Arsenica Variable
+    body        -> Broadacre Regular 0
+    subheading  -> Broadacre Medium 0 (small type only, Marc's rule)
+    heading     -> Arsenica Variable (picker weight 300 = Dawn H2)
+    accent      -> Arsenica Text (Dawn H1, card + print titles)
+  Weight per role comes from the Shopify font picked in Typography (its weight
+  variant, e.g. Inter Light = 300); the family itself is fixed here.
 {%- endcomment -%}
 <link rel="preconnect" href="https://use.typekit.net" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,8 +36,8 @@
     --wd-font-arsenica-text: 'arsenica-text', 'arsenica-variable', Georgia, serif;
 
     --font-body--family: var(--wd-font-broadacre);
-    --font-subheading--family: var(--wd-font-broadacre);
+    --font-subheading--family: var(--wd-font-broadacre-small);
     --font-heading--family: var(--wd-font-arsenica);
-    --font-accent--family: var(--wd-font-arsenica);
+    --font-accent--family: var(--wd-font-arsenica-text);
   }
 </style>
