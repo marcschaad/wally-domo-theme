@@ -34,3 +34,9 @@ Max three release colours on screen.
 1. Theme Store update makes a new theme copy ("Updated copy of ...").
 2. Our `wd-*` files carry over. Re-add the hook lines above.
 3. Pull the copy into this repo on a branch, diff against the baseline commit, merge.
+
+## Gotchas
+- Static blocks in templates/*.json need `"blocks": {}` even when empty, or Shopify
+  silently drops their settings on sync (the commit still "succeeds").
+- Theme editor saves are committed back to main by shopify[bot]. Always `git pull` first.
+- Image references look like `shopify://shop_images/<filename>`.
