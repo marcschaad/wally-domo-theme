@@ -1,0 +1,7 @@
+{%- comment -%}
+  WALLY DOMO — prints one element's full type set (from snippets/wd-type) inside a CSS rule:
+  font, style, size, weight, line height, case, tracking.
+  Usage: html body .thing { {% render 'wd-type-rule', el: 'gallery-number' %} }
+  el = token name with dashes. size: false skips font-size (for text that sizes itself).
+{%- endcomment -%}
+font-family: var(--wd-{{ el }}-font-family) !important; font-style: var(--wd-{{ el }}-font-style) !important;{% unless size == false %} font-size: var(--wd-{{ el }}-font-size) !important;{% endunless %} font-weight: var(--wd-{{ el }}-font-weight) !important; font-variation-settings: "wght" var(--wd-{{ el }}-font-weight); line-height: var(--wd-{{ el }}-line-height) !important; text-transform: var(--wd-{{ el }}-text-transform) !important; letter-spacing: var(--wd-{{ el }}-letter-spacing) !important;

@@ -292,90 +292,114 @@
         "background_color": "{{ settings.color_palette.background }}",
         "padding-block-start": 48,
         "padding-block-end": 48
+      },
+      "disabled": true
+    },
+    "wd_studio_banner": {
+      "type": "wd-studio-banner",
+      "settings": {
+        "centre": "wd26",
+        "background": "#bdc0cd",
+        "ink": "#000000",
+        "grain": 56,
+        "d_height": 130,
+        "d_layout": "stacked",
+        "d_lock_width": 270,
+        "d_lock_y": 0,
+        "d_pig_size": 72,
+        "d_pig_dist": 310,
+        "d_pig_y": 0,
+        "d_cloud": 115,
+        "m_height": 120,
+        "m_layout": "stacked",
+        "m_lock_width": 170,
+        "m_lock_y": 0,
+        "m_pig_size": 56,
+        "m_pig_spread": 85,
+        "m_pig_y": 0,
+        "m_cloud": 65,
+        "pig_light": "#f7e4ec",
+        "pig_shade": "#cfa6bf",
+        "intro_turns": 2,
+        "pig_rest": 4,
+        "secs_per_turn": 5,
+        "hover_boost": 60,
+        "clouds": true,
+        "cloud_count": 4,
+        "cloud_motion": "stepped",
+        "cloud_fps": 8,
+        "cloud_depth": 60,
+        "cloud_secs": 100,
+        "cloud_tint_1": "#ffeeed",
+        "cloud_tint_2": "#dbccd8",
+        "cloud_tint_3": "#fff7e0",
+        "cloud_tint_4": "#ffeecc",
+        "day_night": false,
+        "day_secs": 153,
+        "spin_boost": 25,
+        "sky_night": "#663367",
+        "sky_dusk": "#fda79c",
+        "ink_night": "#d8ebfe",
+        "star_count": 14,
+        "star_light": "#fff8e7",
+        "star_dark": "#8a97c4",
+        "cs_heading": "Coming soon",
+        "cs_font": "arsenica-variable",
+        "cs_size": 52,
+        "cs_weight": 380,
+        "cs_italic": false,
+        "cs_line_height": 100,
+        "cs_tracking": 0,
+        "cs_case": "none",
+        "cs_gap": 14,
+        "cs_line": "Get on the list and you'll see it first.",
+        "cs_button": "Sign me up",
+        "cs_success": "You're on the list. Thanks.",
+        "cs_width": 360,
+        "cs_top": 30,
+        "cs_bottom": 30,
+        "fill_height": false
       }
     },
-    "wd_drop_brooklyn": {
+    "wd_editions": {
       "type": "section",
+      "settings": {
+        "content_direction": "column",
+        "gap": 48,
+        "section_width": "page-width",
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "padding-block-start": 48,
+        "padding-block-end": 80
+      },
       "blocks": {
-        "brk_art": {
+        "ed_intro": {
           "type": "group",
           "settings": {
-            "content_direction": "row",
-            "vertical_on_mobile": true,
-            "gap": 16,
+            "content_direction": "column",
+            "gap": 12,
             "width": "custom",
-            "custom_width": 60,
+            "custom_width": 66,
             "width_mobile": "fill",
             "height": "fit"
           },
           "blocks": {
-            "brk_img0": {
-              "type": "image",
-              "settings": {
-                "image": "shopify://shop_images/WeLivedInBrooklyn_WaterTower_flat.png",
-                "image_ratio": "adapt",
-                "width": "fill",
-                "height": "fit"
-              },
-              "blocks": {}
-            },
-            "brk_img1": {
-              "type": "image",
-              "settings": {
-                "image": "shopify://shop_images/9813251285699716975_2048.jpg",
-                "image_ratio": "adapt",
-                "width": "fill",
-                "height": "fit"
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "brk_img0",
-            "brk_img1"
-          ]
-        },
-        "brk_copy": {
-          "type": "group",
-          "settings": {
-            "content_direction": "column",
-            "gap": 16,
-            "width": "fill",
-            "height": "fit",
-            "vertical_alignment_flex_direction_column": "center"
-          },
-          "blocks": {
-            "brk_eyebrow": {
+            "ed_head": {
               "type": "text",
               "settings": {
-                "text": "<p>Brooklyn</p>",
-                "type_preset": "paragraph",
-                "width": "100%",
-                "alignment": "left",
-                "case": "uppercase",
-                "font_size": "0.75rem",
-                "wrap": "pretty"
-              },
-              "blocks": {}
-            },
-            "brk_headline": {
-              "type": "text",
-              "settings": {
-                "text": "<h2>We Lived in Brooklyn</h2>",
+                "text": "<h2><em>Signed prints, in small numbers.</em></h2>",
                 "type_preset": "h2",
                 "width": "100%",
                 "alignment": "left",
                 "case": "none",
                 "font_size": "1rem",
-                "wrap": "pretty",
-                "text_color": "#8A5A2B"
+                "wrap": "pretty"
               },
               "blocks": {}
             },
-            "brk_line": {
+            "ed_body": {
               "type": "text",
               "settings": {
-                "text": "<p>Signed print and tee. Made in the studio.</p>",
+                "text": "<p>Started in Brooklyn. Now made in a studio on the West Coast. Every print below is signed, numbered and dated by hand.</p>",
                 "type_preset": "paragraph",
                 "width": "100%",
                 "alignment": "left",
@@ -385,138 +409,106 @@
                 "text_color": "{{ settings.color_palette.color1 }}"
               },
               "blocks": {}
-            },
-            "brk_buttons": {
+            }
+          },
+          "block_order": [
+            "ed_head",
+            "ed_body"
+          ]
+        },
+        "ed_row": {
+          "type": "group",
+          "settings": {
+            "content_direction": "row",
+            "vertical_on_mobile": true,
+            "gap": 48,
+            "width": "fill",
+            "height": "fit",
+            "vertical_alignment": "flex-start"
+          },
+          "blocks": {
+            "ed_pigeon": {
               "type": "group",
               "settings": {
-                "content_direction": "row",
-                "vertical_on_mobile": false,
-                "gap": 12,
+                "content_direction": "column",
+                "gap": 14,
                 "width": "fill",
                 "height": "fit"
               },
               "blocks": {
-                "brk_btn0": {
-                  "type": "button",
+                "pg_mat": {
+                  "type": "group",
                   "settings": {
-                    "label": "Shop the print",
-                    "link": "shopify://products/we-lived-in-brooklyn-print",
-                    "style_class": "button-custom",
-                    "custom_button_background": "#8A5A2B",
-                    "custom_button_text": "{{ settings.color_palette.background }}",
-                    "custom_button_border": "#8A5A2B",
-                    "width": "fit-content"
+                    "content_direction": "column",
+                    "gap": 0,
+                    "width": "fill",
+                    "height": "fit",
+                    "background_color": "#FFFFFF",
+                    "padding-block-start": 20,
+                    "padding-block-end": 20,
+                    "padding-inline-start": 20,
+                    "padding-inline-end": 20
+                  },
+                  "blocks": {
+                    "pg_img": {
+                      "type": "image",
+                      "settings": {
+                        "image": "shopify://shop_images/PigeonGoneWest_SantaMonica_WIP.png",
+                        "image_ratio": "adapt",
+                        "width": "fill",
+                        "height": "fit",
+                        "link": "shopify://products/pigeon-gone-west-studio-print"
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "pg_img"
+                  ]
+                },
+                "pg_title": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<h3>Pigeon Gone West</h3>",
+                    "type_preset": "h3",
+                    "width": "100%",
+                    "alignment": "left",
+                    "case": "none",
+                    "font_size": "1rem",
+                    "wrap": "pretty",
+                    "text_color": "#3F63B8"
                   },
                   "blocks": {}
                 },
-                "brk_btn1": {
-                  "type": "button",
+                "pg_note": {
+                  "type": "text",
                   "settings": {
-                    "label": "Shop the tee",
-                    "link": "shopify://products/unisex-garment-dyed-t-shirt",
-                    "style_class": "button-custom",
-                    "custom_button_background": "rgba(0,0,0,0)",
-                    "custom_button_text": "#8A5A2B",
-                    "custom_button_border": "#8A5A2B",
-                    "width": "fit-content"
+                    "text": "<p><em>Summer 2026, before the drive west.</em></p>",
+                    "type_preset": "paragraph",
+                    "width": "100%",
+                    "alignment": "left",
+                    "case": "none",
+                    "font_size": "1rem",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color1 }}"
                   },
                   "blocks": {}
-                }
-              },
-              "block_order": [
-                "brk_btn0",
-                "brk_btn1"
-              ]
-            }
-          },
-          "block_order": [
-            "brk_eyebrow",
-            "brk_headline",
-            "brk_line",
-            "brk_buttons"
-          ]
-        }
-      },
-      "block_order": [
-        "brk_art",
-        "brk_copy"
-      ],
-      "settings": {
-        "content_direction": "row",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "space-between",
-        "vertical_alignment": "center",
-        "gap": 48,
-        "section_width": "page-width",
-        "padding-block-start": 72,
-        "padding-block-end": 72
-      }
-    },
-    "wd_drop_pigeon": {
-      "type": "section",
-      "blocks": {
-        "pgn_copy": {
-          "type": "group",
-          "settings": {
-            "content_direction": "column",
-            "gap": 16,
-            "width": "fill",
-            "height": "fit",
-            "vertical_alignment_flex_direction_column": "center"
-          },
-          "blocks": {
-            "pgn_eyebrow": {
-              "type": "text",
-              "settings": {
-                "text": "<p>Santa Monica</p>",
-                "type_preset": "paragraph",
-                "width": "100%",
-                "alignment": "left",
-                "case": "uppercase",
-                "font_size": "0.75rem",
-                "wrap": "pretty"
-              },
-              "blocks": {}
-            },
-            "pgn_headline": {
-              "type": "text",
-              "settings": {
-                "text": "<h2>Pigeon Gone West</h2>",
-                "type_preset": "h2",
-                "width": "100%",
-                "alignment": "left",
-                "case": "none",
-                "font_size": "1rem",
-                "wrap": "pretty",
-                "text_color": "#3F63B8"
-              },
-              "blocks": {}
-            },
-            "pgn_line": {
-              "type": "text",
-              "settings": {
-                "text": "<p>Signed print. Made in the studio.</p>",
-                "type_preset": "paragraph",
-                "width": "100%",
-                "alignment": "left",
-                "case": "none",
-                "font_size": "1rem",
-                "wrap": "pretty",
-                "text_color": "{{ settings.color_palette.color1 }}"
-              },
-              "blocks": {}
-            },
-            "pgn_buttons": {
-              "type": "group",
-              "settings": {
-                "content_direction": "row",
-                "vertical_on_mobile": false,
-                "gap": 12,
-                "width": "fill",
-                "height": "fit"
-              },
-              "blocks": {
-                "pgn_btn0": {
+                },
+                "pg_ed": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Edition of 15. Signed, numbered and dated by hand.</p>",
+                    "type_preset": "paragraph",
+                    "width": "100%",
+                    "alignment": "left",
+                    "case": "uppercase",
+                    "font_size": "0.75rem",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color1 }}"
+                  },
+                  "blocks": {}
+                },
+                "pg_btn": {
                   "type": "button",
                   "settings": {
                     "label": "Shop the print",
@@ -531,33 +523,142 @@
                 }
               },
               "block_order": [
-                "pgn_btn0"
+                "pg_mat",
+                "pg_title",
+                "pg_note",
+                "pg_ed",
+                "pg_btn"
+              ]
+            },
+            "ed_brooklyn": {
+              "type": "group",
+              "settings": {
+                "content_direction": "column",
+                "gap": 14,
+                "width": "fill",
+                "height": "fit"
+              },
+              "blocks": {
+                "bk_mat": {
+                  "type": "group",
+                  "settings": {
+                    "content_direction": "column",
+                    "gap": 0,
+                    "width": "fill",
+                    "height": "fit",
+                    "background_color": "#FFFFFF",
+                    "padding-block-start": 20,
+                    "padding-block-end": 20,
+                    "padding-inline-start": 20,
+                    "padding-inline-end": 20
+                  },
+                  "blocks": {
+                    "bk_img": {
+                      "type": "image",
+                      "settings": {
+                        "image": "shopify://shop_images/WeLivedInBrooklyn_WaterTower_flat.png",
+                        "image_ratio": "adapt",
+                        "width": "fill",
+                        "height": "fit",
+                        "link": "shopify://products/we-lived-in-brooklyn-print"
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "bk_img"
+                  ]
+                },
+                "bk_title": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<h3>We Lived in Brooklyn, Baby</h3>",
+                    "type_preset": "h3",
+                    "width": "100%",
+                    "alignment": "left",
+                    "case": "none",
+                    "font_size": "1rem",
+                    "wrap": "pretty",
+                    "text_color": "#8A5A2B"
+                  },
+                  "blocks": {}
+                },
+                "bk_ed": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Edition of 15. Signed, numbered and dated by hand.</p>",
+                    "type_preset": "paragraph",
+                    "width": "100%",
+                    "alignment": "left",
+                    "case": "uppercase",
+                    "font_size": "0.75rem",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color1 }}"
+                  },
+                  "blocks": {}
+                },
+                "bk_btn": {
+                  "type": "button",
+                  "settings": {
+                    "label": "Shop the print",
+                    "link": "shopify://products/we-lived-in-brooklyn-print",
+                    "style_class": "button-custom",
+                    "custom_button_background": "#8A5A2B",
+                    "custom_button_text": "{{ settings.color_palette.background }}",
+                    "custom_button_border": "#8A5A2B",
+                    "width": "fit-content"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "bk_mat",
+                "bk_title",
+                "bk_ed",
+                "bk_btn"
               ]
             }
           },
           "block_order": [
-            "pgn_eyebrow",
-            "pgn_headline",
-            "pgn_line",
-            "pgn_buttons"
+            "ed_pigeon",
+            "ed_brooklyn"
           ]
-        },
-        "pgn_art": {
+        }
+      },
+      "block_order": [
+        "ed_intro",
+        "ed_row"
+      ]
+    },
+    "wd_artist": {
+      "type": "section",
+      "settings": {
+        "content_direction": "row",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "center",
+        "vertical_alignment": "center",
+        "gap": 56,
+        "section_width": "page-width",
+        "padding-block-start": 64,
+        "padding-block-end": 80
+      },
+      "blocks": {
+        "ar_portrait": {
           "type": "group",
           "settings": {
-            "content_direction": "row",
-            "vertical_on_mobile": true,
-            "gap": 16,
+            "content_direction": "column",
+            "gap": 0,
             "width": "custom",
-            "custom_width": 60,
-            "width_mobile": "fill",
+            "custom_width": 30,
+            "width_mobile": "custom",
+            "custom_width_mobile": 70,
             "height": "fit"
           },
           "blocks": {
-            "pgn_img0": {
+            "ar_img": {
               "type": "image",
               "settings": {
-                "image": "shopify://shop_images/PigeonGoneWest_SantaMonica_WIP.png",
+                "image": "shopify://shop_images/MS_HeadShot_FINAL_copy.png",
                 "image_ratio": "adapt",
                 "width": "fill",
                 "height": "fit"
@@ -566,30 +667,101 @@
             }
           },
           "block_order": [
-            "pgn_img0"
+            "ar_img"
+          ]
+        },
+        "ar_copy": {
+          "type": "group",
+          "settings": {
+            "content_direction": "column",
+            "gap": 14,
+            "width": "custom",
+            "custom_width": 50,
+            "width_mobile": "fill",
+            "height": "fit"
+          },
+          "blocks": {
+            "ar_eyebrow": {
+              "type": "text",
+              "settings": {
+                "text": "<p>A note from the studio</p>",
+                "type_preset": "paragraph",
+                "width": "100%",
+                "alignment": "left",
+                "case": "uppercase",
+                "font_size": "0.75rem",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color1 }}"
+              },
+              "blocks": {}
+            },
+            "ar_head": {
+              "type": "text",
+              "settings": {
+                "text": "<h2>FIRST LOOK</h2>",
+                "type_preset": "h2",
+                "width": "100%",
+                "alignment": "left",
+                "case": "none",
+                "font_size": "1rem",
+                "wrap": "pretty"
+              },
+              "blocks": {}
+            },
+            "ar_body": {
+              "type": "text",
+              "settings": {
+                "text": "<p>I’ve just landed on the West Coast after a lifetime in the Northeast. New work comes out in small batches, a few pieces at a time.</p><p>Sign up and you’ll see each edition before it goes public.</p>",
+                "type_preset": "paragraph",
+                "width": "100%",
+                "alignment": "left",
+                "case": "none",
+                "font_size": "1rem",
+                "wrap": "pretty"
+              },
+              "blocks": {}
+            },
+            "ar_signup": {
+              "type": "email-signup",
+              "settings": {
+                "width": "fill",
+                "label": "Sign me up",
+                "border_radius": 0
+              },
+              "blocks": {}
+            },
+            "ar_ig": {
+              "type": "button",
+              "settings": {
+                "label": "Follow the studio on Instagram",
+                "link": "https://www.instagram.com/wallydomoart",
+                "open_in_new_tab": true,
+                "style_class": "button-unstyled",
+                "width": "fit-content"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "ar_eyebrow",
+            "ar_head",
+            "ar_body",
+            "ar_signup",
+            "ar_ig"
           ]
         }
       },
       "block_order": [
-        "pgn_art",
-        "pgn_copy"
-      ],
-      "settings": {
-        "content_direction": "row",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "space-between",
-        "vertical_alignment": "center",
-        "gap": 48,
-        "section_width": "page-width",
-        "padding-block-start": 72,
-        "padding-block-end": 72
-      }
+        "ar_portrait",
+        "ar_copy"
+      ]
     }
   },
   "order": [
+    "wd_studio_banner",
     "hero_jVaWmY",
-    "wd_drop_brooklyn",
-    "wd_drop_pigeon",
+    "wd_editions",
+    "wd_artist",
     "product_list_fa6P9H"
   ]
 }

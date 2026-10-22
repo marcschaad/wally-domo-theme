@@ -1,0 +1,496 @@
+{%- comment -%}
+  WALLY DOMO - Studio banner (homepage, and the password page in sign-up mode).
+
+  2026-10-21 REBUILD (Marc: "simplify the banner adjustments... legacy adjusters... redundant ones... mobile and desktop
+  are not distinct. They affect each other"). Previous version: theme "BACKUP 10-21 before banner cleanup".
+  - Desktop and Phones each have their own complete set: height, lockup layout / width / up-down, pig size / distance /
+    up-down, cloud size. Desktop values go into --d-* variables, phone values into --m-*; one media query picks the set.
+    No setting is read by both.
+  - Phones = under 600px (2026-10-21, second pass: the theme editor's desktop preview is often narrower than 750px, so at
+    750 the editor showed phone rules in desktop view and desktop controls looked dead. Real phones are 440px or less.)
+  - Desktop sizes are px at a 1440px-wide page (--k = 1px there, shrinking below 1440). Phone sizes are real phone px (--k = 1px).
+  - Phone pig distance is % of the way from the centre to the screen edge (no dead zone on any phone width).
+  - The lockup and the pigs each centre on the band's centre line and have their own nudge. No art-size multiplier,
+    no padding, no "0 = fit" modes.
+  - Removed: Arsenica arched lockup + its type group, title tilt, hand-drawn lines, art size, art nudge, banner padding,
+    fastest-spin cap (fixed at 1.5 turns/s), WD26 top-line nudge (baked at Marc's +3), retired cloud colours.
+  Kept: WD26 lockup (live Broadacre, ss01 a, Illustrator tspan positions from WD26 BRAND/SVG), pig turntable (rest 4 / 10,
+  left pig runs Marc's frames backwards), Marc's four clouds in three parallax layers with stepped frame rates,
+  day / night wheel (password page), grain, Coming soon + sign-up mode (password page).
+  Pig art: assets/wd-pig-line.png (ink) + assets/wd-pig-fill.png (body mask; frames 5, 9, 10 rebuilt 2026-10-21).
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign spt = s.secs_per_turn | default: 5
+  assign pig_rest = s.pig_rest | default: 4
+  assign left_rest = 38 | minus: pig_rest | modulo: 24
+
+  assign mode = s.centre | default: 'wd26'
+  if mode == 'lockup'
+    assign mode = 'wd26'
+  endif
+  assign d_layout = s.d_layout | default: 'line'
+  assign m_layout = s.m_layout | default: 'stacked'
+  assign d_cs = s.d_cloud | default: 90 | divided_by: 100.0
+  assign m_cs = s.m_cloud | default: 65 | divided_by: 100.0
+  assign m_pp = s.m_pig_spread | default: 95 | divided_by: 100.0
+
+  case s.cs_font
+    when 'arsenica-text'
+      assign cs_stack = '"arsenica-text", Georgia, serif'
+    when 'broadacre'
+      assign cs_stack = '"broadacre-regular-0", "Quicksand", system-ui, -apple-system, "Helvetica Neue", sans-serif'
+    when 'body'
+      assign cs_stack = 'var(--font-body-family)'
+    else
+      assign cs_stack = '"arsenica-variable", Georgia, serif'
+  endcase
+  assign cs_w = s.cs_weight | default: 380
+  assign cs_style = 'normal'
+  if s.cs_italic
+    assign cs_style = 'italic'
+  endif
+  assign cs_lh = s.cs_line_height | default: 100 | divided_by: 100.0
+  assign cs_trk = s.cs_tracking | default: 0 | divided_by: 1000.0
+  assign cs_case = s.cs_case | default: 'none'
+  assign cs_fid = 'WdSbSignup-' | append: section.id
+  assign cs_scheme = s.cs_scheme | default: 'scheme-1'
+
+  assign dn = s.day_night
+  assign cn = s.cloud_count | default: 18 | at_least: 1 | at_most: 24
+  assign cstep = 360.0 | divided_by: cn
+  comment
+    Marc's four clouds: shape k cycles 1-2-3-4; base widths in px (c_bw), varied by c_sz; c_top = vertical position as % of
+    the band's height; c_o = opacity. Odd clouds are flipped. Cloud k sits in depth layer k mod 3 (0 far, 1 middle, 2 near),
+    each with its own sweep speed (cloud_depth), size, opacity and, when stepped, frame rate (far = cloud_fps, x1.5, x2).
+    On screen a cloud is base width x layer size x Cloud size (desktop or phone) x --k.
+  endcomment
+  assign c_sh = '1,2,3,4' | split: ','
+  assign c_vb = '238.66 140.46|405.46 117.84|627.69 152.19|256.59 115.47' | split: '|'
+  assign c_bw = '150,250,340,165' | split: ','
+  assign c_sz = '1,0.8,1.15,0.9,1.05' | split: ','
+  assign c_top = '36.8,13.6,60,24.2,74.7,45.2,9.4' | split: ','
+  assign c_o = '1,0.9,1,0.85,0.95' | split: ','
+  assign ct1 = s.cloud_tint_1 | default: '#ffeeed'
+  assign ct2 = s.cloud_tint_2 | default: '#dbccd8'
+  assign ct3 = s.cloud_tint_3 | default: '#fff7e0'
+  assign ct4 = s.cloud_tint_4 | default: '#ffeecc'
+  assign c_tint = ct1 | append: '|' | append: ct2 | append: '|' | append: ct3 | append: '|' | append: ct4 | split: '|'
+  assign c_secs = s.cloud_secs | default: 75 | times: 1.0
+  assign c_depth = s.cloud_depth | default: 60 | divided_by: 100.0
+  assign c_spd_far = c_depth | times: -0.5 | plus: 1
+  assign c_spd_near = c_depth | times: 0.8 | plus: 1
+  assign c_motion = s.cloud_motion | default: 'stepped'
+  assign c_fps = s.cloud_fps | default: 8
+
+  assign sc = s.star_count | default: 0 | at_least: 0 | at_most: 14
+  assign st_a = '152,208,165,196,172,188,144,216,158,202,180,170,192,138' | split: ','
+  assign st_h = '200,220,120,90,235,160,70,140,160,50,30,180,215,215' | split: ','
+  assign st_s = '3,2.8,1.8,2.2,2.5,1.8,1.6,2.4,2,1.6,1.6,1.8,2.2,2' | split: ','
+  assign st_t = 'L,L,D,D,L,D,D,L,L,D,D,D,L,L' | split: ','
+  assign st_d = '3.1,3.3,4.3,4,3.7,4.6,5.1,4.4,3.5,5.4,4.8,4.1,3.9,5' | split: ','
+  assign st_l = '0,-1.8,-1.2,-0.9,-2.4,-3,-0.6,-3.3,-2.8,-2.2,-3.6,-1.5,-2,-0.3' | split: ','
+  assign grain = s.grain | default: 0 | divided_by: 100.0
+  assign boost = s.spin_boost | default: 15 | divided_by: 100.0
+-%}
+<section id="wd-sb-{{ section.id }}" class="wd-sb wd-sb--{{ mode }} wd-sb--d-{{ d_layout }} wd-sb--m-{{ m_layout }}{% if s.fill_height and mode == 'signup' %} wd-sb--fill{% endif %}{% if dn %} wd-sb--cycle{% endif %}" data-spt="{{ spt }}" data-rest="{{ pig_rest }}" data-hov="{{ s.hover_boost | default: 25 | divided_by: 100.0 }}" data-intro="{{ s.intro_turns | default: 2 }}" data-boost="{{ boost }}"
+  style="--wd-bg0:{{ s.background }};--wd-ink0:{{ s.ink }};--wd-bgn:{{ s.sky_night | default: '#1e2741' }};--wd-duskc:{{ s.sky_dusk | default: '#e9b6a2' }};--wd-ink1:{{ s.ink_night | default: '#f1f4f7' }};--wd-stl:{{ s.star_light | default: '#fff8e7' }};--wd-std:{{ s.star_dark | default: '#8a97c4' }};--wd-days:{{ s.day_secs | default: 60 }}s;--wd-grain:{{ grain }};--wd-spt:{{ spt }}s;--wd-pl:{{ s.pig_light | default: '#d7dfdc' }};--wd-ps:{{ s.pig_shade | default: '#869798' }};--d-h:{{ s.d_height | default: 130 }};--d-lw:{{ s.d_lock_width | default: 420 }};--d-ly:{{ s.d_lock_y | default: 0 }};--d-ps:{{ s.d_pig_size | default: 72 }};--d-pd:{{ s.d_pig_dist | default: 310 }};--d-py:{{ s.d_pig_y | default: 0 }};--d-cs:{{ d_cs }};--m-h:{{ s.m_height | default: 120 }};--m-lw:{{ s.m_lock_width | default: 170 }};--m-ly:{{ s.m_lock_y | default: 0 }};--m-ps:{{ s.m_pig_size | default: 38 }};--m-pp:{{ m_pp }};--m-py:{{ s.m_pig_y | default: 0 }};--m-cs:{{ m_cs }};--wd-csw:{{ s.cs_width | default: 440 }};--wd-cst:{{ s.cs_top | default: -40 }};--wd-csg:{{ s.cs_gap | default: 0 }};--wd-csb:{{ s.cs_bottom | default: 40 }};--wd-css:{{ s.cs_size | default: 46 }}">
+  <h1 class="visually-hidden">The Studio of Marc Schaad</h1>
+  {%- if grain > 0 %}<div class="wd-sb__grain" aria-hidden="true"></div>{% endif %}
+  <div class="wd-sb__stage">
+    <div class="wd-sb__wheel" aria-hidden="true">
+      {%- if dn and sc > 0 -%}
+        {%- for n in (1..sc) -%}
+          {%- assign k = n | minus: 1 -%}
+      <span class="wd-sb__star wd-sb__star--{{ st_t[k] }}" style="--a:{{ st_a[k] }}deg;--h:{{ st_h[k] }};--s:{{ st_s[k] }};--tw:{{ st_d[k] }}s;--tl:{{ st_l[k] }}s"></span>
+        {%- endfor -%}
+      {%- endif %}
+    </div>
+    {%- if s.clouds -%}
+    <div class="wd-sb__shapes" aria-hidden="true"><svg width="0" height="0" focusable="false" aria-hidden="true">
+      <symbol id="wd-sb-cM1-{{ section.id }}" viewBox="0 0 238.66 140.46"><path d="M68.92,71.34c-10.5,3.11-16.58,15.15-15.42,26.04,1.15,10.89,8.1,20.42,16.44,27.52,14.29,12.15,34.09,18.53,52.35,14.21,18.26-4.32,33.83-20.48,34.93-39.21,10.7,10.81,23.36,22.43,38.55,21.64,20.12-1.04,31.94-22.46,39.85-41,1.6-3.75,3.23-7.65,3.03-11.72-.2-4.1-2.24-7.88-4.42-11.36-7.67-12.23-18.37-23.33-32.14-27.67s-30.82-.24-38.32,12.1c-4.89-19.55-21.28-35.77-40.89-40.45-19.61-4.68-41.55,2.39-54.74,17.63-10.57-4.93-20.85-10.93-32.29-13.21-11.44-2.28-24.72.04-31.93,9.22S-.32,40.69,10.91,43.86"/></symbol>
+      <symbol id="wd-sb-cM2-{{ section.id }}" viewBox="0 0 405.46 117.84"><path d="M127.98,33.96C100.81-.91,71.43-14.71,72.1,20.6,50.92,2.75,43.32.48,36.56,19.28,26.17,3.45,16.72,6.87,11.83,12.38c-6.96,7.85-3.67,13.56,1.94,33.56-26.3-18.93-10.71,47.28,11.58,63.91,19.35,14.43,41.14,9.54,38.23-16.42,11.28,10.58,19.47,7.39,27.02,5.82,6.56-1.36,9.11-13.01,14.51-13.74,7.4-1,16.92,11.81,24.71,7.06,6.71-4.1,8.12-12.95,7.44-20.29,22.29,16.27,70.97,28.78,87.78-.44,25.66,22.82,46.89,10.35,67.88-9.11-.02,2.07.39,4.39.51,6.46,11.07,1.78,22.93,6.09,34.53,5.38,17.94-1.11,19.48-9.34,30.61-22.02,15.68-17.86,12.36-4.84,30.03-6.43,12.64-1.14,14.61-12.37,16.85-25.69-29.84-10.89-61.54,8.72-90.99,3.05-25.08-4.83-34.54-28.89-62.27-7.41,1.81-37.9-54.62,9.72-62.95,20.41.24-40.24-79.38-25.74-61.27-2.5Z"/></symbol>
+      <symbol id="wd-sb-cM3-{{ section.id }}" viewBox="0 0 627.69 152.19"><path d="M186.13,71.91c3.08-10.37,6.84-21.66,16.05-27.34,9.21-5.67,24.86-.29,24.13,10.5,9.31-5.1,12.2-16.89,18.63-25.33s23.07-11.03,25.24-.64c6.89-5.62,11.6-13.44,17.86-19.74,6.26-6.3,15.32-11.23,23.83-8.66,12.07,3.64,15.28,18.93,16.41,31.48,14.82-9.32,37.72,1.76,39.61,19.16,14.64-1.19,29.56,7.75,35.43,21.22,13.28-6.52,27.2-13.19,42-13s30.61,9.6,32.82,24.23c-.12,3.75-.25,7.51-.37,11.26,17.35-12.64,40.98-11.66,62.08-7.78s42.55,10.15,63.65,6.25c5.17-.96,10.45-2.52,15.58-1.39s9.88,6.28,8.27,11.29c-1.03,3.2-4.18,5.17-7.21,6.63-29.72,14.37-64.69,5.46-97.54,2.19-37.41-3.71-75.57.46-111.29,12.18-13.16,4.32-28.63,9.36-39.9,1.32-6.64-4.74-9.92-12.97-16.02-18.4-13.53-12.05-34.87-6.28-50.96,2.06-16.09,8.34-33.44,18.98-51.01,14.54-9.01-2.28-16.6-8.32-25.31-11.58-24.52-9.170-50.85,5.01-74.42,16.43-23.56,11.42-54.69,19.34-73.59,1.22-11.66,8.46-23.67,17.08-37.6,20.74-11.34,2.98-36.48,2.36-41.55-11.92-6.57-18.49,21.51-13.82,33.04-17.21,20.7-6.1,30.79-21.46,42.87-37.95,10.11-13.8,18.14-25.02,36.74-20.73,16.54,3.82,21.42,12.48,39.78,7.48,2.82-.77,37.51-14.71,32.73,1.48Z"/></symbol>
+      <symbol id="wd-sb-cM4-{{ section.id }}" viewBox="0 0 256.59 115.47"><path d="M47.37,36.28c-6.65,16.8-4.2,8.39-18.68,13.51C5.49,57.99-9.14,82.57,6.5,102.88c16.89,21.95,49.44,12.47,64.18-7.56,21.95,34.42,39.78,5.63,61.55-1.28,15.36-4.88,23.91-.07,27.2-21.81,2.12-14.05-2.51-21.88-16.89-22.62,6.95-16.58-8.26-22.33-19.89-28.38C108.89,14.07,99.09,1.23,81.05.06c-20.54-1.34-27.57,20.8-33.68,36.22Z"/><path d="M212.12,52.73c13.35-4.76,29.46-.34,38.51,10.57,5.22,6.29,8.05,15.52,4.14,22.7-3.01,5.52-9.41,8.57-15.69,8.94s-12.46-1.57-18.26-3.99c-1.94-.81-3.92-1.7-6.03-1.75-2.29-.06-4.48.86-6.61,1.72-6.73,2.7-14.38,4.84-21.11,2.12-6.5-2.63-10.6-9.4-11.89-16.29s-.23-13.99.94-20.91c.22-1.31-16.72-13.77-14.81-24.46,1.63-9.14,9.33-16.57,17.91-18.85,25.19-6.69,38.86,19.21,32.89,40.22Z"/></symbol>
+    </svg></div>
+    {%- for layer in (0..2) -%}
+      {%- liquid
+        case layer
+          when 0
+            assign l_spd = c_spd_far
+            assign l_size = 0.75
+            assign l_op = 0.7
+            assign l_fpsk = 1
+          when 1
+            assign l_spd = 1.0
+            assign l_size = 1
+            assign l_op = 1
+            assign l_fpsk = 1.5
+          else
+            assign l_spd = c_spd_near
+            assign l_size = 1.25
+            assign l_op = 1
+            assign l_fpsk = 2
+        endcase
+        assign l_dur = c_secs | divided_by: l_spd | round: 2
+        assign l_steps = l_dur | times: c_fps | times: l_fpsk | round | at_least: 1
+      -%}
+    <div class="wd-sb__sweep wd-sb__sweep--{{ layer }}" aria-hidden="true" style="--wd-csd:{{ l_dur }}s;animation-timing-function:{% if c_motion == 'smooth' %}linear{% else %}steps({{ l_steps }}){% endif %}">
+      {%- for copy in (0..1) -%}
+        {%- for n in (1..cn) -%}
+          {%- liquid
+            assign k = n | minus: 1
+            assign kl = k | modulo: 3
+            if kl != layer
+              continue
+            endif
+            assign ks = k | modulo: 4
+            assign kz = k | modulo: 5
+            assign kh = k | modulo: 7
+            assign ko = k | modulo: 5
+            assign cw = c_bw[ks] | times: c_sz[kz] | times: l_size | round: 1
+            assign cop = c_o[ko] | times: l_op | round: 2
+            assign cx = k | times: cstep | plus: 7 | divided_by: 360.0 | times: 50 | plus: 1 | round: 2
+            if copy == 1
+              assign cx = cx | plus: 50
+            endif
+            assign odd = k | modulo: 2
+            assign cc = c_tint[ks]
+          -%}
+      <div class="wd-sb__cl" style="left:{{ cx }}%;top:{{ c_top[kh] }}%;--wd-cc:{{ cc }};--cw:{{ cw }};opacity:{{ cop }}"><svg viewBox="0 0 {{ c_vb[ks] }}" width="100%" aria-hidden="true" focusable="false"{% if odd == 1 %} style="transform:scaleX(-1)"{% endif %}><use href="#wd-sb-cM{{ c_sh[ks] }}-{{ section.id }}"/></svg></div>
+        {%- endfor -%}
+      {%- endfor -%}
+    </div>
+    {%- endfor -%}
+    {%- endif %}
+    <div class="wd-sb__pig wd-sb__pig--l"><button type="button" class="wd-sb__pigbtn" aria-label="Spin the pig" data-wd-kick><span class="wd-sb__bob"><span class="wd-sb__fill"></span><span class="wd-sb__line"></span></span></button></div>
+    <div class="wd-sb__pig wd-sb__pig--r"><button type="button" class="wd-sb__pigbtn" aria-label="Spin the pig" data-wd-kick><span class="wd-sb__bob wd-sb__bob--late"><span class="wd-sb__fill"></span><span class="wd-sb__line"></span></span></button></div>
+    {%- if mode == 'wd26' %}
+    {%- comment -%}
+      WD26 "THE STUDIO OF / Marc Schaad": live Broadacre at the exact tspan coordinates of Marc's exports (WD26 BRAND/SVG).
+      One line = WD26_LOGO_TheStudioOf.svg (viewBox 1023.5 x 102.65; top line baseline 74.25 = caps centred on the name's
+      x-height + Marc's +3). Stacked = WD26_LOGO_TheStudioOf_Centered.svg (636.34 x 160.33). Both are always in the page;
+      CSS shows the one picked for desktop or for phones.
+    {%- endcomment -%}
+    <div class="wd-sb__lock" role="img" aria-label="The Studio of Marc Schaad">
+      <svg class="wd26-svg wd26-svg--line" viewBox="0 0 1023.5 102.65" aria-hidden="true" focusable="false"><text class="wd26-t" transform="translate(0 74.25)"><tspan x="0" y="0">T</tspan><tspan x="28.25" y="0">HE</tspan><tspan x="103.3" y="0">S</tspan><tspan x="131.55" y="0">T</tspan><tspan x="160.1" y="0">UDIO OF</tspan></text><text class="wd26-n" transform="translate(387.16 82.55)"><tspan x="0" y="0">M</tspan><tspan x="96.61" y="0">a</tspan><tspan x="151.04" y="0">r</tspan><tspan x="184.91" y="0">c Schaad</tspan></text></svg>
+      <svg class="wd26-svg wd26-svg--stacked" viewBox="0 0 636.34 160.33" aria-hidden="true" focusable="false"><text class="wd26-t" transform="translate(118.38 37.68)"><tspan x="0" y="0">T</tspan><tspan x="28.25" y="0">HE</tspan><tspan x="103.3" y="0">S</tspan><tspan x="131.55" y="0">T</tspan><tspan x="160.1" y="0">UDIO OF</tspan></text><text class="wd26-n" transform="translate(0 140.24)"><tspan x="0" y="0">M</tspan><tspan x="96.61" y="0">a</tspan><tspan x="151.04" y="0">r</tspan><tspan x="184.91" y="0">c Schaad</tspan></text></svg>
+    </div>
+    {%- elsif s.cs_heading != blank %}
+    <p class="wd-sb__cs-title" role="heading" aria-level="2">{{ s.cs_heading | escape }}</p>
+    {%- endif %}
+  </div>
+  {%- if mode == 'signup' %}
+  <div class="wd-sb__cs color-{{ cs_scheme }}">
+    {% render 'wd-signup', fid: cs_fid, line: s.cs_line, button: s.cs_button, success: s.cs_success, tags: 'newsletter, coming-soon' %}
+  </div>
+  {%- endif %}
+</section>
+
+{% style %}
+  @property --wd-ang { syntax: '<angle>'; inherits: true; initial-value: 0deg; }
+  @property --wd-night { syntax: '<number>'; inherits: true; initial-value: 0; }
+  @property --wd-dusk { syntax: '<number>'; inherits: true; initial-value: 0; }
+  @property --wd-flip { syntax: '<number>'; inherits: true; initial-value: 0; }
+  /* Desktop set (--d-*). --k = 1px at a 1440px-wide page and up, shrinking below that. */
+  #wd-sb-{{ section.id }} {
+    --k: min(1px, 100vw / 1440);
+    --h: var(--d-h); --lw: var(--d-lw); --ly: var(--d-ly); --pz: var(--d-ps); --pd: var(--d-pd); --py: var(--d-py); --cs: var(--d-cs);
+    --tk: var(--k);
+    --wd-D: max(50vw, 380px);
+    --wd-sbot: calc(var(--h) * var(--k));
+    --wd-ink: color-mix(in oklab, var(--wd-ink0), var(--wd-ink1) calc(var(--wd-flip, 0) * 100%));
+    position: relative; isolation: isolate; overflow: hidden; background: var(--wd-bg0); color: var(--wd-ink);
+    height: calc(var(--h) * var(--k));
+    animation: wd-sb-turn var(--wd-days) linear infinite;
+  }
+  /* Phone set (--m-*), real phone pixels, under 600px. Every layout value is swapped here, so nothing leaks between the two. */
+  @media screen and (max-width: 599px) {
+    #wd-sb-{{ section.id }} {
+      --k: 1px;
+      --h: var(--m-h); --lw: var(--m-lw); --ly: var(--m-ly); --pz: var(--m-ps); --py: var(--m-py); --cs: var(--m-cs);
+      --tk: 0.56px;
+    }
+  }
+  #wd-sb-{{ section.id }}.wd-sb--cycle {
+    background: conic-gradient(from var(--wd-ang, 0deg) at 50% calc(var(--wd-sbot) + var(--wd-D)), var(--wd-bg0) 0deg, var(--wd-bg0) 45deg, var(--wd-duskc) 90deg, var(--wd-bgn) 135deg, var(--wd-bgn) 225deg, var(--wd-duskc) 270deg, var(--wd-bg0) 315deg, var(--wd-bg0) 360deg);
+    animation: wd-sb-turn var(--wd-days) linear infinite, wd-sb-day var(--wd-days) ease-in-out infinite;
+  }
+  @keyframes wd-sb-turn { from { --wd-ang: 0deg; } to { --wd-ang: -360deg; } }
+  @keyframes wd-sb-day {
+    0%, 12% { --wd-night: 0; --wd-dusk: 0; --wd-flip: 0; }
+    23% { --wd-night: 0.4; --wd-dusk: 0.9; --wd-flip: 0; }
+    27% { --wd-night: 0.6; --wd-dusk: 0.9; --wd-flip: 1; }
+    38%, 62% { --wd-night: 1; --wd-dusk: 0; --wd-flip: 1; }
+    73% { --wd-night: 0.6; --wd-dusk: 0.9; --wd-flip: 1; }
+    77% { --wd-night: 0.4; --wd-dusk: 0.9; --wd-flip: 0; }
+    88%, 100% { --wd-night: 0; --wd-dusk: 0; --wd-flip: 0; }
+  }
+  #wd-sb-{{ section.id }} .wd-sb__grain { position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: var(--wd-grain); mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+    background-size: 180px 180px; }
+  /* The stage is the coloured band: the whole section, or (sign-up mode) the band above the form */
+  #wd-sb-{{ section.id }} .wd-sb__stage { position: absolute; inset: 0; }
+  #wd-sb-{{ section.id }} .wd-sb__wheel { position: absolute; left: 50%; top: calc(100% + var(--wd-D)); width: 0; height: 0; z-index: 0; pointer-events: none; transform: rotate(var(--wd-ang, 0deg)); }
+  #wd-sb-{{ section.id }} .wd-sb__star { position: absolute;
+    left: calc(sin(var(--a)) * (var(--wd-D) + var(--h) * var(--k)));
+    top: calc(cos(var(--a)) * (var(--wd-D) + var(--h) * var(--k)) * -1); }
+  #wd-sb-{{ section.id }} .wd-sb__star { display: block; width: calc(var(--s) * 1px); height: calc(var(--s) * 1px); margin: calc(var(--s) * -0.5px) 0 0 calc(var(--s) * -0.5px); border-radius: 50%; animation: wd-sb-twinkle var(--tw) ease-in-out infinite; animation-delay: var(--tl); }
+  #wd-sb-{{ section.id }} .wd-sb__star--L { --o: 1; background: var(--wd-stl); box-shadow: 0 0 calc(var(--s) * 2.5px) var(--wd-stl); }
+  #wd-sb-{{ section.id }} .wd-sb__star--L::before, #wd-sb-{{ section.id }} .wd-sb__star--L::after { content: ''; position: absolute; left: 50%; top: 50%; background: var(--wd-stl); opacity: 0.55; transform: translate(-50%, -50%); }
+  #wd-sb-{{ section.id }} .wd-sb__star--L::before { width: calc(var(--s) * 4.5px); height: 1px; }
+  #wd-sb-{{ section.id }} .wd-sb__star--L::after { width: 1px; height: calc(var(--s) * 4.5px); }
+  #wd-sb-{{ section.id }} .wd-sb__star--D { --o: 0.6; background: var(--wd-std); }
+  @keyframes wd-sb-twinkle { 0%, 100% { opacity: var(--o, 1); transform: scale(1); } 50% { opacity: calc(var(--o, 1) * 0.25); transform: scale(0.55); } }
+  /* Clouds: three sweep tracks (far, middle, near), each twice the band's width, sliding left by half and looping.
+     JS runs them while the pigs spin and coasts them to a stop just after. */
+  #wd-sb-{{ section.id }} .wd-sb__shapes { position: absolute; width: 0; height: 0; overflow: hidden; }
+  #wd-sb-{{ section.id }} .wd-sb__shapes symbol path { fill: inherit; }
+  #wd-sb-{{ section.id }} .wd-sb__sweep { position: absolute; left: 0; top: 0; width: 200%; height: 100%; z-index: 0; pointer-events: none; will-change: transform; animation: wd-sb-sweep var(--wd-csd, 75s) linear infinite; }
+  @keyframes wd-sb-sweep { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  #wd-sb-{{ section.id }} .wd-sb__cl { position: absolute; width: calc(var(--cw) * var(--cs) * var(--k)); transform: translate(-50%, -50%); }
+  #wd-sb-{{ section.id }} .wd-sb__cl svg { display: block; fill: var(--wd-cc, #fff); }
+  /* Pigs: centred on the band's centre line (+ up/down). Desktop: --pd px from the page centre, never pushed off screen. */
+  #wd-sb-{{ section.id }} .wd-sb__pig { position: absolute; z-index: 3; width: calc(var(--pz) * var(--k)); height: calc(var(--pz) * 0.8508 * var(--k)); top: calc(50% + (var(--py) - var(--pz) * 0.4254) * var(--k)); }
+  #wd-sb-{{ section.id }} .wd-sb__pig--l { left: max(4px, calc(50% - (var(--pd) + var(--pz) / 2) * var(--k))); --wd-lx: 72%; }
+  #wd-sb-{{ section.id }} .wd-sb__pig--r { left: min(calc(100% - var(--pz) * var(--k) - 4px), calc(50% + (var(--pd) - var(--pz) / 2) * var(--k))); }
+  /* Phones: distance is a share of the way from the centre to the screen edge (--m-pp, 0-1), so it works on every phone width */
+  @media screen and (max-width: 599px) {
+    #wd-sb-{{ section.id }} .wd-sb__pig--l { left: calc(50% - (50% - var(--pz) * var(--k) / 2 - 4px) * var(--m-pp) - var(--pz) * var(--k) / 2); }
+    #wd-sb-{{ section.id }} .wd-sb__pig--r { left: calc(50% + (50% - var(--pz) * var(--k) / 2 - 4px) * var(--m-pp) - var(--pz) * var(--k) / 2); }
+  }
+  #wd-sb-{{ section.id }} .wd-sb__pigbtn { all: unset; display: block; width: 100%; height: 100%; cursor: pointer; }
+  #wd-sb-{{ section.id }} .wd-sb__pigbtn:focus-visible { outline: 2px solid var(--wd-ink); outline-offset: 4px; }
+  #wd-sb-{{ section.id }} .wd-sb__bob { position: relative; display: block; width: 100%; height: 100%; animation: wd-sb-bob 5.5s ease-in-out infinite; }
+  #wd-sb-{{ section.id }} .wd-sb__bob--late { animation-delay: -2.75s; }
+  #wd-sb-{{ section.id }} .wd-sb__fill, #wd-sb-{{ section.id }} .wd-sb__line { position: absolute; inset: 0; }
+  #wd-sb-{{ section.id }} .wd-sb__fill { background: radial-gradient(120% 110% at var(--wd-lx, 28%) 35%, var(--wd-pl) 0%, color-mix(in srgb, var(--wd-pl) 60%, var(--wd-ps)) 45%, var(--wd-ps) 100%);
+    -webkit-mask: url({{ 'wd-pig-fill.png' | asset_url }}) 0 0 / 2400% 100% no-repeat; mask: url({{ 'wd-pig-fill.png' | asset_url }}) 0 0 / 2400% 100% no-repeat;
+    filter: brightness(calc(1 - var(--wd-night, 0) * 0.3));
+    animation: wd-sb-spin-mask var(--wd-spt) steps(24) infinite; }
+  #wd-sb-{{ section.id }} .wd-sb__line { background: url({{ 'wd-pig-line.png' | asset_url }}) 0 0 / 2400% 100% no-repeat;
+    animation: wd-sb-spin var(--wd-spt) steps(24) infinite; }
+  @keyframes wd-sb-spin { from { background-position: 0% 0; } to { background-position: 104.3478% 0; } }
+  @keyframes wd-sb-spin-mask { from { -webkit-mask-position: 0% 0; mask-position: 0% 0; } to { -webkit-mask-position: 104.3478% 0; mask-position: 104.3478% 0; } }
+  @keyframes wd-sb-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(calc(var(--pz) * -0.07 * var(--k))); } }
+  /* WD26 lockup: centred on the band's centre line (+ up/down), --lw wide. Each device shows its own layout. */
+  #wd-sb-{{ section.id }} .wd-sb__lock { position: absolute; left: 50%; top: calc(50% + var(--ly) * var(--k)); z-index: 4; width: calc(var(--lw) * var(--k)); max-width: calc(100% - 24px); transform: translate(-50%, -50%); line-height: 0; }
+  #wd-sb-{{ section.id }} .wd26-svg { display: block; width: 100%; height: auto; overflow: visible; }
+  @media screen and (min-width: 600px) {
+    #wd-sb-{{ section.id }}.wd-sb--d-line .wd26-svg--stacked, #wd-sb-{{ section.id }}.wd-sb--d-stacked .wd26-svg--line { display: none; }
+  }
+  @media screen and (max-width: 599px) {
+    #wd-sb-{{ section.id }}.wd-sb--m-line .wd26-svg--stacked, #wd-sb-{{ section.id }}.wd-sb--m-stacked .wd26-svg--line { display: none; }
+  }
+  /* !important: the theme's type rules otherwise force the body font onto every element. ss01 = Broadacre's alternate a. */
+  html body #wd-sb-{{ section.id }} .wd26-svg text, html body #wd-sb-{{ section.id }} .wd26-svg tspan { fill: var(--wd-ink); font-family: "broadacre-regular-0", "Quicksand", system-ui, -apple-system, "Helvetica Neue", sans-serif !important; font-weight: 300 !important; font-style: normal !important; font-variation-settings: normal !important; font-feature-settings: "kern" 1, "ss01" 1 !important; letter-spacing: 0 !important; word-spacing: 0 !important; text-transform: none !important; font-kerning: normal; }
+  html body #wd-sb-{{ section.id }} .wd26-svg .wd26-t { font-size: 43.06px !important; }
+  html body #wd-sb-{{ section.id }} .wd26-svg .wd26-n { font-size: 94.34px !important; }
+  /* Coming soon + sign-up: the band keeps its set height; the heading sits on its centre line; the form sits under it. */
+  #wd-sb-{{ section.id }}.wd-sb--signup { height: auto; display: flex; flex-direction: column; justify-content: center; }
+  #wd-sb-{{ section.id }}.wd-sb--signup .wd-sb__stage { position: relative; inset: auto; flex: none; height: calc(var(--h) * var(--k)); }
+  html body #wd-sb-{{ section.id }} .wd-sb__cs-title { position: absolute; left: 50%; top: calc(50% + var(--wd-csg) * var(--tk)); transform: translate(-50%, -50%); z-index: 4; width: max-content; max-width: calc(100% - 32px); margin: 0; text-align: center; color: var(--wd-ink); font-family: {{ cs_stack }} !important; font-size: calc(var(--wd-css) * var(--tk)) !important; font-style: {{ cs_style }} !important; font-weight: {{ cs_w }} !important; font-variation-settings: "wght" {{ cs_w }} !important; line-height: {{ cs_lh }} !important; letter-spacing: {{ cs_trk }}em !important; text-transform: {{ cs_case }} !important; }
+  #wd-sb-{{ section.id }} .wd-sb__cs { position: relative; z-index: 4; box-sizing: border-box; width: min(max(280px, calc(var(--wd-csw) * var(--k))), calc(100% - 32px)); margin: calc(var(--wd-cst) * var(--k)) auto 0; padding-bottom: calc(var(--wd-csb) * var(--k)); background: transparent !important; }
+  #wd-sb-{{ section.id }} .wd-sb__cs .wd-signup { justify-content: center; }
+  #wd-sb-{{ section.id }} .wd-sb__cs .wd-signup__form { max-width: none; }
+  html body #wd-sb-{{ section.id }} .wd-sb__cs .wd-signup__cta, html body #wd-sb-{{ section.id }} .wd-sb__cs .wd-signup__msg { text-align: center; color: var(--wd-ink); }
+  #wd-sb-{{ section.id }}.wd-sb--cycle .wd-sb__cs .wd-signup__button { box-shadow: 0 0 0 1px color-mix(in oklab, transparent, var(--wd-ink1) calc(var(--wd-flip, 0) * 100%)); }
+  @media screen and (max-width: 599px) {
+    #wd-sb-{{ section.id }} .wd-sb__cs { width: min(400px, calc(100% - 48px)); }
+  }
+  .password-main:has(#wd-sb-{{ section.id }}.wd-sb--fill) { display: flex; flex-direction: column; }
+  .password-main:has(#wd-sb-{{ section.id }}.wd-sb--fill) > .shopify-section:has(#wd-sb-{{ section.id }}) { flex: 1 0 auto; display: flex; flex-direction: column; }
+  #wd-sb-{{ section.id }}.wd-sb--fill { flex: 1 0 auto; }
+  @media (prefers-reduced-motion: reduce) {
+    #wd-sb-{{ section.id }}, #wd-sb-{{ section.id }}.wd-sb--cycle { animation: none; }
+    #wd-sb-{{ section.id }} .wd-sb__star { display: none; }
+    #wd-sb-{{ section.id }} .wd-sb__bob, #wd-sb-{{ section.id }} .wd-sb__fill, #wd-sb-{{ section.id }} .wd-sb__line, #wd-sb-{{ section.id }} .wd-sb__sweep { animation: none; }
+    #wd-sb-{{ section.id }} .wd-sb__pig--r .wd-sb__line { background-position: calc({{ pig_rest }} * 100% / 23) 0; }
+    #wd-sb-{{ section.id }} .wd-sb__pig--r .wd-sb__fill { -webkit-mask-position: calc({{ pig_rest }} * 100% / 23) 0; mask-position: calc({{ pig_rest }} * 100% / 23) 0; }
+    #wd-sb-{{ section.id }} .wd-sb__pig--l .wd-sb__line { background-position: calc({{ left_rest }} * 100% / 23) 0; }
+    #wd-sb-{{ section.id }} .wd-sb__pig--l .wd-sb__fill { -webkit-mask-position: calc({{ left_rest }} * 100% / 23) 0; mask-position: calc({{ left_rest }} * 100% / 23) 0; }
+  }
+{% endstyle %}
+
+<script>
+  (function () {
+    var root = document.getElementById('wd-sb-{{ section.id }}');
+    if (!root || root.dataset.wdReady) return;
+    root.dataset.wdReady = '1';
+    /* Pivot height for the sky dial: bottom of the band */
+    var stage = root.querySelector('.wd-sb__stage');
+    function measure() { if (stage) root.style.setProperty('--wd-sbot', (stage.offsetTop + stage.offsetHeight) + 'px'); }
+    measure();
+    if (window.ResizeObserver) { new ResizeObserver(measure).observe(root); } else { window.addEventListener('resize', measure); }
+    /* Give every cloud its own copy of its shape: Chrome won't colour <use> clones */
+    root.querySelectorAll('.wd-sb__cl use').forEach(function (u) {
+      var sym = document.getElementById((u.getAttribute('href') || '').slice(1));
+      if (!sym) return;
+      var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      Array.prototype.forEach.call(sym.childNodes, function (n) { var c = n.cloneNode(true); if (c.removeAttribute) c.removeAttribute('fill'); g.appendChild(c); });
+      u.parentNode.replaceChild(g, u);
+    });
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    /* Day / night wheel follows the mouse: left of centre = counter-clockwise, right = clockwise, up to +boost at the edges */
+    var boost = parseFloat(root.dataset.boost); if (isNaN(boost)) boost = 0.15;
+    var dial = (root.getAnimations ? root.getAnimations() : []).filter(function (a) { return /wd-sb-(turn|day)/.test(a.animationName || ''); });
+    var wRate = 1, wTarget = 1, wLoop = null, wLast = 0;
+    function wStep(now) {
+      var dt = Math.min(0.05, (now - wLast) / 1000); wLast = now;
+      wRate += (wTarget - wRate) * Math.min(1, dt * 2.5);
+      dial.forEach(function (a) { a.playbackRate = wRate; });
+      if (Math.abs(wTarget - wRate) > 0.002) { wLoop = requestAnimationFrame(wStep); } else { wRate = wTarget; dial.forEach(function (a) { a.playbackRate = wRate; }); wLoop = null; }
+    }
+    function wGo() { if (!wLoop && dial.length) { wLast = performance.now(); wLoop = requestAnimationFrame(wStep); } }
+    if (root.classList.contains('wd-sb--cycle')) {
+      root.addEventListener('mousemove', function (e) {
+        var b = root.getBoundingClientRect();
+        var dx = Math.max(-1, Math.min(1, (e.clientX - (b.left + b.width / 2)) / (b.width / 2)));
+        wTarget = (dx < 0 ? 1 : -1) * (1 + boost * Math.abs(dx));
+        wGo();
+      });
+      root.addEventListener('mouseleave', function () { wTarget = 1; wGo(); });
+    }
+    /* Pigs: spin introTurns times on load, then glide onto the rest frame. After that they spin only while hovered or for a
+       moment after a tap, and always come back to rest. Cap: 1.5 turns a second. The right pig's turntable is the clock;
+       the left pig runs the same strip backwards, held at frame (14 - right frame), so it rests on 14 - pig_rest. */
+    var spt = parseFloat(root.dataset.spt) || 5;
+    var D = spt * 1000;
+    var cap = 1.5;
+    var hov = parseFloat(root.dataset.hov); if (isNaN(hov)) hov = 0.25;
+    var introTurns = parseFloat(root.dataset.intro); if (isNaN(introTurns)) introTurns = 2;
+    var rest = parseInt(root.dataset.rest, 10); if (isNaN(rest)) rest = 4; rest = ((rest % 24) + 24) % 24;
+    var base = 1 / spt, tps = base, impulse = 0, hover = false, loop = null, last = 0, landed = false;
+    var sweepAnims = [];
+    root.querySelectorAll('.wd-sb__sweep').forEach(function (el) { (el.getAnimations ? el.getAnimations() : []).forEach(function (a) { if (/wd-sb-sweep/.test(a.animationName || '')) sweepAnims.push(a); }); });
+    var cRate = 1;
+    function setSweep(r) { sweepAnims.forEach(function (a) { a.playbackRate = r; }); }
+    var introUntil = performance.now() + introTurns * spt * 1000;
+    function spins(sel) { var out = []; root.querySelectorAll(sel).forEach(function (el) { (el.getAnimations ? el.getAnimations() : []).forEach(function (a) { if (/spin/.test(a.animationName || '')) out.push(a); }); }); return out; }
+    var rAnims = spins('.wd-sb__pig--r .wd-sb__fill, .wd-sb__pig--r .wd-sb__line');
+    var lAnims = spins('.wd-sb__pig--l .wd-sb__fill, .wd-sb__pig--l .wd-sb__line');
+    function setRate(r) { rAnims.forEach(function (a) { a.playbackRate = r; }); lAnims.forEach(function (a) { a.playbackRate = -r; }); }
+    function phase() { var a = rAnims[0]; if (!a || a.currentTime == null) return 0; var t = a.currentTime % D; if (t < 0) t += D; return t / D; }
+    function syncLeft() { var q = ((15 / 24 - phase()) % 1 + 1) % 1; lAnims.forEach(function (a) { a.currentTime = (1000 + q) * D; }); }
+    function seekRest() { rAnims.forEach(function (a) { var ct = a.currentTime || 0; a.currentTime = Math.floor(ct / D) * D + (rest + 0.5) / 24 * D; }); syncLeft(); }
+    function run() {
+      if (loop) return;
+      last = performance.now();
+      loop = requestAnimationFrame(function step(now) {
+        var dt = Math.min(0.05, (now - last) / 1000); last = now;
+        impulse *= Math.exp(-dt / 0.6);
+        var intro = now < introUntil;
+        var active = intro || hover || Math.abs(impulse) > 0.02;
+        cRate += ((active ? 1 : 0) - cRate) * Math.min(1, dt * (active ? 3 : 1));
+        setSweep(cRate);
+        var target = 0;
+        if (active) {
+          landed = false;
+          target = Math.max(0, Math.min(cap, (intro ? base : 0) + (hover ? base + hov : 0) + impulse));
+        } else if (!landed) {
+          var p = phase(), f = Math.floor(p * 24) % 24;
+          if (f === rest && tps < 0.3) { landed = true; tps = 0; setRate(0); seekRest(); }
+          else { var d = ((rest + 0.5) / 24 - p + 1) % 1; target = Math.max(0.08, Math.min(Math.max(base, 0.2), d * 1.6)); }
+        }
+        if (!landed) {
+          tps += (target - tps) * Math.min(1, dt * (Math.abs(target) < Math.abs(tps) ? 1.5 : 4));
+          setRate(tps * spt);
+        }
+        if (landed && cRate < 0.004) { cRate = 0; setSweep(0); loop = null; return; }
+        loop = requestAnimationFrame(step);
+      });
+    }
+    function kick(d) { impulse = Math.max(0, Math.min(cap, impulse + d)); run(); }
+    if (introTurns > 0) { setRate(tps * spt); syncLeft(); run(); } else { tps = 0; setRate(0); seekRest(); landed = true; cRate = 0; setSweep(0); }
+    root.querySelectorAll('.wd-sb__pig').forEach(function (p) {
+      p.addEventListener('mouseenter', function () { hover = true; run(); });
+      p.addEventListener('mouseleave', function () { hover = false; run(); });
+    });
+    root.querySelectorAll('[data-wd-kick]').forEach(function (b) { b.addEventListener('click', function () { kick(0.6); }); });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "WD Studio banner",
+  "tag": "div",
+  "class": "wd-studio-banner-section",
+  "settings": [
+    { "type": "select", "id": "centre", "label": "What sits in the middle", "options": [ { "value": "wd26", "label": "WD26 lockup (The Studio of Marc Schaad)" }, { "value": "signup", "label": "Coming soon + sign-up" } ], "default": "wd26" },
+    { "type": "color", "id": "background", "label": "Sky", "default": "#b5bcd2" },
+    { "type": "color", "id": "ink", "label": "Ink (lockup)", "default": "#191f24" },
+    { "type": "range", "id": "grain", "label": "Grain", "min": 0, "max": 60, "step": 1, "unit": "%", "default": 22 },
+
+    { "type": "header", "content": "Desktop", "info": "Screens 600px and wider: check these in the editor's desktop view. Pixels on a 1440px-wide screen; everything shrinks together on narrower windows. Nothing here changes phones." },
+    { "type": "range", "id": "d_height", "label": "Banner height", "min": 40, "max": 1000, "step": 10, "unit": "px", "default": 130 },
+    { "type": "select", "id": "d_layout", "label": "Lockup layout", "options": [ { "value": "line", "label": "One line" }, { "value": "stacked", "label": "Stacked" } ], "default": "line" },
+    { "type": "range", "id": "d_lock_width", "label": "Lockup width", "min": 100, "max": 1000, "step": 10, "unit": "px", "default": 420 },
+    { "type": "range", "id": "d_lock_y", "label": "Lockup up (−) / down (+)", "min": -200, "max": 200, "step": 4, "unit": "px", "default": 0, "info": "0 = centred in the banner." },
+    { "type": "range", "id": "d_pig_size", "label": "Pig size", "min": 20, "max": 300, "step": 4, "unit": "px", "default": 72 },
+    { "type": "range", "id": "d_pig_dist", "label": "Pigs: distance from centre", "min": 0, "max": 700, "step": 10, "unit": "px", "default": 310 },
+    { "type": "range", "id": "d_pig_y", "label": "Pigs up (−) / down (+)", "min": -200, "max": 200, "step": 4, "unit": "px", "default": 0, "info": "0 = centred in the banner." },
+    { "type": "range", "id": "d_cloud", "label": "Cloud size", "min": 30, "max": 250, "step": 5, "unit": "%", "default": 90 },
+
+    { "type": "header", "content": "Phones", "info": "Screens under 600px: switch the editor to mobile view (phone icon, top bar) to see these. Real pixels on the phone. Nothing here changes desktop." },
+    { "type": "range", "id": "m_height", "label": "Banner height", "min": 40, "max": 400, "step": 5, "unit": "px", "default": 120 },
+    { "type": "select", "id": "m_layout", "label": "Lockup layout", "options": [ { "value": "stacked", "label": "Stacked" }, { "value": "line", "label": "One line" } ], "default": "stacked" },
+    { "type": "range", "id": "m_lock_width", "label": "Lockup width", "min": 60, "max": 360, "step": 5, "unit": "px", "default": 170 },
+    { "type": "range", "id": "m_lock_y", "label": "Lockup up (−) / down (+)", "min": -100, "max": 100, "step": 2, "unit": "px", "default": 0, "info": "0 = centred in the banner." },
+    { "type": "range", "id": "m_pig_size", "label": "Pig size", "min": 10, "max": 120, "step": 2, "unit": "px", "default": 38 },
+    { "type": "range", "id": "m_pig_spread", "label": "Pigs: distance from centre", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 95, "info": "0 = both in the middle, 100 = against the screen edges. Same look on every phone width." },
+    { "type": "range", "id": "m_pig_y", "label": "Pigs up (−) / down (+)", "min": -100, "max": 100, "step": 2, "unit": "px", "default": 0, "info": "0 = centred in the banner." },
+    { "type": "range", "id": "m_cloud", "label": "Cloud size", "min": 30, "max": 250, "step": 5, "unit": "%", "default": 65 },
+
+    { "type": "header", "content": "Pigs", "info": "Colour and motion, same on every screen." },
+    { "type": "color", "id": "pig_light", "label": "Body, lit side", "default": "#d7dfdc" },
+    { "type": "color", "id": "pig_shade", "label": "Body, shaded side", "default": "#869798" },
+    { "type": "range", "id": "intro_turns", "label": "Turns on page load", "min": 0, "max": 5, "step": 1, "default": 2 },
+    { "type": "range", "id": "pig_rest", "label": "Rest pose (frame)", "min": 0, "max": 23, "step": 1, "default": 4, "info": "Right pig stops on this frame, left pig on its mirror (14 minus it). 4 = three-quarter, facing out." },
+    { "type": "range", "id": "secs_per_turn", "label": "Seconds per turn", "min": 1, "max": 12, "step": 0.5, "unit": "s", "default": 5 },
+    { "type": "range", "id": "hover_boost", "label": "Extra spin on hover", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 25 },
+
+    { "type": "header", "content": "Clouds", "info": "Size is set per screen above." },
+    { "type": "checkbox", "id": "clouds", "label": "Show clouds", "default": true },
+    { "type": "range", "id": "cloud_count", "label": "How many", "min": 3, "max": 24, "step": 1, "default": 12, "info": "Split across three depth layers. 9-12 reads as sky.", "visible_if": "{{ section.settings.clouds }}" },
+    { "type": "select", "id": "cloud_motion", "label": "Motion", "options": [ { "value": "stepped", "label": "Stop-motion" }, { "value": "smooth", "label": "Smooth" } ], "default": "stepped", "visible_if": "{{ section.settings.clouds }}" },
+    { "type": "range", "id": "cloud_fps", "label": "Stop-motion frame rate (far layer)", "min": 2, "max": 24, "step": 1, "unit": "fps", "default": 8, "info": "Middle layer 1.5x, near 2x.", "visible_if": "{{ section.settings.clouds and section.settings.cloud_motion == 'stepped' }}" },
+    { "type": "range", "id": "cloud_depth", "label": "Depth (speed gap between layers)", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 60, "visible_if": "{{ section.settings.clouds }}" },
+    { "type": "range", "id": "cloud_secs", "label": "Seconds per pass", "min": 20, "max": 140, "step": 5, "unit": "s", "default": 75, "info": "Middle layer, while the pigs spin.", "visible_if": "{{ section.settings.clouds }}" },
+    { "type": "color", "id": "cloud_tint_1", "label": "Cloud 1 tint", "default": "#ffeeed", "visible_if": "{{ section.settings.clouds }}" },
+    { "type": "color", "id": "cloud_tint_2", "label": "Cloud 2 tint", "default": "#dbccd8", "visible_if": "{{ section.settings.clouds }}" },
+    { "type": "color", "id": "cloud_tint_3", "label": "Cloud 3 tint", "default": "#fff7e0", "visible_if": "{{ section.settings.clouds }}" },
+    { "type": "color", "id": "cloud_tint_4", "label": "Cloud 4 tint", "default": "#ffeecc", "visible_if": "{{ section.settings.clouds }}" },
+
+    { "type": "header", "content": "Day and night" },
+    { "type": "checkbox", "id": "day_night", "label": "Day and night cycle", "default": true, "info": "Off = flat sky." },
+    { "type": "range", "id": "day_secs", "label": "One full day", "min": 12, "max": 240, "step": 3, "unit": "s", "default": 60, "visible_if": "{{ section.settings.day_night }}" },
+    { "type": "range", "id": "spin_boost", "label": "Speeds up toward the mouse", "min": 0, "max": 30, "step": 1, "unit": "%", "default": 15, "visible_if": "{{ section.settings.day_night }}" },
+    { "type": "color", "id": "sky_night", "label": "Night sky", "default": "#1e2741", "visible_if": "{{ section.settings.day_night }}" },
+    { "type": "color", "id": "sky_dusk", "label": "Sunset / sunrise", "default": "#e9b6a2", "visible_if": "{{ section.settings.day_night }}" },
+    { "type": "color", "id": "ink_night", "label": "Ink at night", "default": "#f1f4f7", "visible_if": "{{ section.settings.day_night }}" },
+    { "type": "range", "id": "star_count", "label": "Stars", "min": 0, "max": 14, "step": 1, "default": 8, "visible_if": "{{ section.settings.day_night }}" },
+    { "type": "color", "id": "star_light", "label": "Near stars", "default": "#fff8e7", "visible_if": "{{ section.settings.day_night }}" },
+    { "type": "color", "id": "star_dark", "label": "Far stars", "default": "#8a97c4", "visible_if": "{{ section.settings.day_night }}" },
+
+    { "type": "header", "content": "Coming soon + sign-up", "info": "Only when the middle is Coming soon + sign-up (the password page). Heading sizes are desktop px; phones use about half." },
+    { "type": "text", "id": "cs_heading", "label": "Heading", "default": "Coming soon", "visible_if": "{{ section.settings.centre == 'signup' }}" },
+    { "type": "select", "id": "cs_font", "label": "Heading font", "options": [ { "value": "arsenica-variable", "label": "Arsenica Variable" }, { "value": "arsenica-text", "label": "Arsenica Text" }, { "value": "broadacre", "label": "Broadacre" }, { "value": "body", "label": "Same as body text" } ], "default": "arsenica-variable", "visible_if": "{{ section.settings.centre == 'signup' }}" },
+    { "type": "range", "id": "cs_size", "label": "Heading size", "min": 24, "max": 120, "step": 1, "unit": "px", "default": 46, "visible_if": "{{ section.settings.centre == 'signup' }}" },
+    { "type": "range", "id": "cs_weight", "label": "Heading weight", "min": 100, "max": 800, "step": 10, "default": 380, "visible_if": "{{ section.settings.centre == 'signup' }}" },
+    { "type": "checkbox", "id": "cs_italic", "label": "Heading in italic", "default": false, "visible_if": "{{ section.settings.centre == 'signup' }}" },
+    { "type": "range", "id": "cs_line_height", "label": "Heading line height", "min": 70, "max": 200, "step": 5, "unit": "%", "default": 100, "visible_if": "{{ section.settings.centre == 'signup' }}" },
+    { "type": "range", "id": "cs_tracking", "label": "Heading tracking", "min": -100, "max": 200, "step": 5, "default": 0, "visible_if": "{{ section.settings.centre == 'signup' }}" },
+    { "type": "select", "id": "cs_case", "label": "Heading case", "options": [ { "value": "none", "label": "As typed" }, { "value": "uppercase", "label": "All caps" }, { "value": "lowercase", "label": "All lowercase" }, { "value": "capitalize", "label": "Initial caps" } ], "default": "none", "visible_if": "{{ section.settings.centre == 'signup' }}" },
+    { "type": "range", "id": "cs_gap", "label": "Heading up (−) / down (+)", "min": -60, "max": 60, "step": 2, "unit": "px", "default": 0, "visible_if": "{{ section.settings.centre == 'signup' }}" },
+    { "type": "text", "id": "cs_line", "label": "Line above the email box", "default": "Get on the list and you'll see it first.", "visible_if": "{{ section.settings.centre == 'signup' }}" },
+    { "type": "text", "id": "cs_button", "label": "Button label", "default": "Sign me up", "visible_if": "{{ section.settings.centre == 'signup' }}" },
+    { "type": "text", "id": "cs_success", "label": "Thank-you message", "default": "You're on the list. Thanks.", "visible_if": "{{ section.settings.centre == 'signup' }}" },
+    { "type": "range", "id": "cs_width", "label": "Sign-up width", "min": 240, "max": 560, "step": 5, "unit": "px", "default": 440, "visible_if": "{{ section.settings.centre == 'signup' }}" },
+    { "type": "range", "id": "cs_top", "label": "Sign-up up (−) / down (+)", "min": -80, "max": 80, "step": 2, "unit": "px", "default": -40, "visible_if": "{{ section.settings.centre == 'signup' }}" },
+    { "type": "range", "id": "cs_bottom", "label": "Space below the sign-up", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 40, "visible_if": "{{ section.settings.centre == 'signup' }}" },
+    { "type": "checkbox", "id": "fill_height", "label": "Fill the screen", "default": false, "visible_if": "{{ section.settings.centre == 'signup' }}" }
+  ],
+  "presets": [ { "name": "WD Studio banner" } ]
+}
+{% endschema %}
