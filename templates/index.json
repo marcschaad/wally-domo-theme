@@ -362,77 +362,473 @@
       }
     },
     "wd_editions": {
-      "type": "wd-editions",
+      "type": "section",
       "settings": {
-        "heading": "Signed prints, in small numbers.",
-        "heading_italic": true,
-        "heading_size": 48,
-        "intro": "<p>Started in Brooklyn. Now made in a studio on the West Coast. Every print below is signed, numbered and dated by hand.</p>",
-        "series_color": "#8A5A2B",
-        "tint": 12,
-        "columns": "2",
-        "card_padding": 32,
-        "card_gap": 32,
-        "mat": 20,
-        "image_shape": "portrait",
-        "title_size": 24,
-        "edition_line": "Edition of 15. Signed, numbered and dated by hand.",
-        "show_price": false,
-        "button_label": "Shop the print",
-        "space_top": 48,
-        "space_bottom": 80
+        "content_direction": "column",
+        "gap": 48,
+        "section_width": "page-width",
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "padding-block-start": 48,
+        "padding-block-end": 80
       },
       "blocks": {
-        "print_pigeon": {
-          "type": "print",
+        "ed_intro": {
+          "type": "group",
           "settings": {
-            "product": "pigeon-gone-west-studio-print",
-            "title": "Pigeon Gone West",
-            "note": "Summer 2026, before the drive west.",
-            "edition_line": ""
-          }
+            "content_direction": "column",
+            "gap": 12,
+            "width": "custom",
+            "custom_width": 66,
+            "width_mobile": "fill",
+            "height": "fit"
+          },
+          "blocks": {
+            "ed_head": {
+              "type": "text",
+              "settings": {
+                "text": "<h2><em>Signed prints, in small numbers.</em></h2>",
+                "type_preset": "custom",
+                "width": "100%",
+                "alignment": "left",
+                "case": "none",
+                "font_size": "3rem",
+                "wrap": "pretty",
+                "font": "var(--font-heading--family)",
+                "letter_spacing": "tight",
+                "line_height": "tight"
+              },
+              "blocks": {}
+            },
+            "ed_body": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Started in Brooklyn. Now made in a studio on the West Coast. Every print below is signed, numbered and dated by hand.</p>",
+                "type_preset": "paragraph",
+                "width": "100%",
+                "alignment": "left",
+                "case": "none",
+                "font_size": "1rem",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color1 }}"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "ed_head",
+            "ed_body"
+          ],
+          "name": "Intro"
         },
-        "print_brooklyn": {
-          "type": "print",
+        "ed_row": {
+          "type": "group",
           "settings": {
-            "product": "we-lived-in-brooklyn-print",
-            "title": "We Lived in Brooklyn, Baby",
-            "note": "",
-            "edition_line": ""
-          }
+            "content_direction": "row",
+            "vertical_on_mobile": true,
+            "gap": 32,
+            "width": "fill",
+            "height": "fit",
+            "vertical_alignment": "flex-start"
+          },
+          "blocks": {
+            "ed_pigeon": {
+              "type": "group",
+              "settings": {
+                "content_direction": "column",
+                "gap": 24,
+                "width": "fill",
+                "height": "fill",
+                "background_color": "#EDE7DF",
+                "padding-block-start": 32,
+                "padding-block-end": 40,
+                "padding-inline-start": 32,
+                "padding-inline-end": 32,
+                "vertical_alignment_flex_direction_column": "space-between"
+              },
+              "blocks": {
+                "pg_top": {
+                  "type": "group",
+                  "name": "Print and details",
+                  "settings": {
+                    "content_direction": "column",
+                    "gap": 16,
+                    "width": "fill",
+                    "height": "fit"
+                  },
+                  "blocks": {
+                    "pg_mat": {
+                      "type": "group",
+                      "settings": {
+                        "content_direction": "column",
+                        "gap": 0,
+                        "width": "fill",
+                        "height": "fit",
+                        "background_color": "#FFFFFF",
+                        "padding-block-start": 20,
+                        "padding-block-end": 20,
+                        "padding-inline-start": 20,
+                        "padding-inline-end": 20
+                      },
+                      "blocks": {
+                        "pg_img": {
+                          "type": "image",
+                          "settings": {
+                            "image": "shopify://shop_images/PigeonGoneWest_SantaMonica_WIP.png",
+                            "image_ratio": "portrait",
+                            "width": "fill",
+                            "height": "fit",
+                            "link": "shopify://products/pigeon-gone-west-studio-print"
+                          },
+                          "blocks": {}
+                        }
+                      },
+                      "block_order": [
+                        "pg_img"
+                      ],
+                      "name": "Mat"
+                    },
+                    "pg_title": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<h3>Pigeon Gone West</h3>",
+                        "type_preset": "custom",
+                        "width": "100%",
+                        "alignment": "left",
+                        "case": "none",
+                        "font_size": "1.5rem",
+                        "wrap": "pretty",
+                        "text_color": "#8A5A2B",
+                        "font": "var(--font-accent--family)",
+                        "letter_spacing": "normal",
+                        "line_height": "normal"
+                      },
+                      "blocks": {}
+                    },
+                    "pg_note": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p><em>Summer 2026, before the drive west.</em></p>",
+                        "type_preset": "paragraph",
+                        "width": "100%",
+                        "alignment": "left",
+                        "case": "none",
+                        "font_size": "1rem",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}"
+                      },
+                      "blocks": {}
+                    },
+                    "pg_ed": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Edition of 15. Signed, numbered and dated by hand.</p>",
+                        "type_preset": "custom",
+                        "width": "100%",
+                        "alignment": "left",
+                        "case": "uppercase",
+                        "font_size": "0.75rem",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "font": "var(--font-subheading--family)",
+                        "letter_spacing": "loose",
+                        "line_height": "normal"
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "pg_mat",
+                    "pg_title",
+                    "pg_note",
+                    "pg_ed"
+                  ]
+                },
+                "pg_btn": {
+                  "type": "button",
+                  "settings": {
+                    "label": "Shop the print",
+                    "link": "shopify://products/pigeon-gone-west-studio-print",
+                    "style_class": "button-custom",
+                    "custom_button_background": "#8A5A2B",
+                    "custom_button_text": "{{ settings.color_palette.background }}",
+                    "custom_button_border": "#8A5A2B",
+                    "width": "fit-content"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "pg_top",
+                "pg_btn"
+              ],
+              "name": "Pigeon card"
+            },
+            "ed_brooklyn": {
+              "type": "group",
+              "settings": {
+                "content_direction": "column",
+                "gap": 24,
+                "width": "fill",
+                "height": "fill",
+                "background_color": "#EDE7DF",
+                "padding-block-start": 32,
+                "padding-block-end": 40,
+                "padding-inline-start": 32,
+                "padding-inline-end": 32,
+                "vertical_alignment_flex_direction_column": "space-between"
+              },
+              "blocks": {
+                "bk_top": {
+                  "type": "group",
+                  "name": "Print and details",
+                  "settings": {
+                    "content_direction": "column",
+                    "gap": 16,
+                    "width": "fill",
+                    "height": "fit"
+                  },
+                  "blocks": {
+                    "bk_mat": {
+                      "type": "group",
+                      "settings": {
+                        "content_direction": "column",
+                        "gap": 0,
+                        "width": "fill",
+                        "height": "fit",
+                        "background_color": "#FFFFFF",
+                        "padding-block-start": 20,
+                        "padding-block-end": 20,
+                        "padding-inline-start": 20,
+                        "padding-inline-end": 20
+                      },
+                      "blocks": {
+                        "bk_img": {
+                          "type": "image",
+                          "settings": {
+                            "image": "shopify://shop_images/WeLivedInBrooklyn_WaterTower_flat.png",
+                            "image_ratio": "portrait",
+                            "width": "fill",
+                            "height": "fit",
+                            "link": "shopify://products/we-lived-in-brooklyn-print"
+                          },
+                          "blocks": {}
+                        }
+                      },
+                      "block_order": [
+                        "bk_img"
+                      ],
+                      "name": "Mat"
+                    },
+                    "bk_title": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<h3>We Lived in Brooklyn, Baby</h3>",
+                        "type_preset": "custom",
+                        "width": "100%",
+                        "alignment": "left",
+                        "case": "none",
+                        "font_size": "1.5rem",
+                        "wrap": "pretty",
+                        "text_color": "#8A5A2B",
+                        "font": "var(--font-accent--family)",
+                        "letter_spacing": "normal",
+                        "line_height": "normal"
+                      },
+                      "blocks": {}
+                    },
+                    "bk_ed": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Edition of 15. Signed, numbered and dated by hand.</p>",
+                        "type_preset": "custom",
+                        "width": "100%",
+                        "alignment": "left",
+                        "case": "uppercase",
+                        "font_size": "0.75rem",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "font": "var(--font-subheading--family)",
+                        "letter_spacing": "loose",
+                        "line_height": "normal"
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "bk_mat",
+                    "bk_title",
+                    "bk_ed"
+                  ]
+                },
+                "bk_btn": {
+                  "type": "button",
+                  "settings": {
+                    "label": "Shop the print",
+                    "link": "shopify://products/we-lived-in-brooklyn-print",
+                    "style_class": "button-custom",
+                    "custom_button_background": "#8A5A2B",
+                    "custom_button_text": "{{ settings.color_palette.background }}",
+                    "custom_button_border": "#8A5A2B",
+                    "width": "fit-content"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "bk_top",
+                "bk_btn"
+              ],
+              "name": "Brooklyn card"
+            }
+          },
+          "block_order": [
+            "ed_pigeon",
+            "ed_brooklyn"
+          ],
+          "name": "Cards row"
         }
       },
       "block_order": [
-        "print_pigeon",
-        "print_brooklyn"
-      ]
+        "ed_intro",
+        "ed_row"
+      ],
+      "name": "Editions"
     },
-    "wd_studio_note": {
-      "type": "wd-studio-note",
+    "wd_artist": {
+      "type": "section",
       "settings": {
-        "image": "shopify://shop_images/MS_HeadShot_FINAL_copy.png",
-        "image_width": 30,
-        "image_side": "left",
-        "eyebrow": "A note from the studio",
-        "heading": "FIRST LOOK",
-        "heading_size": 40,
-        "text": "<p>I’ve just landed on the West Coast after a lifetime in the Northeast. New work comes out in small batches, a few pieces at a time.</p><p>Sign up and you’ll see each edition before it goes public.</p>",
-        "show_signup": true,
-        "signup_button": "Sign me up",
-        "signup_success": "You're on the list. Thanks.",
-        "signup_tags": "newsletter, first-look",
-        "link_label": "Follow the studio on Instagram",
-        "link": "https://www.instagram.com/wallydomoart",
-        "space_top": 64,
-        "space_bottom": 80
-      }
+        "content_direction": "row",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "center",
+        "vertical_alignment": "center",
+        "gap": 56,
+        "section_width": "page-width",
+        "padding-block-start": 64,
+        "padding-block-end": 80
+      },
+      "blocks": {
+        "ar_portrait": {
+          "type": "group",
+          "settings": {
+            "content_direction": "column",
+            "gap": 0,
+            "width": "custom",
+            "custom_width": 30,
+            "width_mobile": "custom",
+            "custom_width_mobile": 70,
+            "height": "fit"
+          },
+          "blocks": {
+            "ar_img": {
+              "type": "image",
+              "settings": {
+                "image": "shopify://shop_images/MS_HeadShot_FINAL_copy.png",
+                "image_ratio": "adapt",
+                "width": "fill",
+                "height": "fit"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "ar_img"
+          ]
+        },
+        "ar_copy": {
+          "type": "group",
+          "settings": {
+            "content_direction": "column",
+            "gap": 14,
+            "width": "custom",
+            "custom_width": 50,
+            "width_mobile": "fill",
+            "height": "fit"
+          },
+          "blocks": {
+            "ar_eyebrow": {
+              "type": "text",
+              "settings": {
+                "text": "<p>A note from the studio</p>",
+                "type_preset": "custom",
+                "width": "100%",
+                "alignment": "left",
+                "case": "uppercase",
+                "font_size": "0.75rem",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color1 }}",
+                "font": "var(--font-subheading--family)",
+                "letter_spacing": "loose",
+                "line_height": "normal"
+              },
+              "blocks": {}
+            },
+            "ar_head": {
+              "type": "text",
+              "settings": {
+                "text": "<h2>FIRST LOOK</h2>",
+                "type_preset": "h2",
+                "width": "100%",
+                "alignment": "left",
+                "case": "none",
+                "font_size": "1rem",
+                "wrap": "pretty"
+              },
+              "blocks": {}
+            },
+            "ar_body": {
+              "type": "text",
+              "settings": {
+                "text": "<p>I’ve just landed on the West Coast after a lifetime in the Northeast. New work comes out in small batches, a few pieces at a time.</p><p>Sign up and you’ll see each edition before it goes public.</p>",
+                "type_preset": "paragraph",
+                "width": "100%",
+                "alignment": "left",
+                "case": "none",
+                "font_size": "1rem",
+                "wrap": "pretty"
+              },
+              "blocks": {}
+            },
+            "ar_signup": {
+              "type": "email-signup",
+              "settings": {
+                "width": "fill",
+                "label": "Sign me up",
+                "border_radius": 0
+              },
+              "blocks": {}
+            },
+            "ar_ig": {
+              "type": "button",
+              "settings": {
+                "label": "Follow the studio on Instagram",
+                "link": "https://www.instagram.com/wallydomoart",
+                "open_in_new_tab": true,
+                "style_class": "button-unstyled",
+                "width": "fit-content"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "ar_eyebrow",
+            "ar_head",
+            "ar_body",
+            "ar_signup",
+            "ar_ig"
+          ]
+        }
+      },
+      "block_order": [
+        "ar_portrait",
+        "ar_copy"
+      ]
     }
   },
   "order": [
     "wd_studio_banner",
     "hero_jVaWmY",
     "wd_editions",
-    "wd_studio_note",
+    "wd_artist",
     "product_list_fa6P9H"
   ]
 }
