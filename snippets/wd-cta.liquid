@@ -1,0 +1,26 @@
+{%- comment -%}
+  WALLY DOMO: the CTA style from Dawn (Marc, 2026-10-07; carried to Horizon 2026-10-22).
+  2px stroke, no fill, label in the CTA colour. Hover / keyboard focus fills it with that
+  colour and a near-white label, so the click still feels like a button. Disabled
+  (sold out) never fills. Every other button stays a solid fill.
+
+  The CTA colour is the button's own border colour, so the editor still drives it:
+    - Our homepage series buttons (Button style "Custom") = the series colour.
+    - Add to cart and Checkout = Theme settings > Colors > Primary button border (ink).
+  Utility for custom liquid: class "wd-cta" on any .button.
+  Rendered from snippets/wd-fonts.liquid (our file).
+{%- endcomment -%}
+<style>
+  html body :is(.button-custom, .add-to-cart-button, .cart__checkout-button, .button.wd-cta):not(.button-unstyled) {
+    background-color: transparent !important;
+    color: var(--button-border-color) !important;
+    box-shadow: inset 0 0 0 2px var(--button-border-color) !important;
+    transition: background-color .15s ease, color .15s ease, box-shadow .15s ease;
+  }
+  html body :is(.button-custom, .add-to-cart-button, .cart__checkout-button, .button.wd-cta):not(.button-unstyled):not([disabled], [aria-disabled='true']):is(:hover, :focus-visible) {
+    background-color: var(--button-background-color) !important;
+    color: var(--button-color) !important;
+    box-shadow: inset 0 0 0 2px var(--button-background-color) !important;
+  }
+  html body :is(.button-custom, .add-to-cart-button, .cart__checkout-button, .button.wd-cta) svg { color: currentColor; }
+</style>
