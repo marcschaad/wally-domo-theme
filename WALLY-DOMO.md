@@ -7,6 +7,17 @@ Never edit Horizon's own files. Everything Wally Domo lives in files we own,
 named `wd-*` (snippets, blocks, sections, assets). Shopify keeps those through
 a theme update; it overwrites everything else.
 
+Content files are not code and are ours to edit: `config/settings_data.json`
+(palette, theme settings) and `templates/*.json` / `sections/*-group.json`
+(which sections sit on which page). Updates carry them over.
+
+## Colour (2026-10-22)
+Frame = Horizon's global palette: paper #F2EFE6, ink #1A1A1A, graphite #5E5A53,
+stock #DAD5CA. Each release gets one loud section background pulled from its
+own art and pushed: Brooklyn = tower wood #8A5A2B, Pigeon = cap blue #3F63B8.
+Horizon picks paper or ink text automatically; every pair checked AA.
+Max three release colours on screen.
+
 ## The only exceptions (re-add after every Horizon update)
 | file | change |
 |---|---|

@@ -6,7 +6,8 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "hero_jVaWmY": {
       "type": "hero",
@@ -89,7 +90,8 @@
         "reflection_opacity": 75,
         "padding-block-start": 100,
         "padding-block-end": 72
-      }
+      },
+      "disabled": true
     },
     "product_list_fa6P9H": {
       "type": "product-list",
@@ -276,10 +278,112 @@
         "padding-block-start": 48,
         "padding-block-end": 48
       }
+    },
+    "wd_drop_brooklyn": {
+      "type": "featured-product",
+      "blocks": {
+        "media": {
+          "type": "_media-without-appearance",
+          "static": true,
+          "settings": {}
+        },
+        "featured-product": {
+          "type": "_featured-product",
+          "static": true,
+          "settings": {},
+          "blocks": {
+            "featured-product-title": {
+              "type": "product-title",
+              "static": true,
+              "settings": {
+                "type_preset": "h3",
+                "width": "100%"
+              }
+            },
+            "featured-product-price": {
+              "type": "_featured-product-price",
+              "static": true,
+              "settings": {}
+            },
+            "featured-product-gallery": {
+              "type": "_featured-product-gallery",
+              "static": true,
+              "settings": {}
+            },
+            "featured-product-swatches": {
+              "type": "swatches",
+              "static": true,
+              "settings": {
+                "hide_padding": true
+              }
+            }
+          },
+          "block_order": []
+        }
+      },
+      "settings": {
+        "product": "we-lived-in-brooklyn-print",
+        "layout": "media-left",
+        "background_color": "#8A5A2B",
+        "padding-block-start": 64,
+        "padding-block-end": 64
+      }
+    },
+    "wd_drop_pigeon": {
+      "type": "featured-product",
+      "blocks": {
+        "media": {
+          "type": "_media-without-appearance",
+          "static": true,
+          "settings": {}
+        },
+        "featured-product": {
+          "type": "_featured-product",
+          "static": true,
+          "settings": {},
+          "blocks": {
+            "featured-product-title": {
+              "type": "product-title",
+              "static": true,
+              "settings": {
+                "type_preset": "h3",
+                "width": "100%"
+              }
+            },
+            "featured-product-price": {
+              "type": "_featured-product-price",
+              "static": true,
+              "settings": {}
+            },
+            "featured-product-gallery": {
+              "type": "_featured-product-gallery",
+              "static": true,
+              "settings": {}
+            },
+            "featured-product-swatches": {
+              "type": "swatches",
+              "static": true,
+              "settings": {
+                "hide_padding": true
+              }
+            }
+          },
+          "block_order": []
+        }
+      },
+      "settings": {
+        "product": "pigeon-gone-west-studio-print",
+        "layout": "media-right",
+        "background_color": "#3F63B8",
+        "padding-block-start": 64,
+        "padding-block-end": 64
+      }
     }
   },
   "order": [
     "hero_jVaWmY",
+    "wd_drop_brooklyn",
+    "wd_drop_pigeon",
     "product_list_fa6P9H"
   ]
 }
