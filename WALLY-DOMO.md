@@ -84,3 +84,10 @@ solid. Buttons are square (radius 0, as on Dawn). Add class `wd-cta` to any
   default makes Shopify reject the whole section file, and any template using it.
 - If Shopify rejects a file, its stale copy of anything that depends on it comes back to
   GitHub on the next editor save. Check `git log` for shopify[bot] commits after pushing.
+
+## Product type eyebrow (2026-10-22)
+Every product shows its Shopify **Product type** (Print, Tee, Kids Tee, Tote) above the
+title: a Horizon text block named "Product type" (`{{ closest.product.type }}`, small
+tracked caps, graphite) in every product card template and above the product page title,
+plus `.wd-ed__eyebrow` in WD Editions (per-print override available). Marc sets the
+type in Shopify admin > Products > Type, so titles can just be the piece's name.

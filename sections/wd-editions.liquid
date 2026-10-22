@@ -55,6 +55,7 @@
           assign p = block.settings.product
           assign title = block.settings.title | default: p.title | default: 'Pick a product'
           assign edition = block.settings.edition_line | default: s.edition_line
+          assign eyebrow = block.settings.eyebrow | default: p.type
         -%}
         <article class="wd-ed__card" {{ block.shopify_attributes }}>
           <a class="wd-ed__mat" href="{{ p.url | default: '#' }}" tabindex="-1" aria-hidden="true">
@@ -65,6 +66,9 @@
             {%- endif -%}
           </a>
           <div class="wd-ed__details">
+            {%- if s.show_type and eyebrow != blank -%}
+              <p class="wd-ed__eyebrow">{{ eyebrow | escape }}</p>
+            {%- endif -%}
             <h3 class="wd-ed__title"><a href="{{ p.url | default: '#' }}">{{ title | escape }}</a></h3>
             {%- if block.settings.note != blank -%}
               <p class="wd-ed__note">{{ block.settings.note | escape }}</p>
@@ -110,6 +114,7 @@
     font-size: var(--wd-ed-title); line-height: 1.2; color: var(--wd-ed-series); text-transform: none;
   }
   .wd-ed__title a { color: inherit; text-decoration: none; }
+  .wd-ed__eyebrow { margin: 0; font-family: var(--font-subheading--family); font-weight: 500; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--wd-ed-graphite); }
   .wd-ed__note { margin: 0; font-style: italic; color: var(--wd-ed-graphite); }
   .wd-ed__edition { margin: 0; font-family: var(--font-subheading--family); font-weight: 500; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--wd-ed-graphite); }
   .wd-ed__price { margin: 0; }
@@ -142,6 +147,7 @@
     { "type": "range", "id": "card_gap", "label": "Space between cards", "min": 0, "max": 80, "step": 2, "unit": "px", "default": 32 },
     { "type": "range", "id": "mat", "label": "White mat around the print", "min": 0, "max": 48, "step": 2, "unit": "px", "default": 20 },
     { "type": "select", "id": "image_shape", "label": "Print shape", "options": [ { "value": "portrait", "label": "All the same height (portrait, no cropping)" }, { "value": "square", "label": "All square (no cropping)" }, { "value": "original", "label": "Each print's own shape" } ], "default": "portrait" },
+    { "type": "checkbox", "id": "show_type", "label": "Show product type above the title", "default": true, "info": "Comes from each product's Type in Shopify admin (Print, Tee, Kids Tee, Tote)." },
     { "type": "range", "id": "title_size", "label": "Title size", "min": 14, "max": 48, "step": 1, "unit": "px", "default": 24 },
     { "type": "text", "id": "edition_line", "label": "Edition line (all cards)", "default": "Edition of 15. Signed, numbered and dated by hand.", "info": "A print block can override this." },
     { "type": "checkbox", "id": "show_price", "label": "Show price", "default": false },
@@ -158,6 +164,7 @@
       "settings": [
         { "type": "product", "id": "product", "label": "Product" },
         { "type": "text", "id": "title", "label": "Title (optional)", "info": "Leave empty to use the product name." },
+        { "type": "text", "id": "eyebrow", "label": "Product type label (optional)", "info": "Leave empty to use the product's Type from Shopify admin." },
         { "type": "text", "id": "note", "label": "Note under the title (optional)" },
         { "type": "text", "id": "edition_line", "label": "Edition line for this print (optional)", "info": "Leave empty to use the section's edition line." }
       ]
