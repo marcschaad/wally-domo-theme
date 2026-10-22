@@ -571,8 +571,8 @@
         }
       },
       "block_order": [
-        "pgn_copy",
-        "pgn_art"
+        "pgn_art",
+        "pgn_copy"
       ],
       "settings": {
         "content_direction": "row",
