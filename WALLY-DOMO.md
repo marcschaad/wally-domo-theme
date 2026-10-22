@@ -14,12 +14,13 @@ Content files are not code and are ours to edit: `config/settings_data.json`
 ## Colour (2026-10-22)
 Frame = Horizon's global palette: near-white #FAFAF7, ink #1A1A1A,
 graphite #5E5A53, hairline #E2E0DA. Surfaces stay near-white everywhere.
-Each drop gets ONE saturated colour pulled from its own art, used only for that
-drop's headline and its call-to-action buttons (Marc, 2026-10-22):
-Brooklyn = tower wood #8A5A2B (5.6:1 on near-white), Pigeon = cap blue #3F63B8 (5.4:1).
+Each BODY OF WORK (not each piece) gets ONE saturated colour pulled from its art,
+used only for its titles and call-to-action buttons (Marc, 2026-10-22).
+Series 1 (We Lived in Brooklyn, Baby + Pigeon Gone West) = tower wood #8A5A2B
+(5.6:1 on near-white). Cap blue #3F63B8 retired with it; kept here if wanted.
 Global buttons (cart, checkout) stay ink. Max three drop colours on screen.
-Product cards are tonal: the card background is the drop colour at 12% over
-near-white (Pigeon #E4E8EF, Brooklyn #EDE7DF). Titles in the drop colour still pass AA.
+Product cards are tonal: the card background is the series colour at 12% over
+near-white (series 1: #EDE7DF). Titles in the drop colour still pass AA.
 
 ## The only exceptions (re-add after every Horizon update)
 | file | change |
