@@ -1,0 +1,109 @@
+{%- comment -%}
+  WALLY DOMO: Studio note. Our section (2026-10-22), replaces the nested Horizon "Custom section".
+  Portrait beside a short note, an email sign-up and a link. Everything on one screen.
+  Sign-up adds the customer with the tags below (Shopify Customers, marketing consent on).
+  Button uses the solid style (it isn't a buying CTA).
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign graphite = settings.color_palette.color1 | default: '#5E5A53'
+  assign fid = 'WdNote-' | append: section.id
+-%}
+<div
+  class="wd-note wd-note--image-{{ s.image_side }}"
+  style="--wd-note-img: {{ s.image_width }}%; --wd-note-graphite: {{ graphite }}; --wd-note-head: {{ s.heading_size }}px; --wd-note-top: {{ s.space_top }}px; --wd-note-bottom: {{ s.space_bottom }}px;"
+>
+  <div class="wd-note__wrap">
+    <div class="wd-note__image">
+      {%- if s.image != blank -%}
+        {{ s.image | image_url: width: 1200 | image_tag: widths: '400, 600, 800, 1200', sizes: '(min-width: 750px) 35vw, 70vw', alt: s.image.alt, loading: 'lazy', class: 'wd-note__img' }}
+      {%- else -%}
+        {{ 'image' | placeholder_svg_tag: 'wd-note__img wd-note__img--placeholder' }}
+      {%- endif -%}
+    </div>
+    <div class="wd-note__copy">
+      {%- if s.eyebrow != blank -%}<p class="wd-note__eyebrow">{{ s.eyebrow | escape }}</p>{%- endif -%}
+      {%- if s.heading != blank -%}<h2 class="wd-note__heading">{{ s.heading | escape }}</h2>{%- endif -%}
+      {%- if s.text != blank -%}<div class="wd-note__text">{{ s.text }}</div>{%- endif -%}
+
+      {%- if s.show_signup -%}
+        {%- form 'customer', id: fid, class: 'wd-note__form' -%}
+          <input type="hidden" name="contact[tags]" value="{{ s.signup_tags | default: 'newsletter' }}">
+          {%- if form.posted_successfully? -%}
+            <p class="wd-note__msg" tabindex="-1">{{ s.signup_success | escape }}</p>
+          {%- else -%}
+            <label class="visually-hidden" for="{{ fid }}-email">Email</label>
+            <input id="{{ fid }}-email" class="wd-note__input" type="email" name="contact[email]" value="{{ form.email }}" placeholder="Email address" autocomplete="email" autocapitalize="off" required{% if form.errors %} aria-invalid="true" aria-describedby="{{ fid }}-error"{% endif %}>
+            <button type="submit" class="button wd-note__button">{{ s.signup_button | escape }}</button>
+            {%- if form.errors -%}
+              <p id="{{ fid }}-error" class="wd-note__msg wd-note__msg--error">{{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}</p>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endform -%}
+      {%- endif -%}
+
+      {%- if s.link_label != blank and s.link != blank -%}
+        <a class="wd-note__link" href="{{ s.link }}"{% if s.link contains 'http' %} target="_blank" rel="noopener"{% endif %}>{{ s.link_label | escape }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<style>
+  .wd-note { padding-block: var(--wd-note-top) var(--wd-note-bottom); }
+  .wd-note__wrap { width: min(var(--page-content-width, 1200px), 100% - var(--page-margin, 20px) * 2); margin-inline: auto; display: flex; align-items: center; justify-content: center; gap: 56px; }
+  .wd-note--image-right .wd-note__image { order: 2; }
+  .wd-note__image { flex: 0 0 var(--wd-note-img); }
+  .wd-note__img { display: block; width: 100%; height: auto; }
+  .wd-note__copy { flex: 1 1 0; max-width: 560px; display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
+  .wd-note__eyebrow { margin: 0; font-family: var(--font-subheading--family); font-weight: 500; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--wd-note-graphite); }
+  html body .wd-note__heading { margin: 0; font-family: var(--font-heading--family); font-weight: var(--font-heading--weight); font-size: var(--wd-note-head); line-height: 1.1; text-transform: none; }
+  .wd-note__text p { margin: 0 0 .75em; }
+  .wd-note__text p:last-child { margin-bottom: 0; }
+  .wd-note__form { display: flex; gap: 10px; width: 100%; flex-wrap: wrap; }
+  .wd-note__input { flex: 1 1 220px; min-width: 0; padding: 14px 16px; border: 1px solid var(--color-border, #E2E0DA); border-radius: 0; background: #fff; }
+  .wd-note__button { flex: none; }
+  .wd-note__msg { margin: 0; width: 100%; }
+  .wd-note__msg--error { color: #b32517; }
+  .wd-note__link { color: inherit; text-underline-offset: 3px; }
+  @media screen and (max-width: 749px) {
+    .wd-note__wrap { flex-direction: column; align-items: flex-start; gap: 28px; }
+    .wd-note--image-right .wd-note__image { order: 0; }
+    .wd-note__image { flex-basis: auto; width: min(100%, calc(var(--wd-note-img) * 2)); }
+    .wd-note__button { width: 100%; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "WD Studio note",
+  "class": "wd-studio-note-section",
+  "settings": [
+    { "type": "header", "content": "Portrait" },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "range", "id": "image_width", "label": "Image width", "min": 15, "max": 60, "step": 1, "unit": "%", "default": 30 },
+    { "type": "select", "id": "image_side", "label": "Image side", "options": [ { "value": "left", "label": "Left" }, { "value": "right", "label": "Right" } ], "default": "left" },
+
+    { "type": "header", "content": "Note" },
+    { "type": "text", "id": "eyebrow", "label": "Small line above", "default": "A note from the studio" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "FIRST LOOK" },
+    { "type": "range", "id": "heading_size", "label": "Heading size", "min": 20, "max": 80, "step": 2, "unit": "px", "default": 40 },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>I’ve just landed on the West Coast after a lifetime in the Northeast. New work comes out in small batches, a few pieces at a time.</p><p>Sign up and you’ll see each edition before it goes public.</p>" },
+
+    { "type": "header", "content": "Sign-up" },
+    { "type": "checkbox", "id": "show_signup", "label": "Show email sign-up", "default": true },
+    { "type": "text", "id": "signup_button", "label": "Button label", "default": "Sign me up" },
+    { "type": "text", "id": "signup_success", "label": "Thank-you message", "default": "You're on the list. Thanks." },
+    { "type": "text", "id": "signup_tags", "label": "Customer tags", "default": "newsletter, first-look", "info": "Added to everyone who signs up here, so you can find them in Customers." },
+
+    { "type": "header", "content": "Link" },
+    { "type": "text", "id": "link_label", "label": "Link text", "default": "Follow the studio on Instagram" },
+    { "type": "url", "id": "link", "label": "Link", "default": "https://www.instagram.com/wallydomoart" },
+
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "space_top", "label": "Space above", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 64 },
+    { "type": "range", "id": "space_bottom", "label": "Space below", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 80 }
+  ],
+  "presets": [ { "name": "WD Studio note" } ]
+}
+{% endschema %}

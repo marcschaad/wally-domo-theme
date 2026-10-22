@@ -35,6 +35,13 @@ near-white (series 1: #EDE7DF). Titles in the drop colour still pass AA.
   Medium, heading = Arsenica Variable, accent = Arsenica Text. Renders wd-cta.
 - `sections/wd-type.liquid` (+ `snippets/wd-type-el.liquid`): editor Header >
   "Wally Domo fonts and type". Role weights, per-element type, H3 weight, sweep.
+- `sections/wd-editions.liquid` ("WD Editions"): homepage print cards. Flat controls:
+  heading, intro, series colour, card tint, card margin, gap, mat, print shape, title
+  size, edition line, price, button label, spacing; one "Print" block per card.
+- `sections/wd-studio-note.liquid` ("WD Studio note"): portrait + note + email sign-up
+  (customer tags) + link, flat controls.
+- Rule (Marc, 2026-10-22): build our own flat sections instead of nesting Horizon's
+  generic groups. Every control on one screen, named plainly.
 
 ## Updating Horizon
 1. Theme Store update makes a new theme copy ("Updated copy of ...").

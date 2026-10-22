@@ -1,0 +1,169 @@
+{%- comment -%}
+  WALLY DOMO: Editions. Our section (2026-10-22), replaces the nested Horizon "Custom section".
+  Everything on one screen in the editor: heading, intro, series colour, card look, spacing.
+  One "Print" block per card (product + optional title, note and edition line).
+  Colour rule: one colour per body of work. Titles + buttons use the series colour; the card is
+  the series colour mixed into the page colour (tint strength). Buttons use the Dawn CTA style
+  (snippets/wd-cta.liquid via .wd-cta).
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign page_bg = settings.color_palette.background | default: '#FAFAF7'
+  assign graphite = settings.color_palette.color1 | default: '#5E5A53'
+  assign series = s.series_color | default: '#8A5A2B'
+  case s.image_shape
+    when 'square'
+      assign ratio = '1 / 1'
+    when 'portrait'
+      assign ratio = '4 / 5'
+    else
+      assign ratio = 'auto'
+  endcase
+-%}
+<div
+  class="wd-ed"
+  style="
+    --wd-ed-series: {{ series }};
+    --wd-ed-tint: color-mix(in srgb, {{ series }} {{ s.tint }}%, {{ page_bg }});
+    --wd-ed-graphite: {{ graphite }};
+    --wd-ed-pad: {{ s.card_padding }}px;
+    --wd-ed-gap: {{ s.card_gap }}px;
+    --wd-ed-mat: {{ s.mat }}px;
+    --wd-ed-ratio: {{ ratio }};
+    --wd-ed-cols: {{ s.columns }};
+    --wd-ed-title: {{ s.title_size }}px;
+    --wd-ed-head: {{ s.heading_size }}px;
+    --wd-ed-top: {{ s.space_top }}px;
+    --wd-ed-bottom: {{ s.space_bottom }}px;
+  "
+>
+  <div class="wd-ed__wrap">
+    {%- if s.heading != blank or s.intro != blank -%}
+      <div class="wd-ed__intro">
+        {%- if s.heading != blank -%}
+          <h2 class="wd-ed__heading{% if s.heading_italic %} wd-ed__heading--italic{% endif %}">{{ s.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if s.intro != blank -%}
+          <div class="wd-ed__lede">{{ s.intro }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="wd-ed__grid">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign p = block.settings.product
+          assign title = block.settings.title | default: p.title | default: 'Pick a product'
+          assign edition = block.settings.edition_line | default: s.edition_line
+        -%}
+        <article class="wd-ed__card" {{ block.shopify_attributes }}>
+          <a class="wd-ed__mat" href="{{ p.url | default: '#' }}" tabindex="-1" aria-hidden="true">
+            {%- if p.featured_media -%}
+              {{ p.featured_media.preview_image | image_url: width: 1600 | image_tag: widths: '400, 600, 800, 1000, 1200, 1600', sizes: '(min-width: 750px) 50vw, 100vw', class: 'wd-ed__img', alt: '', loading: 'lazy' }}
+            {%- else -%}
+              {{ 'product-1' | placeholder_svg_tag: 'wd-ed__img wd-ed__img--placeholder' }}
+            {%- endif -%}
+          </a>
+          <div class="wd-ed__details">
+            <h3 class="wd-ed__title"><a href="{{ p.url | default: '#' }}">{{ title | escape }}</a></h3>
+            {%- if block.settings.note != blank -%}
+              <p class="wd-ed__note">{{ block.settings.note | escape }}</p>
+            {%- endif -%}
+            {%- if edition != blank -%}
+              <p class="wd-ed__edition">{{ edition | escape }}</p>
+            {%- endif -%}
+            {%- if s.show_price and p -%}
+              <p class="wd-ed__price">{{ p.price | money }}</p>
+            {%- endif -%}
+          </div>
+          {%- if s.button_label != blank and p -%}
+            <a
+              class="button button-custom wd-cta wd-ed__button"
+              href="{{ p.url }}"
+              style="--button-border-color: {{ series }}; --button-background-color: {{ series }}; --button-color: {{ page_bg }};"
+            >{{ s.button_label | escape }}</a>
+          {%- endif -%}
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+<style>
+  .wd-ed { padding-block: var(--wd-ed-top) var(--wd-ed-bottom); }
+  .wd-ed__wrap { width: min(var(--page-content-width, 1200px), 100% - var(--page-margin, 20px) * 2); margin-inline: auto; display: flex; flex-direction: column; gap: 48px; }
+  .wd-ed__intro { max-width: 66%; display: flex; flex-direction: column; gap: 12px; }
+  html body .wd-ed__heading {
+    margin: 0; font-family: var(--font-heading--family); font-weight: var(--font-heading--weight);
+    font-size: var(--wd-ed-head); line-height: 1.05; letter-spacing: -0.005em; text-transform: none;
+  }
+  .wd-ed__heading--italic { font-style: italic; }
+  .wd-ed__lede { color: var(--wd-ed-graphite); }
+  .wd-ed__lede p { margin: 0; }
+  .wd-ed__grid { display: grid; grid-template-columns: repeat(var(--wd-ed-cols), minmax(0, 1fr)); gap: var(--wd-ed-gap); align-items: stretch; }
+  .wd-ed__card { display: flex; flex-direction: column; gap: 16px; padding: var(--wd-ed-pad); background: var(--wd-ed-tint); }
+  .wd-ed__mat { display: block; padding: var(--wd-ed-mat); background: #fff; }
+  .wd-ed__img { display: block; width: 100%; height: auto; aspect-ratio: var(--wd-ed-ratio); object-fit: contain; }
+  .wd-ed__details { display: flex; flex-direction: column; gap: 8px; }
+  html body .wd-ed__title {
+    margin: 0; font-family: var(--font-accent--family) !important; font-weight: var(--font-accent--weight) !important;
+    font-size: var(--wd-ed-title); line-height: 1.2; color: var(--wd-ed-series); text-transform: none;
+  }
+  .wd-ed__title a { color: inherit; text-decoration: none; }
+  .wd-ed__note { margin: 0; font-style: italic; color: var(--wd-ed-graphite); }
+  .wd-ed__edition { margin: 0; font-family: var(--font-subheading--family); font-weight: 500; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--wd-ed-graphite); }
+  .wd-ed__price { margin: 0; }
+  .wd-ed__button { margin-top: auto; width: fit-content; }
+  @media screen and (max-width: 749px) {
+    .wd-ed__intro { max-width: none; }
+    .wd-ed__grid { grid-template-columns: minmax(0, 1fr); }
+    .wd-ed__card { padding: calc(var(--wd-ed-pad) * .66); }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "WD Editions",
+  "class": "wd-editions-section",
+  "settings": [
+    { "type": "header", "content": "Heading" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Signed prints, in small numbers." },
+    { "type": "checkbox", "id": "heading_italic", "label": "Heading in italic", "default": true },
+    { "type": "range", "id": "heading_size", "label": "Heading size", "min": 24, "max": 96, "step": 2, "unit": "px", "default": 48 },
+    { "type": "richtext", "id": "intro", "label": "Intro text", "default": "<p>Started in Brooklyn. Now made in a studio on the West Coast. Every print below is signed, numbered and dated by hand.</p>" },
+
+    { "type": "header", "content": "Series colour" },
+    { "type": "color", "id": "series_color", "label": "Series colour (titles and buttons)", "default": "#8A5A2B", "info": "One colour per body of work, taken from the art." },
+    { "type": "range", "id": "tint", "label": "Card tint strength", "min": 0, "max": 30, "step": 1, "unit": "%", "default": 12, "info": "How much of the series colour goes into the card. 0 = page colour." },
+
+    { "type": "header", "content": "Cards" },
+    { "type": "select", "id": "columns", "label": "Cards per row (desktop)", "options": [ { "value": "2", "label": "2" }, { "value": "3", "label": "3" } ], "default": "2" },
+    { "type": "range", "id": "card_padding", "label": "Card margin (inside the card)", "min": 0, "max": 80, "step": 2, "unit": "px", "default": 32 },
+    { "type": "range", "id": "card_gap", "label": "Space between cards", "min": 0, "max": 80, "step": 2, "unit": "px", "default": 32 },
+    { "type": "range", "id": "mat", "label": "White mat around the print", "min": 0, "max": 48, "step": 2, "unit": "px", "default": 20 },
+    { "type": "select", "id": "image_shape", "label": "Print shape", "options": [ { "value": "portrait", "label": "All the same height (portrait, no cropping)" }, { "value": "square", "label": "All square (no cropping)" }, { "value": "original", "label": "Each print's own shape" } ], "default": "portrait" },
+    { "type": "range", "id": "title_size", "label": "Title size", "min": 14, "max": 48, "step": 1, "unit": "px", "default": 24 },
+    { "type": "text", "id": "edition_line", "label": "Edition line (all cards)", "default": "Edition of 15. Signed, numbered and dated by hand.", "info": "A print block can override this." },
+    { "type": "checkbox", "id": "show_price", "label": "Show price", "default": false },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop the print", "info": "Leave empty to hide the button." },
+
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "space_top", "label": "Space above", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 48 },
+    { "type": "range", "id": "space_bottom", "label": "Space below", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 80 }
+  ],
+  "blocks": [
+    {
+      "type": "print",
+      "name": "Print",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "text", "id": "title", "label": "Title (optional)", "info": "Leave empty to use the product name." },
+        { "type": "text", "id": "note", "label": "Note under the title (optional)" },
+        { "type": "text", "id": "edition_line", "label": "Edition line for this print (optional)", "info": "Leave empty to use the section's edition line." }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [ { "name": "WD Editions", "blocks": [ { "type": "print" }, { "type": "print" } ] } ]
+}
+{% endschema %}
