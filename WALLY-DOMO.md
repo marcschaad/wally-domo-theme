@@ -53,3 +53,11 @@ subheading 500). The picker's font name is ignored; only its weight counts.
 H1-H6 and body sizes live in Horizon's own Typography panel (Dawn values snapped
 to Horizon's options). Text blocks only honour their own size/case/font when their
 preset is "Custom".
+
+Everything Horizon's panel can't reach lives in OUR section `sections/wd-type.liquid`
+(in the header group, editor: Header > "Wally Domo type"; one rule per element via
+`snippets/wd-type-el.liquid`): buttons, desktop menu, phone menu, announcement bar,
+product page title, prices, product card titles, badges, footer text, form fields,
+H3 weight, and the headline weight sweep (Arsenica Variable h1/h2 in main; default
+heavy to light, 450 to 300). Defaults = Marc's Dawn values. Dawn's captions and
+vendor styles have no Horizon equivalent.
