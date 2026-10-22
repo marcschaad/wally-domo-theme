@@ -62,3 +62,12 @@ product page title, prices, product card titles, badges, footer text, form field
 H3 weight, and the headline weight sweep (Arsenica Variable h1/h2 in main; default
 heavy to light, 450 to 300). Defaults = Marc's Dawn values. Dawn's captions and
 vendor styles have no Horizon equivalent.
+
+## CTAs (2026-10-22, Marc: "the same exact CTA style I had on Dawn")
+`snippets/wd-cta.liquid` (rendered from wd-fonts): homepage series buttons
+(Button style "Custom"), Add to cart (main + sticky bar) and Checkout get a 2px
+stroke, no fill, label in the button's border colour; hover/keyboard focus fills
+with that colour and a near-white label; disabled never fills. Other buttons stay
+solid. Buttons are square (radius 0, as on Dawn). Add class `wd-cta` to any
+.button to opt in.
+
