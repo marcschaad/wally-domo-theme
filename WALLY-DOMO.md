@@ -12,11 +12,12 @@ Content files are not code and are ours to edit: `config/settings_data.json`
 (which sections sit on which page). Updates carry them over.
 
 ## Colour (2026-10-22)
-Frame = Horizon's global palette: paper #F2EFE6, ink #1A1A1A, graphite #5E5A53,
-stock #DAD5CA. Each release gets one loud section background pulled from its
-own art and pushed: Brooklyn = tower wood #8A5A2B, Pigeon = cap blue #3F63B8.
-Horizon picks paper or ink text automatically; every pair checked AA.
-Max three release colours on screen.
+Frame = Horizon's global palette: near-white #FAFAF7, ink #1A1A1A,
+graphite #5E5A53, hairline #E2E0DA. Surfaces stay near-white everywhere.
+Each drop gets ONE saturated colour pulled from its own art, used only for that
+drop's headline and its call-to-action buttons (Marc, 2026-10-22):
+Brooklyn = tower wood #8A5A2B (5.6:1 on near-white), Pigeon = cap blue #3F63B8 (5.4:1).
+Global buttons (cart, checkout) stay ink. Max three drop colours on screen.
 
 ## The only exceptions (re-add after every Horizon update)
 | file | change |
