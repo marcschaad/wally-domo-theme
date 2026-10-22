@@ -43,3 +43,13 @@ near-white (Pigeon #E4E8EF, Brooklyn #EDE7DF). Titles in the drop colour still p
   silently drops their settings on sync (the commit still "succeeds").
 - Theme editor saves are committed back to main by shopify[bot]. Always `git pull` first.
 - Image references look like `shopify://shop_images/<filename>`.
+
+## Type (2026-10-22)
+Four roles, families fixed in snippets/wd-fonts.liquid: body = Broadacre Regular,
+subheading = Broadacre Medium (small type), heading = Arsenica Variable,
+accent = Arsenica Text. Weight per role = the weight variant of the Shopify font
+picked in Theme settings > Typography (heading Inter Light 300; body, accent 400;
+subheading 500). The picker's font name is ignored; only its weight counts.
+H1-H6 and body sizes live in Horizon's own Typography panel (Dawn values snapped
+to Horizon's options). Text blocks only honour their own size/case/font when their
+preset is "Custom".
