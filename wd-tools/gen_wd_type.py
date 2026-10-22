@@ -12,7 +12,7 @@ repo = sys.argv[1]
 
 # key, editor label, CSS selector, defaults: font, size, weight, line height %, tracking (1/1000 em), case
 ELEMENTS = [
-    ("button", "Buttons", ":is(.button, .button-secondary, .button-custom, button.shopify-payment-button__button--unbranded):not(.button-unstyled)",
+    ("button", "Buttons (Add to cart, Shop the print, Sign me up...)", ":is(.button, .button-secondary, .button-custom, button.shopify-payment-button__button--unbranded):not(.button-unstyled)",
      ("arsenica-variable", 13, 800, 120, 70, "uppercase"), (8, 32)),
     ("nav", "Menu (desktop)", ":is(.menu-list__link, .menu-list__link-title)",
      ("arsenica-variable", 13, 700, 120, 25, "capitalize"), (8, 32)),
@@ -91,6 +91,9 @@ schema_settings = [
     {"type": "paragraph", "content": "Weights: Arsenica Variable takes any weight 100-800. Arsenica Text is 400 or 700. Broadacre is two cuts: under 450 = Regular, 450 and up = Medium."},
     {"type": "paragraph", "content": "Headlines in Arsenica Variable get the weight sweep (bottom of this panel) instead of their own weight while the sweep is on."},
 ]
+for key, label, _sel, defaults, rng in ELEMENTS:
+    schema_settings += settings_for(key, label, defaults, rng)
+schema_settings += [{"type": "paragraph", "content": "Headings and body text (used by Horizon blocks, e.g. a Text block set to Heading 2) are below."}]
 for key, label, d, rng in PRESETS:
     font, size, phone, weight, lh, trk, case = d
     schema_settings += settings_for(key, label, (font, size, weight, lh, trk, case), rng, phone)
@@ -102,8 +105,6 @@ schema_settings += [
      "options": [{"value": "400", "label": "Regular (400)"}, {"value": "700", "label": "Bold (700)"}], "default": "400",
      "info": "Only for Horizon text that has no weight control of its own."},
 ]
-for key, label, _sel, defaults, rng in ELEMENTS:
-    schema_settings += settings_for(key, label, defaults, rng)
 schema_settings += [
     {"type": "header", "content": "Product type label colour"},
     {"type": "color", "id": "product_type_color", "label": "Colour",
