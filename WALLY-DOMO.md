@@ -80,3 +80,7 @@ with that colour and a near-white label; disabled never fills. Other buttons sta
 solid. Buttons are square (radius 0, as on Dawn). Add class `wd-cta` to any
 .button to opt in.
 
+- `url` settings may only default to a store path (e.g. /collections/all). An outside URL
+  default makes Shopify reject the whole section file, and any template using it.
+- If Shopify rejects a file, its stale copy of anything that depends on it comes back to
+  GitHub on the next editor save. Check `git log` for shopify[bot] commits after pushing.
