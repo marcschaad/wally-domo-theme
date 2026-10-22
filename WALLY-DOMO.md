@@ -18,6 +18,8 @@ Each drop gets ONE saturated colour pulled from its own art, used only for that
 drop's headline and its call-to-action buttons (Marc, 2026-10-22):
 Brooklyn = tower wood #8A5A2B (5.6:1 on near-white), Pigeon = cap blue #3F63B8 (5.4:1).
 Global buttons (cart, checkout) stay ink. Max three drop colours on screen.
+Product cards are tonal: the card background is the drop colour at 12% over
+near-white (Pigeon #E4E8EF, Brooklyn #EDE7DF). Titles in the drop colour still pass AA.
 
 ## The only exceptions (re-add after every Horizon update)
 | file | change |
