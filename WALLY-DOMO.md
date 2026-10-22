@@ -57,7 +57,7 @@ settings in WD sections. Edit the script in `wd-tools/` and run it: `python3 -I 
 then `python3 -I wd-tools/gen_wd_sections.py .` (Shopify ignores the wd-tools folder.)
 
 ## Gotchas
-- Range settings: (max - min) / step must be 100 or less, or Shopify rejects the whole section file.
+- Range settings: (max - min) / step must stay well under 100 (10-110 step 1 was still rejected; 12-100 passes), or Shopify rejects the whole section file.
 - Static blocks in templates/*.json need `"blocks": {}` even when empty, or Shopify
   silently drops their settings on sync (the commit still "succeeds").
 - Theme editor saves are committed back to main by shopify[bot]. Always `git pull` first.
