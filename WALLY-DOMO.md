@@ -27,7 +27,7 @@ near-white (series 1: #EDE7DF). Titles in the drop colour still pass AA.
 |---|---|
 | layout/theme.liquid | `{%- render 'wd-fonts' -%}` after `render 'color-palette'` |
 | layout/password.liquid | same line, same place |
-| locales/en.default.schema.json | cosmetic labels only: content.text_presets = "Text presets (not used)", content.responsive_font_sizes = pointer to our panel; options.body = "Broadacre", options.subheading = "Broadacre Medium", options.heading = "Arsenica Variable", options.accent = "Arsenica Text"; content.fonts = "Fonts: pickers unused (set fonts in Header > Wally Domo fonts and type)". If an update reverts them nothing breaks; the editor just shows Horizon's role names again. |
+| locales/en.default.schema.json | cosmetic labels only: content.text_presets = "Text presets (not used)", options.button_primary / options.button_secondary = "... Font + case here do nothing: set them in Header > Wally Domo fonts and type > Buttons" (Buttons group headers; only used there), content.responsive_font_sizes = pointer to our panel; options.body = "Broadacre", options.subheading = "Broadacre Medium", options.heading = "Arsenica Variable", options.accent = "Arsenica Text"; content.fonts = "Fonts: pickers unused (set fonts in Header > Wally Domo fonts and type)". If an update reverts them nothing breaks; the editor just shows Horizon's role names again. |
 
 ## Our files
 - `snippets/wd-fonts.liquid`: Adobe kit gag8aux + Quicksand fallback; fixes Horizon's
