@@ -27,6 +27,7 @@ near-white (series 1: #EDE7DF). Titles in the drop colour still pass AA.
 |---|---|
 | layout/theme.liquid | `{%- render 'wd-fonts' -%}` after `render 'color-palette'` |
 | layout/password.liquid | same line, same place |
+| locales/en.default.schema.json | cosmetic labels only: options.body = "Broadacre", options.subheading = "Broadacre Medium", options.heading = "Arsenica Variable", options.accent = "Arsenica Text"; content.fonts = "Fonts: pickers unused (set fonts in Header > Wally Domo fonts and type)". If an update reverts them nothing breaks; the editor just shows Horizon's role names again. |
 
 ## Our files
 - `snippets/wd-fonts.liquid`: Adobe kit gag8aux + Quicksand fallback; points Horizon's
@@ -46,7 +47,11 @@ near-white (series 1: #EDE7DF). Titles in the drop colour still pass AA.
 - Image references look like `shopify://shop_images/<filename>`.
 
 ## Type (2026-10-22)
-Four roles, families fixed in snippets/wd-fonts.liquid: body = Broadacre Regular,
+Four roles, families fixed in snippets/wd-fonts.liquid, and every Font menu in the
+editor is labelled with the real font name (see the locale exception above). Weights
+for Arsenica Variable and Arsenica Text are set in Header > Wally Domo fonts and type
+(the Typography font pickers are no longer used).
+Original note:: body = Broadacre Regular,
 subheading = Broadacre Medium (small type), heading = Arsenica Variable,
 accent = Arsenica Text. Weight per role = the weight variant of the Shopify font
 picked in Theme settings > Typography (heading Inter Light 300; body, accent 400;

@@ -8,6 +8,16 @@
 {%- endcomment -%}
 {%- assign s = section.settings -%}
 <style>
+  :root {
+    --font-body--weight: 300;
+    --font-subheading--weight: 500;
+    --font-heading--weight: {{ s.w_arsenica_variable | default: 300 }};
+    --font-accent--weight: {{ s.w_arsenica_text | default: 400 }};
+    --font-body--style: normal;
+    --font-subheading--style: normal;
+    --font-heading--style: normal;
+    --font-accent--style: normal;
+  }
   {%- render 'wd-type-el', s: s, el: 'button', sel: ':is(.button, .button-secondary, .button-custom, button.shopify-payment-button__button--unbranded):not(.button-unstyled)' -%}
   {%- render 'wd-type-el', s: s, el: 'nav', sel: ':is(.menu-list__link, .menu-list__link-title)' -%}
   {%- render 'wd-type-el', s: s, el: 'mobile_nav', sel: ':is(.menu-drawer__menu-item, .menu-drawer__menu-item a)' -%}
@@ -106,12 +116,51 @@
 
 {% schema %}
 {
-  "name": "Wally Domo type",
+  "name": "Wally Domo fonts and type",
   "class": "wd-type-section",
   "settings": [
     {
       "type": "paragraph",
-      "content": "Wally Domo type for the parts of the site Horizon's own Typography panel can't reach. Headings H1-H6 and body text stay in Theme settings > Typography."
+      "content": "The site uses four fonts. Every Font menu in the editor lists them by name: Broadacre, Broadacre Medium, Arsenica Variable, Arsenica Text. Each name always means that font. To swap the font on anything, pick a different name in its Font menu."
+    },
+    {
+      "type": "paragraph",
+      "content": "Sizes for Heading 1-6 and body text: Theme settings > Typography. Everything else: below. The font pickers at the top of Theme settings > Typography are not used."
+    },
+    {
+      "type": "header",
+      "content": "Font weights"
+    },
+    {
+      "type": "range",
+      "id": "w_arsenica_variable",
+      "label": "Arsenica Variable weight",
+      "min": 100,
+      "max": 800,
+      "step": 10,
+      "default": 300,
+      "info": "Used wherever a Font menu says Arsenica Variable (H2 by default). Any weight 100-800."
+    },
+    {
+      "type": "select",
+      "id": "w_arsenica_text",
+      "label": "Arsenica Text weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Regular (400)"
+        },
+        {
+          "value": "700",
+          "label": "Bold (700)"
+        }
+      ],
+      "default": "400",
+      "info": "Used wherever a Font menu says Arsenica Text (H1 by default)."
+    },
+    {
+      "type": "paragraph",
+      "content": "Broadacre is always Regular and Broadacre Medium is always Medium (single cuts)."
     },
     {
       "type": "header",
@@ -124,11 +173,11 @@
       "options": [
         {
           "value": "body",
-          "label": "Same as body text (Broadacre)"
+          "label": "Broadacre (same as body text)"
         },
         {
           "value": "broadacre",
-          "label": "Broadacre"
+          "label": "Broadacre (Regular; Medium at 450+)"
         },
         {
           "value": "arsenica-variable",
@@ -220,11 +269,11 @@
       "options": [
         {
           "value": "body",
-          "label": "Same as body text (Broadacre)"
+          "label": "Broadacre (same as body text)"
         },
         {
           "value": "broadacre",
-          "label": "Broadacre"
+          "label": "Broadacre (Regular; Medium at 450+)"
         },
         {
           "value": "arsenica-variable",
@@ -316,11 +365,11 @@
       "options": [
         {
           "value": "body",
-          "label": "Same as body text (Broadacre)"
+          "label": "Broadacre (same as body text)"
         },
         {
           "value": "broadacre",
-          "label": "Broadacre"
+          "label": "Broadacre (Regular; Medium at 450+)"
         },
         {
           "value": "arsenica-variable",
@@ -412,11 +461,11 @@
       "options": [
         {
           "value": "body",
-          "label": "Same as body text (Broadacre)"
+          "label": "Broadacre (same as body text)"
         },
         {
           "value": "broadacre",
-          "label": "Broadacre"
+          "label": "Broadacre (Regular; Medium at 450+)"
         },
         {
           "value": "arsenica-variable",
@@ -508,11 +557,11 @@
       "options": [
         {
           "value": "body",
-          "label": "Same as body text (Broadacre)"
+          "label": "Broadacre (same as body text)"
         },
         {
           "value": "broadacre",
-          "label": "Broadacre"
+          "label": "Broadacre (Regular; Medium at 450+)"
         },
         {
           "value": "arsenica-variable",
@@ -604,11 +653,11 @@
       "options": [
         {
           "value": "body",
-          "label": "Same as body text (Broadacre)"
+          "label": "Broadacre (same as body text)"
         },
         {
           "value": "broadacre",
-          "label": "Broadacre"
+          "label": "Broadacre (Regular; Medium at 450+)"
         },
         {
           "value": "arsenica-variable",
@@ -700,11 +749,11 @@
       "options": [
         {
           "value": "body",
-          "label": "Same as body text (Broadacre)"
+          "label": "Broadacre (same as body text)"
         },
         {
           "value": "broadacre",
-          "label": "Broadacre"
+          "label": "Broadacre (Regular; Medium at 450+)"
         },
         {
           "value": "arsenica-variable",
@@ -796,11 +845,11 @@
       "options": [
         {
           "value": "body",
-          "label": "Same as body text (Broadacre)"
+          "label": "Broadacre (same as body text)"
         },
         {
           "value": "broadacre",
-          "label": "Broadacre"
+          "label": "Broadacre (Regular; Medium at 450+)"
         },
         {
           "value": "arsenica-variable",
@@ -892,11 +941,11 @@
       "options": [
         {
           "value": "body",
-          "label": "Same as body text (Broadacre)"
+          "label": "Broadacre (same as body text)"
         },
         {
           "value": "broadacre",
-          "label": "Broadacre"
+          "label": "Broadacre (Regular; Medium at 450+)"
         },
         {
           "value": "arsenica-variable",
@@ -988,11 +1037,11 @@
       "options": [
         {
           "value": "body",
-          "label": "Same as body text (Broadacre)"
+          "label": "Broadacre (same as body text)"
         },
         {
           "value": "broadacre",
-          "label": "Broadacre"
+          "label": "Broadacre (Regular; Medium at 450+)"
         },
         {
           "value": "arsenica-variable",
