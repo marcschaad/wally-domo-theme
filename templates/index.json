@@ -285,7 +285,11 @@
         "media": {
           "type": "_media-without-appearance",
           "static": true,
-          "settings": {}
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/9813251285699716975_2048.jpg",
+            "image_position": "cover"
+          }
         },
         "featured-product": {
           "type": "_featured-product",
@@ -335,7 +339,11 @@
         "media": {
           "type": "_media-without-appearance",
           "static": true,
-          "settings": {}
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/PigeonGoneWest_SantaMonica_WIP.png",
+            "image_position": "cover"
+          }
         },
         "featured-product": {
           "type": "_featured-product",
