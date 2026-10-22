@@ -31,9 +31,18 @@
   {%- liquid
     assign h3w = s.h3_weight | default: 600
   -%}
-  html body h3, html body .h3 > :is(p, span) {
-    font-weight: {{ h3w }} !important;
-    {%- if h3w >= 450 %} font-family: var(--wd-font-broadacre-small) !important;{% endif %}
+  :root {
+  {%- if settings.type_font_h3 == 'body' or settings.type_font_h3 == 'subheading' %}
+    {%- if h3w >= 450 %}
+    --font-h3--family: var(--wd-font-broadacre-small);
+    --font-h3--weight: 500;
+    {%- else %}
+    --font-h3--family: var(--wd-font-broadacre);
+    --font-h3--weight: 300;
+    {%- endif %}
+  {%- else %}
+    --font-h3--weight: {{ h3w }};
+  {%- endif %}
   }
   .wd-type-section { display: contents; }
 </style>
@@ -1134,7 +1143,7 @@
       "max": 900,
       "step": 50,
       "default": 600,
-      "info": "Horizon sets weight per font role, not per heading. Broadacre 450+ switches to Medium."
+      "info": "Only affects text using the Heading 3 style. If H3 is set to Broadacre: under 450 = Regular, 450+ = Medium."
     },
     {
       "type": "header",
