@@ -1,6 +1,8 @@
 {%- comment -%}
   WALLY DOMO: one element's full type rule for sections/wd-type.liquid.
-  Params: s = section.settings, el = element key, sel = CSS selector.
+  Params: s = section.settings, el = element key, and EITHER sel = CSS selector (writes a rule)
+  OR vars = Horizon preset name (h1-h6, paragraph: writes Horizon's --font-<preset>--* variables).
+  Optional <el>_phone setting = size on phones (fluid clamp, like Horizon's own).
   Font keys: body / broadacre (Regular under 450, Medium 450+), arsenica-variable(-italic),
   arsenica-text (snaps to 400 or 700).
 {%- endcomment -%}
@@ -38,7 +40,29 @@
   endcase
   assign lh = s[k_lh] | default: 120 | divided_by: 100.0
   assign trk = s[k_trk] | default: 0 | divided_by: 1000.0
+  assign size = s[k_size]
+  assign k_phone = el | append: '_phone'
+  assign phone = s[k_phone] | default: size
+  if phone < size
+    assign vw = size | times: 0.1
+    capture size_css
+      echo 'clamp(' | append: phone | append: 'px, ' | append: vw | append: 'vw, ' | append: size | append: 'px)'
+    endcapture
+  else
+    assign size_css = size | append: 'px'
+  endif
 -%}
+{%- if vars != blank -%}
+:root {
+  --font-{{ vars }}--family: {{ stack }};
+  --font-{{ vars }}--style: {{ style }};
+  --font-{{ vars }}--weight: {{ w }};
+  --font-{{ vars }}--size: {{ size_css }};
+  --font-{{ vars }}--line-height: {{ lh }};
+  --font-{{ vars }}--letter-spacing: {{ trk }}em;
+  --font-{{ vars }}--case: {{ s[k_case] | default: 'none' }};
+}
+{%- else -%}
 html body {{ sel }} {
   font-family: {{ stack }} !important;
   font-style: {{ style }} !important;
@@ -49,3 +73,4 @@ html body {{ sel }} {
   letter-spacing: {{ trk }}em !important;
   text-transform: {{ s[k_case] | default: 'none' }} !important;
 }
+{%- endif -%}

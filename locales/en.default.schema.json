@@ -119,7 +119,7 @@
     "popup": "Popup",
     "product_media": "Product media",
     "product_page": "Product page",
-    "responsive_font_sizes": "Sizes automatically scale for all screen sizes",
+    "responsive_font_sizes": "Not used. Heading 1-6 and body text are set in Header > Wally Domo fonts and type (font, size, phone size, weight, line height, tracking, case). Changes here do nothing.",
     "resource_reference_collection_card": "Displays collection from parent section",
     "resource_reference_collection_card_image": "Displays image from parent collection",
     "resource_reference_collection_title": "Displays title from parent collection",
@@ -148,7 +148,7 @@
     "submenu_feature": "Submenu feature",
     // Section header for text positioning settings
     "text": "Text",
-    "text_presets": "Text presets",
+    "text_presets": "Text presets (not used)",
     "thumbnails": "Thumbnails",
     "transparent_background": "Transparent background",
     "type": "Type",

@@ -35,17 +35,26 @@
   assign m_cs = s.m_cloud | default: 65 | divided_by: 100.0
   assign m_pp = s.m_pig_spread | default: 95 | divided_by: 100.0
 
+  assign cs_w = s.cs_weight | default: 380
   case s.cs_font
     when 'arsenica-text'
-      assign cs_stack = '"arsenica-text", Georgia, serif'
-    when 'broadacre'
-      assign cs_stack = '"broadacre-regular-0", "Quicksand", system-ui, -apple-system, "Helvetica Neue", sans-serif'
-    when 'body'
-      assign cs_stack = 'var(--font-body-family)'
+      assign cs_stack = 'var(--wd-font-arsenica-text)'
+      if cs_w >= 550
+        assign cs_w = 700
+      else
+        assign cs_w = 400
+      endif
+    when 'broadacre', 'body'
+      if cs_w >= 450
+        assign cs_stack = 'var(--wd-font-broadacre-small)'
+        assign cs_w = 500
+      else
+        assign cs_stack = 'var(--wd-font-broadacre)'
+        assign cs_w = 300
+      endif
     else
-      assign cs_stack = '"arsenica-variable", Georgia, serif'
+      assign cs_stack = 'var(--wd-font-arsenica)'
   endcase
-  assign cs_w = s.cs_weight | default: 380
   assign cs_style = 'normal'
   if s.cs_italic
     assign cs_style = 'italic'
@@ -475,9 +484,9 @@
 
     { "type": "header", "content": "Coming soon + sign-up", "info": "Only when the middle is Coming soon + sign-up (the password page). Heading sizes are desktop px; phones use about half." },
     { "type": "text", "id": "cs_heading", "label": "Heading", "default": "Coming soon", "visible_if": "{{ section.settings.centre == 'signup' }}" },
-    { "type": "select", "id": "cs_font", "label": "Heading font", "options": [ { "value": "arsenica-variable", "label": "Arsenica Variable" }, { "value": "arsenica-text", "label": "Arsenica Text" }, { "value": "broadacre", "label": "Broadacre" }, { "value": "body", "label": "Same as body text" } ], "default": "arsenica-variable", "visible_if": "{{ section.settings.centre == 'signup' }}" },
+    { "type": "select", "id": "cs_font", "label": "Heading font", "options": [ { "value": "arsenica-variable", "label": "Arsenica Variable" }, { "value": "arsenica-text", "label": "Arsenica Text" }, { "value": "broadacre", "label": "Broadacre (Regular; Medium at 450+)" } ], "default": "arsenica-variable", "visible_if": "{{ section.settings.centre == 'signup' }}" },
     { "type": "range", "id": "cs_size", "label": "Heading size", "min": 24, "max": 120, "step": 1, "unit": "px", "default": 46, "visible_if": "{{ section.settings.centre == 'signup' }}" },
-    { "type": "range", "id": "cs_weight", "label": "Heading weight", "min": 100, "max": 800, "step": 10, "default": 380, "visible_if": "{{ section.settings.centre == 'signup' }}" },
+    { "type": "range", "id": "cs_weight", "label": "Heading weight", "min": 100, "max": 800, "step": 10, "default": 380, "info": "Broadacre: under 450 = Regular, 450+ = Medium. Arsenica Text: 400 or 700.", "visible_if": "{{ section.settings.centre == 'signup' }}" },
     { "type": "checkbox", "id": "cs_italic", "label": "Heading in italic", "default": false, "visible_if": "{{ section.settings.centre == 'signup' }}" },
     { "type": "range", "id": "cs_line_height", "label": "Heading line height", "min": 70, "max": 200, "step": 5, "unit": "%", "default": 100, "visible_if": "{{ section.settings.centre == 'signup' }}" },
     { "type": "range", "id": "cs_tracking", "label": "Heading tracking", "min": -100, "max": 200, "step": 5, "default": 0, "visible_if": "{{ section.settings.centre == 'signup' }}" },
