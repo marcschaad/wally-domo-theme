@@ -30,10 +30,11 @@ near-white (series 1: #EDE7DF). Titles in the drop colour still pass AA.
 | locales/en.default.schema.json | cosmetic labels only: options.body = "Broadacre", options.subheading = "Broadacre Medium", options.heading = "Arsenica Variable", options.accent = "Arsenica Text"; content.fonts = "Fonts: pickers unused (set fonts in Header > Wally Domo fonts and type)". If an update reverts them nothing breaks; the editor just shows Horizon's role names again. |
 
 ## Our files
-- `snippets/wd-fonts.liquid`: Adobe kit gag8aux + Quicksand fallback; points Horizon's
-  four font roles at our families (body/subheading = Broadacre Regular 0,
-  heading/accent = Arsenica Variable). Families only; sizes and weights stay in
-  Theme settings > Typography.
+- `snippets/wd-fonts.liquid`: Adobe kit gag8aux + Quicksand fallback; fixes Horizon's
+  four font roles to our families: body = Broadacre Regular, subheading = Broadacre
+  Medium, heading = Arsenica Variable, accent = Arsenica Text. Renders wd-cta.
+- `sections/wd-type.liquid` (+ `snippets/wd-type-el.liquid`): editor Header >
+  "Wally Domo fonts and type". Role weights, per-element type, H3 weight, sweep.
 
 ## Updating Horizon
 1. Theme Store update makes a new theme copy ("Updated copy of ...").
@@ -47,21 +48,17 @@ near-white (series 1: #EDE7DF). Titles in the drop colour still pass AA.
 - Image references look like `shopify://shop_images/<filename>`.
 
 ## Type (2026-10-22)
-Four roles, families fixed in snippets/wd-fonts.liquid, and every Font menu in the
-editor is labelled with the real font name (see the locale exception above). Weights
-for Arsenica Variable and Arsenica Text are set in Header > Wally Domo fonts and type
-(the Typography font pickers are no longer used).
-Original note:: body = Broadacre Regular,
-subheading = Broadacre Medium (small type), heading = Arsenica Variable,
-accent = Arsenica Text. Weight per role = the weight variant of the Shopify font
-picked in Theme settings > Typography (heading Inter Light 300; body, accent 400;
-subheading 500). The picker's font name is ignored; only its weight counts.
-H1-H6 and body sizes live in Horizon's own Typography panel (Dawn values snapped
-to Horizon's options). Text blocks only honour their own size/case/font when their
+Four fonts, each tied to one Horizon role and labelled by its real name in every
+Font menu: Broadacre (body), Broadacre Medium (subheading), Arsenica Variable
+(heading), Arsenica Text (accent). Swap a font on anything = pick another name in
+its Font menu. Weights: Header > Wally Domo fonts and type (Arsenica Variable 300,
+Arsenica Text 400; Broadacre cuts fixed). The Typography font pickers are unused.
+H1-H6 and body sizes live in Horizon's own Typography panel (Dawn values snapped to
+Horizon's options). Text blocks only honour their own size/case/font when their
 preset is "Custom".
 
 Everything Horizon's panel can't reach lives in OUR section `sections/wd-type.liquid`
-(in the header group, editor: Header > "Wally Domo type"; one rule per element via
+(in the header group, editor: Header > "Wally Domo fonts and type"; one rule per element via
 `snippets/wd-type-el.liquid`): buttons, desktop menu, phone menu, announcement bar,
 product page title, prices, product card titles, badges, footer text, form fields,
 H3 weight, and the headline weight sweep (Arsenica Variable h1/h2 in main; default
