@@ -699,34 +699,28 @@
     },
     "wd_canvas": {
       "type": "wd-canvas",
-      "settings": {
-        "series_color": "#8A5A2B",
-        "row_height": 0
-      },
       "blocks": {
         "img": {
           "type": "image",
           "settings": {
+            "aspect": "45",
+            "mat": 24,
             "col": 1,
             "span": 7,
             "row": 1,
-            "rows": 3,
-            "aspect": "45",
-            "mat": 24
-          },
-          "blocks": {}
+            "rows": 3
+          }
         },
         "panel": {
           "type": "panel",
           "settings": {
+            "opacity": 12,
             "col": 5,
             "span": 8,
             "row": 1,
             "rows": 3,
-            "opacity": 12,
             "nudge_y": 40
-          },
-          "blocks": {}
+          }
         },
         "head": {
           "type": "heading",
@@ -736,8 +730,7 @@
             "span": 5,
             "row": 1,
             "align_y": "end"
-          },
-          "blocks": {}
+          }
         },
         "txt": {
           "type": "text",
@@ -745,8 +738,7 @@
             "col": 8,
             "span": 4,
             "row": 2
-          },
-          "blocks": {}
+          }
         },
         "btn": {
           "type": "button",
@@ -756,8 +748,7 @@
             "col": 8,
             "span": 5,
             "row": 3
-          },
-          "blocks": {}
+          }
         }
       },
       "block_order": [
@@ -766,7 +757,11 @@
         "head",
         "txt",
         "btn"
-      ]
+      ],
+      "settings": {
+        "row_height": 0,
+        "series_color": "#8A5A2B"
+      }
     }
   },
   "order": [
