@@ -1,5 +1,5 @@
 """Adds full type controls (font, size, weight, line height, tracking, case) to every text in
-sections/wd-editions.liquid, sections/wd-studio-note.liquid and sections/wd-footer.liquid. Usage: python3 -I gen_wd_sections.py <repo>
+sections/wd-editions.liquid, sections/wd-drop.liquid, sections/wd-studio-note.liquid and sections/wd-footer.liquid. Usage: python3 -I gen_wd_sections.py <repo>
 Idempotent: strips a previous run (between the WD-TYPE markers) before writing."""
 import json, re, sys
 repo = sys.argv[1]
@@ -24,14 +24,32 @@ SPECS = {
   "sections/wd-editions.liquid": {
     "drop": ["heading_italic", "heading_size", "title_size"],
     "groups": [  # key, label, defaults, size range, selector (inside the section), insert before setting id
+      ("ty_series", "Series name type", ("body", 12, 500, 120, 80, "uppercase"), (8, 24), ".wd-ed__series", "series_color"),
       ("ty_heading", "Heading type", ("arsenica-variable-italic", 48, 300, 105, -5, "none"), (20, 120), ".wd-ed__heading", "series_color"),
       ("ty_intro", "Intro text type", ("body", 14, 300, 140, 0, "none"), (10, 32), ":is(.wd-ed__lede, .wd-ed__lede *)", "series_color"),
       ("ty_title", "Print title type", ("arsenica-text", 24, 400, 120, 0, "none"), (12, 60), ".wd-ed__title", "space_top"),
       ("ty_note", "Note type", ("arsenica-variable-italic", 15, 300, 140, 0, "none"), (10, 28), ".wd-ed__note", "space_top"),
       ("ty_edition", "Edition line type", ("body", 12, 500, 120, 60, "uppercase"), (8, 24), ".wd-ed__edition", "space_top"),
       ("ty_price", "Price type", ("body", 14, 600, 130, 35, "none"), (8, 32), ".wd-ed__price", "space_top"),
+      ("ty_coming", "Coming soon line type", ("body", 12, 500, 120, 60, "uppercase"), (8, 24), ".wd-ed__coming", "space_top"),
     ],
     "insert_header_before": {"space_top": None},
+  },
+  "sections/wd-drop.liquid": {
+    "drop": [],
+    "groups": [
+      ("ty_eyebrow", "Small line type", ("body", 12, 500, 120, 80, "uppercase"), (8, 24), ".wd-dr__eyebrow", "start_date"),
+      ("ty_heading", "Heading type", ("arsenica-variable-italic", 48, 300, 105, -5, "none"), (20, 120), ".wd-dr__heading", "start_date"),
+      ("ty_intro", "Intro text type", ("body", 14, 300, 140, 0, "none"), (10, 32), ":is(.wd-dr__lede, .wd-dr__lede *)", "start_date"),
+      ("ty_number", "Number type", ("body", 11, 500, 120, 100, "uppercase"), (8, 24), ".wd-dr__number", "space_top"),
+      ("ty_name", "Name type (big card)", ("arsenica-text", 36, 400, 110, 0, "none"), (16, 96), ".wd-dr__card.is-feature .wd-dr__name", "space_top"),
+      ("ty_small_name", "Name type (small cards)", ("arsenica-text", 18, 400, 120, 0, "none"), (10, 40), ".wd-dr__card:not(.is-feature) .wd-dr__name", "space_top"),
+      ("ty_line", "Line under the name type", ("arsenica-variable-italic", 16, 300, 140, 0, "none"), (10, 32), ".wd-dr__line", "space_top"),
+      ("ty_status", "Drop status type", ("body", 12, 500, 120, 60, "uppercase"), (8, 24), ".wd-dr__status", "space_top"),
+      ("ty_edition", "Edition line type", ("body", 12, 500, 120, 60, "uppercase"), (8, 24), ".wd-dr__edition", "space_top"),
+      ("ty_price", "Price type", ("body", 14, 600, 130, 35, "none"), (8, 32), ".wd-dr__price", "space_top"),
+      ("ty_signup", "Sign-up link type", ("body", 14, 300, 140, 0, "none"), (10, 28), ".wd-dr__signup", "space_top"),
+    ],
   },
   "sections/wd-studio-note.liquid": {
     "drop": ["heading_size"],

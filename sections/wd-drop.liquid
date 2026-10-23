@@ -1,0 +1,1630 @@
+{%- comment -%}
+  WALLY DOMO: Weekly drop (2026-10-23). Built for Portraits of an Urban Jungle.
+  One "Portrait" block per piece, in drop order. Set the first drop date and how many days
+  apart; every block after the first gets its date from that (a block can override it).
+  The section flips by itself: before its date a portrait shows as coming (teaser hidden,
+  blurred or shown); from its date and time it is "out now"; an older one shows "dropped";
+  a product with no stock shows "sold out". The newest released portrait is the big card;
+  before the first drop, the next one is. Times are in the store's time zone
+  (Settings > General). The page is checked again in the browser, so a cached page still flips.
+  Colour rule: one colour per body of work, used on titles + buttons, card tint at 12%.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign page_bg = settings.color_palette.background | default: '#FAFAF7'
+  assign graphite = settings.color_palette.color1 | default: '#5E5A53'
+  assign series = s.series_color | default: '#5E5A53'
+  case s.image_shape
+    when 'square'
+      assign ratio = '1 / 1'
+    when 'portrait'
+      assign ratio = '4 / 5'
+    else
+      assign ratio = '3 / 4'
+  endcase
+
+  assign now_num = 'now' | date: '%Y%m%d%H%M' | plus: 0
+  assign time = s.drop_time | default: '10:00' | strip | remove: ':'
+  if time.size == 3
+    assign time = '0' | append: time
+  endif
+  assign step = s.every_days | default: 7 | times: 86400
+  assign base = 0
+  if s.start_date != blank
+    assign base = s.start_date | strip | append: ' 12:00' | date: '%s' | plus: 0
+  endif
+  assign total = section.blocks.size
+
+  # pass 1: newest released + first upcoming decide the big card
+  assign latest = -1
+  assign first_next = -1
+  for block in section.blocks
+    assign i = forloop.index0
+    assign day = ''
+    if block.settings.date != blank
+      assign day = block.settings.date | strip
+    elsif base > 0
+      assign day = step | times: i | plus: base | date: '%Y-%m-%d'
+    endif
+    assign at = 0
+    if day != blank
+      assign at = day | remove: '-' | append: time | plus: 0
+    endif
+    if at > 0 and at <= now_num
+      assign latest = i
+    elsif first_next < 0
+      assign first_next = i
+    endif
+  endfor
+  assign feature = latest
+  if feature < 0
+    assign feature = first_next
+  endif
+-%}
+<div
+  id="WdDrop-{{ section.id }}"
+  class="wd-dr wd-dr--{{ s.teaser }}"
+  data-offset="{{ 'now' | date: '%z' }}"
+  style="
+    --wd-dr-series: {{ series }};
+    --wd-dr-tint: color-mix(in srgb, {{ series }} {{ s.tint }}%, {{ page_bg }});
+    --wd-dr-graphite: {{ graphite }};
+    --wd-dr-pad: {{ s.card_padding }}px;
+    --wd-dr-gap: {{ s.card_gap }}px;
+    --wd-dr-mat: {{ s.mat }}px;
+    --wd-dr-ratio: {{ ratio }};
+    --wd-dr-top: {{ s.space_top }}px;
+    --wd-dr-bottom: {{ s.space_bottom }}px;
+  "
+>
+  <div class="wd-dr__wrap">
+    {%- if s.eyebrow != blank or s.heading != blank or s.intro != blank -%}
+      <div class="wd-dr__intro">
+        {%- if s.eyebrow != blank -%}
+          <p class="wd-dr__eyebrow">{{ s.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if s.heading != blank -%}
+          <h2 class="wd-dr__heading">{{ s.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if s.intro != blank -%}
+          <div class="wd-dr__lede">{{ s.intro }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="wd-dr__grid">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign i = forloop.index0
+          assign p = block.settings.product
+          assign name = block.settings.name | default: p.title | default: 'Portrait'
+          assign edition = block.settings.edition_line | default: s.edition_line
+          assign day = ''
+          if block.settings.date != blank
+            assign day = block.settings.date | strip
+          elsif base > 0
+            assign day = step | times: i | plus: base | date: '%Y-%m-%d'
+          endif
+          assign at = 0
+          assign day_label = ''
+          if day != blank
+            assign at = day | remove: '-' | append: time | plus: 0
+            assign day_label = day | append: ' 12:00' | date: '%a, %b %-d'
+          endif
+          assign sold = false
+          if p and p.available == false
+            assign sold = true
+          endif
+          if at > 0 and at <= now_num
+            if sold
+              assign state = 'sold'
+            elsif i == latest
+              assign state = 'out'
+            else
+              assign state = 'past'
+            endif
+          elsif at > 0
+            assign state = 'next'
+          else
+            assign state = 'tba'
+          endif
+        -%}
+        <article
+          class="wd-dr__card is-{{ state }}{% if i == feature %} is-feature{% endif %}"
+          data-at="{{ at }}"
+          data-sold="{% if sold %}1{% endif %}"
+          {{ block.shopify_attributes }}
+        >
+          <a class="wd-dr__mat" href="{{ p.url | default: '#' }}" tabindex="-1" aria-hidden="true">
+            {%- if p.featured_media -%}
+              {{ p.featured_media.preview_image | image_url: width: 1600 | image_tag: widths: '300, 500, 800, 1200, 1600', sizes: '(min-width: 750px) 50vw, 100vw', class: 'wd-dr__img', alt: '', loading: 'lazy' }}
+            {%- elsif block.settings.teaser -%}
+              {{ block.settings.teaser | image_url: width: 1600 | image_tag: widths: '300, 500, 800, 1200, 1600', sizes: '(min-width: 750px) 50vw, 100vw', class: 'wd-dr__img wd-dr__img--teaser', alt: '', loading: 'lazy' }}
+              <span class="wd-dr__blank wd-dr__blank--behind">{{ forloop.index }}</span>
+            {%- else -%}
+              <span class="wd-dr__blank">{{ forloop.index }}</span>
+            {%- endif -%}
+          </a>
+          <div class="wd-dr__details">
+            <p class="wd-dr__number">{{ s.number_label | escape }} {{ forloop.index }} <span>of {{ total }}</span></p>
+            <h3 class="wd-dr__name">
+              {%- if p -%}<a href="{{ p.url }}">{{ name | escape }}</a>{%- else -%}{{ name | escape }}{%- endif -%}
+            </h3>
+            {%- if block.settings.line != blank -%}
+              <p class="wd-dr__line">{{ block.settings.line | escape }}</p>
+            {%- endif -%}
+            <p class="wd-dr__status">
+              <span class="wd-dr__when wd-dr__when--out">{{ s.out_label | escape }}</span>
+              <span class="wd-dr__when wd-dr__when--past">{{ s.past_label | escape }} {{ day_label | remove: ',' | split: ' ' | slice: 1, 2 | join: ' ' }}</span>
+              <span class="wd-dr__when wd-dr__when--sold">{{ s.soldout_label | escape }}</span>
+              <span class="wd-dr__when wd-dr__when--next">{{ s.next_label | escape }} {{ day_label }}</span>
+              <span class="wd-dr__when wd-dr__when--tba">{{ s.tba_label | escape }}</span>
+            </p>
+            {%- if edition != blank -%}
+              <p class="wd-dr__edition">{{ edition | escape }}</p>
+            {%- endif -%}
+            {%- if s.show_price and p -%}
+              <p class="wd-dr__price">{{ p.price | money }}</p>
+            {%- endif -%}
+            <div class="wd-dr__actions">
+              {%- if s.button_label != blank and p and sold == false -%}
+                <a
+                  class="button button-custom wd-cta wd-dr__button"
+                  href="{{ p.url }}"
+                  style="--button-border-color: {{ series }}; --button-background-color: {{ series }}; --button-color: {{ page_bg }};"
+                >{{ s.button_label | escape }}</a>
+              {%- endif -%}
+              {%- if s.signup_label != blank and s.signup_link != blank -%}
+                <a class="wd-dr__signup" href="{{ s.signup_link | escape }}">{{ s.signup_label | escape }}</a>
+              {%- endif -%}
+            </div>
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+<script>
+  (() => {
+    const root = document.getElementById('WdDrop-{{ section.id }}');
+    if (!root) return;
+    const m = (root.dataset.offset || '').match(/([+-])(\d\d)(\d\d)/);
+    const mins = m ? (m[1] === '-' ? -1 : 1) * (Number(m[2]) * 60 + Number(m[3])) : 0;
+    const d = new Date(Date.now() + mins * 60000);
+    const p2 = (n) => String(n).padStart(2, '0');
+    const now = Number(`${d.getUTCFullYear()}${p2(d.getUTCMonth() + 1)}${p2(d.getUTCDate())}${p2(d.getUTCHours())}${p2(d.getUTCMinutes())}`);
+    const cards = [...root.querySelectorAll('.wd-dr__card')];
+    let latest = -1, firstNext = -1;
+    const out = cards.map((c, i) => {
+      const at = Number(c.dataset.at) || 0;
+      const o = at > 0 && at <= now;
+      if (o) latest = i; else if (firstNext < 0) firstNext = i;
+      return o;
+    });
+    const feature = latest >= 0 ? latest : firstNext;
+    cards.forEach((c, i) => {
+      const at = Number(c.dataset.at) || 0;
+      const state = out[i] ? (c.dataset.sold ? 'sold' : i === latest ? 'out' : 'past') : at ? 'next' : 'tba';
+      c.classList.remove('is-out', 'is-past', 'is-sold', 'is-next', 'is-tba', 'is-feature');
+      c.classList.add(`is-${state}`);
+      if (i === feature) c.classList.add('is-feature');
+    });
+  })();
+</script>
+
+<style>
+  .wd-dr { padding-block: var(--wd-dr-top) var(--wd-dr-bottom); }
+  .wd-dr__wrap { width: min(var(--page-content-width, 1200px), 100% - var(--page-margin, 20px) * 2); margin-inline: auto; display: flex; flex-direction: column; gap: 48px; }
+  .wd-dr__intro { max-width: 66%; display: flex; flex-direction: column; gap: 12px; }
+  .wd-dr__eyebrow, .wd-dr__heading { margin: 0; }
+  .wd-dr__eyebrow { color: var(--wd-dr-graphite); }
+  .wd-dr__lede { color: var(--wd-dr-graphite); }
+  .wd-dr__lede p { margin: 0; }
+
+  .wd-dr__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: var(--wd-dr-gap); align-items: start; }
+  .wd-dr__card { display: flex; flex-direction: column; gap: 14px; padding: calc(var(--wd-dr-pad) * .5); background: var(--wd-dr-tint); min-width: 0; }
+  .wd-dr__mat { position: relative; display: block; padding: calc(var(--wd-dr-mat) * .5); background: #fff; overflow: hidden; }
+  .wd-dr__img { position: relative; z-index: 1; display: block; width: 100%; height: auto; aspect-ratio: var(--wd-dr-ratio); object-fit: contain; transition: filter .6s ease; }
+  .wd-dr__blank { display: grid; place-items: center; width: 100%; aspect-ratio: var(--wd-dr-ratio); background: var(--wd-dr-tint); color: var(--wd-dr-series); font-family: var(--wd-font-arsenica); font-style: italic; font-weight: 300; font-size: clamp(40px, 6vw, 96px); line-height: 1; }
+  .wd-dr__blank--behind { position: absolute; inset: calc(var(--wd-dr-mat) * .5); width: auto; z-index: 0; display: none; }
+  .wd-dr__details { display: flex; flex-direction: column; gap: 6px; }
+  .wd-dr__number, .wd-dr__name, .wd-dr__line, .wd-dr__status, .wd-dr__edition, .wd-dr__price { margin: 0; }
+  .wd-dr__number { color: var(--wd-dr-graphite); }
+  .wd-dr__number span { opacity: .7; }
+  .wd-dr__name { color: var(--wd-dr-series); }
+  .wd-dr__name a { color: inherit; text-decoration: none; }
+  .wd-dr__line, .wd-dr__edition { color: var(--wd-dr-graphite); }
+  .wd-dr__status { color: var(--wd-dr-series); }
+  .wd-dr__when { display: none; }
+  .is-out .wd-dr__when--out, .is-past .wd-dr__when--past, .is-sold .wd-dr__when--sold,
+  .is-next .wd-dr__when--next, .is-tba .wd-dr__when--tba { display: inline; }
+  .wd-dr__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-top: 8px; }
+  .wd-dr__signup { color: inherit; text-underline-offset: 3px; }
+
+  /* before its date: teaser hidden or blurred; edition, price and buy stay off */
+  .wd-dr__card:is(.is-next, .is-tba) :is(.wd-dr__edition, .wd-dr__price, .wd-dr__button) { display: none; }
+  .wd-dr__card:is(.is-out, .is-past, .is-sold) .wd-dr__signup { display: none; }
+  .wd-dr--blur .wd-dr__card:is(.is-next, .is-tba) .wd-dr__img--teaser { filter: blur(18px) saturate(.6); transform: scale(1.06); }
+  .wd-dr--hidden .wd-dr__card:is(.is-next, .is-tba) .wd-dr__img--teaser { visibility: hidden; }
+  .wd-dr--hidden .wd-dr__card:is(.is-next, .is-tba) .wd-dr__blank--behind { display: grid; }
+  .wd-dr__card.is-sold .wd-dr__img { opacity: .55; }
+
+  /* small cards: details trimmed to number, name, status */
+  .wd-dr__card:not(.is-feature) :is(.wd-dr__line, .wd-dr__edition, .wd-dr__price, .wd-dr__actions) { display: none; }
+
+  /* the big card: newest drop, or the next one before the first drop */
+  .wd-dr__card.is-feature { order: -1; grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 40px; align-items: center; padding: var(--wd-dr-pad); }
+  .wd-dr__card.is-feature .wd-dr__mat { padding: var(--wd-dr-mat); }
+  .wd-dr__card.is-feature .wd-dr__blank--behind { inset: var(--wd-dr-mat); }
+  .wd-dr__card.is-feature .wd-dr__details { gap: 10px; }
+
+  @media screen and (max-width: 749px) {
+    .wd-dr__intro { max-width: none; }
+    .wd-dr__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: calc(var(--wd-dr-gap) * .5); }
+    .wd-dr__card.is-feature { grid-template-columns: minmax(0, 1fr); gap: 20px; padding: calc(var(--wd-dr-pad) * .5); }
+  }
+  @media (prefers-reduced-motion: reduce) { .wd-dr__img { transition: none; } }
+</style>
+
+{%- comment -%}WD-TYPE START (generated by gen_wd_sections.py){%- endcomment -%}
+{%- liquid
+  assign wd_scope = '#shopify-section-' | append: section.id
+  assign wd_sel_ty_eyebrow = wd_scope | append: ' .wd-dr__eyebrow'
+  assign wd_sel_ty_heading = wd_scope | append: ' .wd-dr__heading'
+  assign wd_sel_ty_intro = wd_scope | append: ' :is(.wd-dr__lede, .wd-dr__lede *)'
+  assign wd_sel_ty_number = wd_scope | append: ' .wd-dr__number'
+  assign wd_sel_ty_name = wd_scope | append: ' .wd-dr__card.is-feature .wd-dr__name'
+  assign wd_sel_ty_small_name = wd_scope | append: ' .wd-dr__card:not(.is-feature) .wd-dr__name'
+  assign wd_sel_ty_line = wd_scope | append: ' .wd-dr__line'
+  assign wd_sel_ty_status = wd_scope | append: ' .wd-dr__status'
+  assign wd_sel_ty_edition = wd_scope | append: ' .wd-dr__edition'
+  assign wd_sel_ty_price = wd_scope | append: ' .wd-dr__price'
+  assign wd_sel_ty_signup = wd_scope | append: ' .wd-dr__signup'
+-%}
+<style>
+  {%- render 'wd-type-el', s: section.settings, el: 'ty_eyebrow', sel: wd_sel_ty_eyebrow -%}
+  {%- render 'wd-type-el', s: section.settings, el: 'ty_heading', sel: wd_sel_ty_heading -%}
+  {%- render 'wd-type-el', s: section.settings, el: 'ty_intro', sel: wd_sel_ty_intro -%}
+  {%- render 'wd-type-el', s: section.settings, el: 'ty_number', sel: wd_sel_ty_number -%}
+  {%- render 'wd-type-el', s: section.settings, el: 'ty_name', sel: wd_sel_ty_name -%}
+  {%- render 'wd-type-el', s: section.settings, el: 'ty_small_name', sel: wd_sel_ty_small_name -%}
+  {%- render 'wd-type-el', s: section.settings, el: 'ty_line', sel: wd_sel_ty_line -%}
+  {%- render 'wd-type-el', s: section.settings, el: 'ty_status', sel: wd_sel_ty_status -%}
+  {%- render 'wd-type-el', s: section.settings, el: 'ty_edition', sel: wd_sel_ty_edition -%}
+  {%- render 'wd-type-el', s: section.settings, el: 'ty_price', sel: wd_sel_ty_price -%}
+  {%- render 'wd-type-el', s: section.settings, el: 'ty_signup', sel: wd_sel_ty_signup -%}
+</style>
+{%- comment -%}WD-TYPE END{%- endcomment -%}
+
+{% schema %}
+{
+  "name": "WD Weekly drop",
+  "class": "wd-drop-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small line above the heading",
+      "default": "One a week"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Portraits of an Urban Jungle"
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Intro text",
+      "default": "<p>Five residents of the neighbourhood. One portrait goes up each week, in an edition of 20.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Small line type"
+    },
+    {
+      "type": "select",
+      "id": "ty_eyebrow_font",
+      "label": "Font",
+      "options": [
+        {
+          "value": "body",
+          "label": "Broadacre (Regular; Medium at 450+)"
+        },
+        {
+          "value": "arsenica-variable",
+          "label": "Arsenica Variable"
+        },
+        {
+          "value": "arsenica-variable-italic",
+          "label": "Arsenica Variable Italic"
+        },
+        {
+          "value": "arsenica-text",
+          "label": "Arsenica Text"
+        }
+      ],
+      "default": "body"
+    },
+    {
+      "type": "range",
+      "id": "ty_eyebrow_size",
+      "label": "Size",
+      "min": 8,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "ty_eyebrow_weight",
+      "label": "Weight",
+      "min": 100,
+      "max": 900,
+      "step": 50,
+      "default": 500,
+      "info": "Broadacre: under 450 = Regular, 450+ = Medium. Arsenica Text: 400 or 700."
+    },
+    {
+      "type": "range",
+      "id": "ty_eyebrow_lh",
+      "label": "Line height",
+      "min": 70,
+      "max": 200,
+      "step": 5,
+      "unit": "%",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "ty_eyebrow_tracking",
+      "label": "Tracking",
+      "min": -100,
+      "max": 300,
+      "step": 5,
+      "default": 80,
+      "info": "1/1000 em, as in Illustrator."
+    },
+    {
+      "type": "select",
+      "id": "ty_eyebrow_case",
+      "label": "Case",
+      "options": [
+        {
+          "value": "none",
+          "label": "As typed"
+        },
+        {
+          "value": "uppercase",
+          "label": "All caps"
+        },
+        {
+          "value": "lowercase",
+          "label": "All lowercase"
+        },
+        {
+          "value": "capitalize",
+          "label": "Initial caps"
+        }
+      ],
+      "default": "uppercase"
+    },
+    {
+      "type": "header",
+      "content": "Heading type"
+    },
+    {
+      "type": "select",
+      "id": "ty_heading_font",
+      "label": "Font",
+      "options": [
+        {
+          "value": "body",
+          "label": "Broadacre (Regular; Medium at 450+)"
+        },
+        {
+          "value": "arsenica-variable",
+          "label": "Arsenica Variable"
+        },
+        {
+          "value": "arsenica-variable-italic",
+          "label": "Arsenica Variable Italic"
+        },
+        {
+          "value": "arsenica-text",
+          "label": "Arsenica Text"
+        }
+      ],
+      "default": "arsenica-variable-italic"
+    },
+    {
+      "type": "range",
+      "id": "ty_heading_size",
+      "label": "Size",
+      "min": 20,
+      "max": 120,
+      "step": 1,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "ty_heading_weight",
+      "label": "Weight",
+      "min": 100,
+      "max": 900,
+      "step": 50,
+      "default": 300,
+      "info": "Broadacre: under 450 = Regular, 450+ = Medium. Arsenica Text: 400 or 700."
+    },
+    {
+      "type": "range",
+      "id": "ty_heading_lh",
+      "label": "Line height",
+      "min": 70,
+      "max": 200,
+      "step": 5,
+      "unit": "%",
+      "default": 105
+    },
+    {
+      "type": "range",
+      "id": "ty_heading_tracking",
+      "label": "Tracking",
+      "min": -100,
+      "max": 300,
+      "step": 5,
+      "default": -5,
+      "info": "1/1000 em, as in Illustrator."
+    },
+    {
+      "type": "select",
+      "id": "ty_heading_case",
+      "label": "Case",
+      "options": [
+        {
+          "value": "none",
+          "label": "As typed"
+        },
+        {
+          "value": "uppercase",
+          "label": "All caps"
+        },
+        {
+          "value": "lowercase",
+          "label": "All lowercase"
+        },
+        {
+          "value": "capitalize",
+          "label": "Initial caps"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "header",
+      "content": "Intro text type"
+    },
+    {
+      "type": "select",
+      "id": "ty_intro_font",
+      "label": "Font",
+      "options": [
+        {
+          "value": "body",
+          "label": "Broadacre (Regular; Medium at 450+)"
+        },
+        {
+          "value": "arsenica-variable",
+          "label": "Arsenica Variable"
+        },
+        {
+          "value": "arsenica-variable-italic",
+          "label": "Arsenica Variable Italic"
+        },
+        {
+          "value": "arsenica-text",
+          "label": "Arsenica Text"
+        }
+      ],
+      "default": "body"
+    },
+    {
+      "type": "range",
+      "id": "ty_intro_size",
+      "label": "Size",
+      "min": 10,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "ty_intro_weight",
+      "label": "Weight",
+      "min": 100,
+      "max": 900,
+      "step": 50,
+      "default": 300,
+      "info": "Broadacre: under 450 = Regular, 450+ = Medium. Arsenica Text: 400 or 700."
+    },
+    {
+      "type": "range",
+      "id": "ty_intro_lh",
+      "label": "Line height",
+      "min": 70,
+      "max": 200,
+      "step": 5,
+      "unit": "%",
+      "default": 140
+    },
+    {
+      "type": "range",
+      "id": "ty_intro_tracking",
+      "label": "Tracking",
+      "min": -100,
+      "max": 300,
+      "step": 5,
+      "default": 0,
+      "info": "1/1000 em, as in Illustrator."
+    },
+    {
+      "type": "select",
+      "id": "ty_intro_case",
+      "label": "Case",
+      "options": [
+        {
+          "value": "none",
+          "label": "As typed"
+        },
+        {
+          "value": "uppercase",
+          "label": "All caps"
+        },
+        {
+          "value": "lowercase",
+          "label": "All lowercase"
+        },
+        {
+          "value": "capitalize",
+          "label": "Initial caps"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "header",
+      "content": "Drop schedule"
+    },
+    {
+      "type": "text",
+      "id": "start_date",
+      "label": "First drop date",
+      "info": "YYYY-MM-DD, e.g. 2026-11-20. Leave empty until it's set: every portrait then shows the 'date to come' line."
+    },
+    {
+      "type": "range",
+      "id": "every_days",
+      "label": "Days between drops",
+      "min": 1,
+      "max": 28,
+      "step": 1,
+      "default": 7,
+      "info": "Each portrait after the first drops this many days after the one before. A portrait's own date overrides it."
+    },
+    {
+      "type": "text",
+      "id": "drop_time",
+      "label": "Drop time (24-hour)",
+      "default": "10:00",
+      "info": "In the store's time zone (Shopify admin > Settings > General)."
+    },
+    {
+      "type": "paragraph",
+      "content": "The section flips each portrait by itself. Schedule the matching product to publish at the same time (Products > the product > Sales channels > Online Store > schedule), or the card goes live with no buy button."
+    },
+    {
+      "type": "header",
+      "content": "Before a portrait drops"
+    },
+    {
+      "type": "select",
+      "id": "teaser",
+      "label": "Teaser image",
+      "options": [
+        {
+          "value": "blur",
+          "label": "Blurred"
+        },
+        {
+          "value": "hidden",
+          "label": "Hidden (number only)"
+        },
+        {
+          "value": "show",
+          "label": "Shown"
+        }
+      ],
+      "default": "blur",
+      "info": "Uses the portrait's teaser image. Once the product is published, its own photo is used."
+    },
+    {
+      "type": "header",
+      "content": "Labels"
+    },
+    {
+      "type": "text",
+      "id": "number_label",
+      "label": "Number label",
+      "default": "No."
+    },
+    {
+      "type": "text",
+      "id": "next_label",
+      "label": "Coming (followed by the date)",
+      "default": "Drops"
+    },
+    {
+      "type": "text",
+      "id": "tba_label",
+      "label": "Coming, no date yet",
+      "default": "Date to come"
+    },
+    {
+      "type": "text",
+      "id": "out_label",
+      "label": "Newest drop",
+      "default": "Out now"
+    },
+    {
+      "type": "text",
+      "id": "past_label",
+      "label": "Older drop (followed by the date)",
+      "default": "Dropped"
+    },
+    {
+      "type": "text",
+      "id": "soldout_label",
+      "label": "Sold out",
+      "default": "Sold out"
+    },
+    {
+      "type": "text",
+      "id": "edition_line",
+      "label": "Edition line",
+      "default": "Edition of 20. Signed, numbered and dated by hand."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price",
+      "label": "Show price",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop the portrait"
+    },
+    {
+      "type": "text",
+      "id": "signup_label",
+      "label": "Sign-up link (shown before a drop)",
+      "default": "Get the drop email"
+    },
+    {
+      "type": "text",
+      "id": "signup_link",
+      "label": "Sign-up link goes to",
+      "default": "#shopify-section-wd_studio_note",
+      "info": "Default jumps to the studio note sign-up on the homepage."
+    },
+    {
+      "type": "header",
+      "content": "Series colour"
+    },
+    {
+      "type": "color",
+      "id": "series_color",
+      "label": "Series colour (titles, status and buttons)",
+      "default": "#5E5A53",
+      "info": "One colour per body of work, eyedropped from the art. Placeholder until the Urban Jungle frame is final."
+    },
+    {
+      "type": "range",
+      "id": "tint",
+      "label": "Card tint strength",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "%",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Cards"
+    },
+    {
+      "type": "select",
+      "id": "image_shape",
+      "label": "Image shape",
+      "options": [
+        {
+          "value": "tall",
+          "label": "3:4"
+        },
+        {
+          "value": "portrait",
+          "label": "4:5"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        }
+      ],
+      "default": "tall"
+    },
+    {
+      "type": "range",
+      "id": "card_padding",
+      "label": "Card margin (big card; small cards get half)",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "label": "Gap between cards",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "mat",
+      "label": "White mat around the image",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Number type"
+    },
+    {
+      "type": "select",
+      "id": "ty_number_font",
+      "label": "Font",
+      "options": [
+        {
+          "value": "body",
+          "label": "Broadacre (Regular; Medium at 450+)"
+        },
+        {
+          "value": "arsenica-variable",
+          "label": "Arsenica Variable"
+        },
+        {
+          "value": "arsenica-variable-italic",
+          "label": "Arsenica Variable Italic"
+        },
+        {
+          "value": "arsenica-text",
+          "label": "Arsenica Text"
+        }
+      ],
+      "default": "body"
+    },
+    {
+      "type": "range",
+      "id": "ty_number_size",
+      "label": "Size",
+      "min": 8,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 11
+    },
+    {
+      "type": "range",
+      "id": "ty_number_weight",
+      "label": "Weight",
+      "min": 100,
+      "max": 900,
+      "step": 50,
+      "default": 500,
+      "info": "Broadacre: under 450 = Regular, 450+ = Medium. Arsenica Text: 400 or 700."
+    },
+    {
+      "type": "range",
+      "id": "ty_number_lh",
+      "label": "Line height",
+      "min": 70,
+      "max": 200,
+      "step": 5,
+      "unit": "%",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "ty_number_tracking",
+      "label": "Tracking",
+      "min": -100,
+      "max": 300,
+      "step": 5,
+      "default": 100,
+      "info": "1/1000 em, as in Illustrator."
+    },
+    {
+      "type": "select",
+      "id": "ty_number_case",
+      "label": "Case",
+      "options": [
+        {
+          "value": "none",
+          "label": "As typed"
+        },
+        {
+          "value": "uppercase",
+          "label": "All caps"
+        },
+        {
+          "value": "lowercase",
+          "label": "All lowercase"
+        },
+        {
+          "value": "capitalize",
+          "label": "Initial caps"
+        }
+      ],
+      "default": "uppercase"
+    },
+    {
+      "type": "header",
+      "content": "Name type (big card)"
+    },
+    {
+      "type": "select",
+      "id": "ty_name_font",
+      "label": "Font",
+      "options": [
+        {
+          "value": "body",
+          "label": "Broadacre (Regular; Medium at 450+)"
+        },
+        {
+          "value": "arsenica-variable",
+          "label": "Arsenica Variable"
+        },
+        {
+          "value": "arsenica-variable-italic",
+          "label": "Arsenica Variable Italic"
+        },
+        {
+          "value": "arsenica-text",
+          "label": "Arsenica Text"
+        }
+      ],
+      "default": "arsenica-text"
+    },
+    {
+      "type": "range",
+      "id": "ty_name_size",
+      "label": "Size",
+      "min": 16,
+      "max": 96,
+      "step": 1,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "ty_name_weight",
+      "label": "Weight",
+      "min": 100,
+      "max": 900,
+      "step": 50,
+      "default": 400,
+      "info": "Broadacre: under 450 = Regular, 450+ = Medium. Arsenica Text: 400 or 700."
+    },
+    {
+      "type": "range",
+      "id": "ty_name_lh",
+      "label": "Line height",
+      "min": 70,
+      "max": 200,
+      "step": 5,
+      "unit": "%",
+      "default": 110
+    },
+    {
+      "type": "range",
+      "id": "ty_name_tracking",
+      "label": "Tracking",
+      "min": -100,
+      "max": 300,
+      "step": 5,
+      "default": 0,
+      "info": "1/1000 em, as in Illustrator."
+    },
+    {
+      "type": "select",
+      "id": "ty_name_case",
+      "label": "Case",
+      "options": [
+        {
+          "value": "none",
+          "label": "As typed"
+        },
+        {
+          "value": "uppercase",
+          "label": "All caps"
+        },
+        {
+          "value": "lowercase",
+          "label": "All lowercase"
+        },
+        {
+          "value": "capitalize",
+          "label": "Initial caps"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "header",
+      "content": "Name type (small cards)"
+    },
+    {
+      "type": "select",
+      "id": "ty_small_name_font",
+      "label": "Font",
+      "options": [
+        {
+          "value": "body",
+          "label": "Broadacre (Regular; Medium at 450+)"
+        },
+        {
+          "value": "arsenica-variable",
+          "label": "Arsenica Variable"
+        },
+        {
+          "value": "arsenica-variable-italic",
+          "label": "Arsenica Variable Italic"
+        },
+        {
+          "value": "arsenica-text",
+          "label": "Arsenica Text"
+        }
+      ],
+      "default": "arsenica-text"
+    },
+    {
+      "type": "range",
+      "id": "ty_small_name_size",
+      "label": "Size",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "ty_small_name_weight",
+      "label": "Weight",
+      "min": 100,
+      "max": 900,
+      "step": 50,
+      "default": 400,
+      "info": "Broadacre: under 450 = Regular, 450+ = Medium. Arsenica Text: 400 or 700."
+    },
+    {
+      "type": "range",
+      "id": "ty_small_name_lh",
+      "label": "Line height",
+      "min": 70,
+      "max": 200,
+      "step": 5,
+      "unit": "%",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "ty_small_name_tracking",
+      "label": "Tracking",
+      "min": -100,
+      "max": 300,
+      "step": 5,
+      "default": 0,
+      "info": "1/1000 em, as in Illustrator."
+    },
+    {
+      "type": "select",
+      "id": "ty_small_name_case",
+      "label": "Case",
+      "options": [
+        {
+          "value": "none",
+          "label": "As typed"
+        },
+        {
+          "value": "uppercase",
+          "label": "All caps"
+        },
+        {
+          "value": "lowercase",
+          "label": "All lowercase"
+        },
+        {
+          "value": "capitalize",
+          "label": "Initial caps"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "header",
+      "content": "Line under the name type"
+    },
+    {
+      "type": "select",
+      "id": "ty_line_font",
+      "label": "Font",
+      "options": [
+        {
+          "value": "body",
+          "label": "Broadacre (Regular; Medium at 450+)"
+        },
+        {
+          "value": "arsenica-variable",
+          "label": "Arsenica Variable"
+        },
+        {
+          "value": "arsenica-variable-italic",
+          "label": "Arsenica Variable Italic"
+        },
+        {
+          "value": "arsenica-text",
+          "label": "Arsenica Text"
+        }
+      ],
+      "default": "arsenica-variable-italic"
+    },
+    {
+      "type": "range",
+      "id": "ty_line_size",
+      "label": "Size",
+      "min": 10,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "ty_line_weight",
+      "label": "Weight",
+      "min": 100,
+      "max": 900,
+      "step": 50,
+      "default": 300,
+      "info": "Broadacre: under 450 = Regular, 450+ = Medium. Arsenica Text: 400 or 700."
+    },
+    {
+      "type": "range",
+      "id": "ty_line_lh",
+      "label": "Line height",
+      "min": 70,
+      "max": 200,
+      "step": 5,
+      "unit": "%",
+      "default": 140
+    },
+    {
+      "type": "range",
+      "id": "ty_line_tracking",
+      "label": "Tracking",
+      "min": -100,
+      "max": 300,
+      "step": 5,
+      "default": 0,
+      "info": "1/1000 em, as in Illustrator."
+    },
+    {
+      "type": "select",
+      "id": "ty_line_case",
+      "label": "Case",
+      "options": [
+        {
+          "value": "none",
+          "label": "As typed"
+        },
+        {
+          "value": "uppercase",
+          "label": "All caps"
+        },
+        {
+          "value": "lowercase",
+          "label": "All lowercase"
+        },
+        {
+          "value": "capitalize",
+          "label": "Initial caps"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "header",
+      "content": "Drop status type"
+    },
+    {
+      "type": "select",
+      "id": "ty_status_font",
+      "label": "Font",
+      "options": [
+        {
+          "value": "body",
+          "label": "Broadacre (Regular; Medium at 450+)"
+        },
+        {
+          "value": "arsenica-variable",
+          "label": "Arsenica Variable"
+        },
+        {
+          "value": "arsenica-variable-italic",
+          "label": "Arsenica Variable Italic"
+        },
+        {
+          "value": "arsenica-text",
+          "label": "Arsenica Text"
+        }
+      ],
+      "default": "body"
+    },
+    {
+      "type": "range",
+      "id": "ty_status_size",
+      "label": "Size",
+      "min": 8,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "ty_status_weight",
+      "label": "Weight",
+      "min": 100,
+      "max": 900,
+      "step": 50,
+      "default": 500,
+      "info": "Broadacre: under 450 = Regular, 450+ = Medium. Arsenica Text: 400 or 700."
+    },
+    {
+      "type": "range",
+      "id": "ty_status_lh",
+      "label": "Line height",
+      "min": 70,
+      "max": 200,
+      "step": 5,
+      "unit": "%",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "ty_status_tracking",
+      "label": "Tracking",
+      "min": -100,
+      "max": 300,
+      "step": 5,
+      "default": 60,
+      "info": "1/1000 em, as in Illustrator."
+    },
+    {
+      "type": "select",
+      "id": "ty_status_case",
+      "label": "Case",
+      "options": [
+        {
+          "value": "none",
+          "label": "As typed"
+        },
+        {
+          "value": "uppercase",
+          "label": "All caps"
+        },
+        {
+          "value": "lowercase",
+          "label": "All lowercase"
+        },
+        {
+          "value": "capitalize",
+          "label": "Initial caps"
+        }
+      ],
+      "default": "uppercase"
+    },
+    {
+      "type": "header",
+      "content": "Edition line type"
+    },
+    {
+      "type": "select",
+      "id": "ty_edition_font",
+      "label": "Font",
+      "options": [
+        {
+          "value": "body",
+          "label": "Broadacre (Regular; Medium at 450+)"
+        },
+        {
+          "value": "arsenica-variable",
+          "label": "Arsenica Variable"
+        },
+        {
+          "value": "arsenica-variable-italic",
+          "label": "Arsenica Variable Italic"
+        },
+        {
+          "value": "arsenica-text",
+          "label": "Arsenica Text"
+        }
+      ],
+      "default": "body"
+    },
+    {
+      "type": "range",
+      "id": "ty_edition_size",
+      "label": "Size",
+      "min": 8,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "ty_edition_weight",
+      "label": "Weight",
+      "min": 100,
+      "max": 900,
+      "step": 50,
+      "default": 500,
+      "info": "Broadacre: under 450 = Regular, 450+ = Medium. Arsenica Text: 400 or 700."
+    },
+    {
+      "type": "range",
+      "id": "ty_edition_lh",
+      "label": "Line height",
+      "min": 70,
+      "max": 200,
+      "step": 5,
+      "unit": "%",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "ty_edition_tracking",
+      "label": "Tracking",
+      "min": -100,
+      "max": 300,
+      "step": 5,
+      "default": 60,
+      "info": "1/1000 em, as in Illustrator."
+    },
+    {
+      "type": "select",
+      "id": "ty_edition_case",
+      "label": "Case",
+      "options": [
+        {
+          "value": "none",
+          "label": "As typed"
+        },
+        {
+          "value": "uppercase",
+          "label": "All caps"
+        },
+        {
+          "value": "lowercase",
+          "label": "All lowercase"
+        },
+        {
+          "value": "capitalize",
+          "label": "Initial caps"
+        }
+      ],
+      "default": "uppercase"
+    },
+    {
+      "type": "header",
+      "content": "Price type"
+    },
+    {
+      "type": "select",
+      "id": "ty_price_font",
+      "label": "Font",
+      "options": [
+        {
+          "value": "body",
+          "label": "Broadacre (Regular; Medium at 450+)"
+        },
+        {
+          "value": "arsenica-variable",
+          "label": "Arsenica Variable"
+        },
+        {
+          "value": "arsenica-variable-italic",
+          "label": "Arsenica Variable Italic"
+        },
+        {
+          "value": "arsenica-text",
+          "label": "Arsenica Text"
+        }
+      ],
+      "default": "body"
+    },
+    {
+      "type": "range",
+      "id": "ty_price_size",
+      "label": "Size",
+      "min": 8,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "ty_price_weight",
+      "label": "Weight",
+      "min": 100,
+      "max": 900,
+      "step": 50,
+      "default": 600,
+      "info": "Broadacre: under 450 = Regular, 450+ = Medium. Arsenica Text: 400 or 700."
+    },
+    {
+      "type": "range",
+      "id": "ty_price_lh",
+      "label": "Line height",
+      "min": 70,
+      "max": 200,
+      "step": 5,
+      "unit": "%",
+      "default": 130
+    },
+    {
+      "type": "range",
+      "id": "ty_price_tracking",
+      "label": "Tracking",
+      "min": -100,
+      "max": 300,
+      "step": 5,
+      "default": 35,
+      "info": "1/1000 em, as in Illustrator."
+    },
+    {
+      "type": "select",
+      "id": "ty_price_case",
+      "label": "Case",
+      "options": [
+        {
+          "value": "none",
+          "label": "As typed"
+        },
+        {
+          "value": "uppercase",
+          "label": "All caps"
+        },
+        {
+          "value": "lowercase",
+          "label": "All lowercase"
+        },
+        {
+          "value": "capitalize",
+          "label": "Initial caps"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "header",
+      "content": "Sign-up link type"
+    },
+    {
+      "type": "select",
+      "id": "ty_signup_font",
+      "label": "Font",
+      "options": [
+        {
+          "value": "body",
+          "label": "Broadacre (Regular; Medium at 450+)"
+        },
+        {
+          "value": "arsenica-variable",
+          "label": "Arsenica Variable"
+        },
+        {
+          "value": "arsenica-variable-italic",
+          "label": "Arsenica Variable Italic"
+        },
+        {
+          "value": "arsenica-text",
+          "label": "Arsenica Text"
+        }
+      ],
+      "default": "body"
+    },
+    {
+      "type": "range",
+      "id": "ty_signup_size",
+      "label": "Size",
+      "min": 10,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "ty_signup_weight",
+      "label": "Weight",
+      "min": 100,
+      "max": 900,
+      "step": 50,
+      "default": 300,
+      "info": "Broadacre: under 450 = Regular, 450+ = Medium. Arsenica Text: 400 or 700."
+    },
+    {
+      "type": "range",
+      "id": "ty_signup_lh",
+      "label": "Line height",
+      "min": 70,
+      "max": 200,
+      "step": 5,
+      "unit": "%",
+      "default": 140
+    },
+    {
+      "type": "range",
+      "id": "ty_signup_tracking",
+      "label": "Tracking",
+      "min": -100,
+      "max": 300,
+      "step": 5,
+      "default": 0,
+      "info": "1/1000 em, as in Illustrator."
+    },
+    {
+      "type": "select",
+      "id": "ty_signup_case",
+      "label": "Case",
+      "options": [
+        {
+          "value": "none",
+          "label": "As typed"
+        },
+        {
+          "value": "uppercase",
+          "label": "All caps"
+        },
+        {
+          "value": "lowercase",
+          "label": "All lowercase"
+        },
+        {
+          "value": "capitalize",
+          "label": "Initial caps"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "space_top",
+      "label": "Space above",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "space_bottom",
+      "label": "Space below",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "paragraph",
+      "content": "Product type label, buttons and email fields follow the site-wide styles in Header > Wally Domo fonts and type, so they match everywhere."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "portrait",
+      "name": "Portrait",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "info": "Leave empty to use the product name."
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product",
+          "info": "Can be added later. Unpublished products don't show until they're published."
+        },
+        {
+          "type": "text",
+          "id": "line",
+          "label": "Line under the name (optional)"
+        },
+        {
+          "type": "image_picker",
+          "id": "teaser",
+          "label": "Teaser image",
+          "info": "Shown before the drop (blurred, hidden or as is) and until a product photo exists."
+        },
+        {
+          "type": "text",
+          "id": "date",
+          "label": "Drop date (optional)",
+          "info": "YYYY-MM-DD. Leave empty to follow the schedule."
+        },
+        {
+          "type": "text",
+          "id": "edition_line",
+          "label": "Edition line for this portrait (optional)"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "WD Weekly drop",
+      "blocks": [
+        {
+          "type": "portrait"
+        },
+        {
+          "type": "portrait"
+        },
+        {
+          "type": "portrait"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

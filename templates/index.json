@@ -386,7 +386,11 @@
         "show_price": false,
         "button_label": "Shop the print",
         "space_top": 48,
-        "space_bottom": 80
+        "space_bottom": 80,
+        "series_line": "Common Species",
+        "coming_title": "In the studio",
+        "coming_line": "Coming soon",
+        "coming_blur": 0
       },
       "blocks": {
         "print_pigeon": {
@@ -395,7 +399,8 @@
             "product": "pigeon-gone-west-studio-print",
             "title": "Pigeon Gone West",
             "note": "Summer 2026, before the drive west.",
-            "edition_line": ""
+            "edition_line": "",
+            "status": "available"
           }
         },
         "print_brooklyn": {
@@ -404,13 +409,28 @@
             "product": "we-lived-in-brooklyn-print",
             "title": "We Lived in Brooklyn, Baby",
             "note": "",
-            "edition_line": ""
+            "edition_line": "",
+            "status": "available"
+          }
+        },
+        "plate_03": {
+          "type": "print",
+          "settings": {
+            "status": "coming"
+          }
+        },
+        "plate_04": {
+          "type": "print",
+          "settings": {
+            "status": "coming"
           }
         }
       },
       "block_order": [
         "print_pigeon",
-        "print_brooklyn"
+        "print_brooklyn",
+        "plate_03",
+        "plate_04"
       ]
     },
     "wd_studio_note": {
@@ -431,12 +451,66 @@
         "space_top": 64,
         "space_bottom": 80
       }
+    },
+    "wd_drop": {
+      "type": "wd-drop",
+      "settings": {
+        "eyebrow": "One a week",
+        "heading": "Portraits of an Urban Jungle",
+        "intro": "<p>Five residents of the neighbourhood. One portrait goes up each week, in an edition of 20.</p>",
+        "start_date": "",
+        "every_days": 7,
+        "drop_time": "10:00",
+        "teaser": "blur",
+        "series_color": "#5E5A53",
+        "tint": 12
+      },
+      "blocks": {
+        "portrait_sunday": {
+          "type": "portrait",
+          "settings": {
+            "name": "Sunday"
+          }
+        },
+        "portrait_gjoob": {
+          "type": "portrait",
+          "settings": {
+            "name": "GJoob"
+          }
+        },
+        "portrait_dan_d": {
+          "type": "portrait",
+          "settings": {
+            "name": "Dan D."
+          }
+        },
+        "portrait_virgil": {
+          "type": "portrait",
+          "settings": {
+            "name": "Virgil"
+          }
+        },
+        "portrait_teo": {
+          "type": "portrait",
+          "settings": {
+            "name": "Téo"
+          }
+        }
+      },
+      "block_order": [
+        "portrait_sunday",
+        "portrait_gjoob",
+        "portrait_dan_d",
+        "portrait_virgil",
+        "portrait_teo"
+      ]
     }
   },
   "order": [
     "wd_studio_banner",
     "hero_jVaWmY",
     "wd_editions",
+    "wd_drop",
     "wd_studio_note",
     "product_list_fa6P9H"
   ]
