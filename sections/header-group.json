@@ -207,11 +207,16 @@
         "m_version": "stacked",
         "m_height": 40
       }
+    },
+    "wd_styles": {
+      "type": "wd-styles",
+      "settings": {}
     }
   },
   "order": [
     "header_announcements_9jGBFp",
     "header_section",
+    "wd_styles",
     "wd_type",
     "wd_logo"
   ]

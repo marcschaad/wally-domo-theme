@@ -25,7 +25,7 @@ def group(key, label, d, rng, style="custom", scope="section"):
         x["visible_if"] = vis
     pick = {"type": "select", "id": f"{key}_style", "label": "Style",
             "options": [{"value": s["key"], "label": s["label"]} for s in STYLES] + [{"value": "custom", "label": "Custom (own controls)"}],
-            "default": style, "info": "Styles are set once in Header > Wally Domo fonts and type > Text styles."}
+            "default": style, "info": "Styles are set once in Header > Wally Domo text styles."}
     return [{"type": "header", "content": label}, pick] + six
 
 # which text style each element starts on (Custom = its own controls)
