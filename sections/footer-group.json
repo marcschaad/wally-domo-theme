@@ -91,7 +91,8 @@
         "space_top": 72,
         "space_bottom": 32,
         "ty_top_style": "custom",
-        "ty_link_style": "custom"
+        "ty_link_style": "custom",
+        "ty_name_style": "custom"
       }
     },
     "footer_m9NzUG": {
