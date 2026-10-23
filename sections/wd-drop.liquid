@@ -34,6 +34,7 @@
     assign base = s.start_date | strip | append: ' 12:00' | date: '%s' | plus: 0
   endif
   assign total = section.blocks.size
+  assign small_cols = total | minus: 1 | at_most: 4 | at_least: 2
 
   # pass 1: newest released + first upcoming decide the big card
   assign latest = -1
@@ -73,6 +74,7 @@
     --wd-dr-gap: {{ s.card_gap }}px;
     --wd-dr-mat: {{ s.mat }}px;
     --wd-dr-ratio: {{ ratio }};
+    --wd-dr-cols: {{ small_cols }};
     --wd-dr-top: {{ s.space_top }}px;
     --wd-dr-bottom: {{ s.space_bottom }}px;
   "
@@ -222,11 +224,11 @@
   .wd-dr__lede { color: var(--wd-dr-graphite); }
   .wd-dr__lede p { margin: 0; }
 
-  .wd-dr__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: var(--wd-dr-gap); align-items: start; }
+  .wd-dr__grid { display: grid; grid-template-columns: repeat(var(--wd-dr-cols), minmax(0, 1fr)); gap: var(--wd-dr-gap); align-items: start; }
   .wd-dr__card { display: flex; flex-direction: column; gap: 14px; padding: calc(var(--wd-dr-pad) * .5); background: var(--wd-dr-tint); min-width: 0; }
   .wd-dr__mat { position: relative; display: block; padding: calc(var(--wd-dr-mat) * .5); background: #fff; overflow: hidden; }
   .wd-dr__img { position: relative; z-index: 1; display: block; width: 100%; height: auto; aspect-ratio: var(--wd-dr-ratio); object-fit: contain; transition: filter .6s ease; }
-  .wd-dr__blank { display: grid; place-items: center; width: 100%; aspect-ratio: var(--wd-dr-ratio); background: var(--wd-dr-tint); color: var(--wd-dr-series); font-family: var(--wd-font-arsenica); font-style: italic; font-weight: 300; font-size: clamp(40px, 6vw, 96px); line-height: 1; }
+  .wd-dr__blank { display: grid; place-items: center; width: 100%; aspect-ratio: var(--wd-dr-ratio); background: #fff; color: var(--wd-dr-series); font-family: var(--wd-font-arsenica); font-style: italic; font-weight: 300; font-size: clamp(40px, 6vw, 96px); line-height: 1; }
   .wd-dr__blank--behind { position: absolute; inset: calc(var(--wd-dr-mat) * .5); width: auto; z-index: 0; display: none; }
   .wd-dr__details { display: flex; flex-direction: column; gap: 6px; }
   .wd-dr__number, .wd-dr__name, .wd-dr__line, .wd-dr__status, .wd-dr__edition, .wd-dr__price { margin: 0; }

@@ -458,7 +458,7 @@
         "eyebrow": "One a week",
         "heading": "Portraits of an Urban Jungle",
         "intro": "<p>Five residents of the neighbourhood. One portrait goes up each week, in an edition of 20.</p>",
-        "start_date": "2026-10-09",
+        "start_date": "",
         "every_days": 7,
         "drop_time": "10:00",
         "teaser": "blur",
