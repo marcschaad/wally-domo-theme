@@ -1,5 +1,5 @@
 """Adds full type controls (font, size, weight, line height, tracking, case) to every text in
-sections/wd-editions.liquid, sections/wd-drop.liquid, sections/wd-studio-note.liquid and sections/wd-footer.liquid. Usage: python3 -I gen_wd_sections.py <repo>
+sections/wd-editions.liquid, sections/wd-drop.liquid, sections/wd-canvas.liquid, sections/wd-studio-note.liquid and sections/wd-footer.liquid. Usage: python3 -I gen_wd_sections.py <repo>
 Idempotent: strips a previous run (between the WD-TYPE markers) before writing."""
 import json, re, sys
 repo = sys.argv[1]
@@ -7,10 +7,12 @@ FONT_OPTIONS = [("body", "Broadacre (Regular; Medium at 450+)"), ("arsenica-vari
                 ("arsenica-variable-italic", "Arsenica Variable Italic"), ("arsenica-text", "Arsenica Text")]
 CASE_OPTIONS = [("none", "As typed"), ("uppercase", "All caps"), ("lowercase", "All lowercase"), ("capitalize", "Initial caps")]
 
-def group(key, label, d, rng):
+STYLES = json.load(open(f"{repo}/wd-tools/styles.json"))  # written by gen_wd_type.py
+
+def group(key, label, d, rng, style="custom", scope="section"):
     font, size, weight, lh, trk, case = d
-    return [
-        {"type": "header", "content": label},
+    vis = "{{ " + scope + ".settings." + key + "_style == 'custom' }}"
+    six = [
         {"type": "select", "id": f"{key}_font", "label": "Font", "options": [{"value": v, "label": l} for v, l in FONT_OPTIONS], "default": font},
         {"type": "range", "id": f"{key}_size", "label": "Size", "min": rng[0], "max": rng[1], "step": 1, "unit": "px", "default": size},
         {"type": "range", "id": f"{key}_weight", "label": "Weight", "min": 100, "max": 900, "step": 50, "default": weight,
@@ -19,6 +21,25 @@ def group(key, label, d, rng):
         {"type": "range", "id": f"{key}_tracking", "label": "Tracking", "min": -100, "max": 300, "step": 5, "default": trk, "info": "1/1000 em, as in Illustrator."},
         {"type": "select", "id": f"{key}_case", "label": "Case", "options": [{"value": v, "label": l} for v, l in CASE_OPTIONS], "default": case},
     ]
+    for x in six:
+        x["visible_if"] = vis
+    pick = {"type": "select", "id": f"{key}_style", "label": "Style",
+            "options": [{"value": s["key"], "label": s["label"]} for s in STYLES] + [{"value": "custom", "label": "Custom (own controls)"}],
+            "default": style, "info": "Styles are set once in Header > Wally Domo fonts and type > Text styles."}
+    return [{"type": "header", "content": label}, pick] + six
+
+# which text style each element starts on (Custom = its own controls)
+STYLE_OF = {
+  "sections/wd-editions.liquid": {"ty_series": "label", "ty_heading": "display", "ty_intro": "body", "ty_title": "title",
+      "ty_note": "note", "ty_edition": "label", "ty_price": "price", "ty_coming": "label"},
+  "sections/wd-drop.liquid": {"ty_eyebrow": "label", "ty_heading": "display", "ty_intro": "body", "ty_number": "label_small",
+      "ty_name": "title_large", "ty_small_name": "title_small", "ty_line": "note", "ty_status": "label", "ty_edition": "label",
+      "ty_price": "price", "ty_signup": "body"},
+  "sections/wd-studio-note.liquid": {"ty_eyebrow": "label", "ty_heading": "headline", "ty_text": "body", "ty_link": "body"},
+  "sections/wd-footer.liquid": {"ty_top": "label", "ty_name": "custom", "ty_line": "note", "ty_head": "label_small", "ty_link": "body",
+      "ty_cap": "label_small", "ty_small": "small"},
+  "sections/wd-canvas.liquid": {},
+}
 
 SPECS = {
   "sections/wd-editions.liquid": {
@@ -50,6 +71,18 @@ SPECS = {
       ("ty_price", "Price type", ("body", 14, 600, 130, 35, "none"), (8, 32), ".wd-dr__price", "space_top"),
       ("ty_signup", "Sign-up link type", ("body", 14, 300, 140, 0, "none"), (10, 28), ".wd-dr__signup", "space_top"),
     ],
+  },
+  "sections/wd-canvas.liquid": {
+    "drop": [],
+    "note": False,
+    "groups": [],
+    "block_groups": {  # key, label, defaults, size range, starting style
+      "heading": [("ty_head", "Heading type", ("arsenica-variable-italic", 48, 300, 105, -5, "none"), (16, 104), "display")],
+      "text": [("ty_text", "Text type", ("body", 14, 300, 140, 0, "none"), (10, 40), "body")],
+      "product": [("ty_ptitle", "Title type", ("arsenica-text", 24, 400, 120, 0, "none"), (12, 60), "title"),
+                  ("ty_pline", "Line type", ("arsenica-variable-italic", 15, 300, 140, 0, "none"), (10, 32), "note"),
+                  ("ty_pprice", "Price type", ("body", 14, 600, 130, 35, "none"), (8, 32), "price")],
+    },
   },
   "sections/wd-studio-note.liquid": {
     "drop": ["heading_size"],
@@ -91,11 +124,19 @@ for path, spec in SPECS.items():
         # land before the header that opens `before`'s group
         while idx > 0 and st[idx - 1].get("type") == "header" and st[idx-1].get("content") not in [g[1] for g in spec["groups"]]:
             idx -= 1
-        st[idx:idx] = group(key, label, d, rng)
+        st[idx:idx] = group(key, label, d, rng, STYLE_OF.get(path, {}).get(key, "custom"))
     if spec.get("note", True):
         st.append(NOTE)
     schema["settings"] = st
-    calls = "\n".join(f"  {{%- render 'wd-type-el', s: section.settings, el: '{k}', sel: wd_sel_{k} -%}}" for k, *_ in spec["groups"])
+    # block-level type groups (rendered by the section itself with wd-type-pick)
+    for btype, groups in spec.get("block_groups", {}).items():
+        b = next(x for x in schema["blocks"] if x["type"] == btype)
+        labels_b = [g[1] for g in groups]
+        bs = [x for x in b["settings"] if not str(x.get("id", "")).startswith("ty_") and not (x.get("type") == "header" and x.get("content") in labels_b)]
+        for key, label, d, rng, style in groups:
+            bs += group(key, label, d, rng, style, scope="block")
+        b["settings"] = bs
+    calls = "\n".join(f"  {{%- render 'wd-type-pick', s: section.settings, el: '{k}', sel: wd_sel_{k} -%}}" for k, *_ in spec["groups"])
     assigns = "\n".join(f"  assign wd_sel_{k} = wd_scope | append: ' {sel}'" for k, _l, _d, _r, sel, _b in spec["groups"])
     block = ("{%- comment -%}WD-TYPE START (generated by gen_wd_sections.py){%- endcomment -%}\n"
              "{%- liquid\n  assign wd_scope = '#shopify-section-' | append: section.id\n" + assigns + "\n-%}\n<style>\n" + calls +

@@ -1,6 +1,7 @@
 {%- comment -%}
   WALLY DOMO: one element's full type rule for sections/wd-type.liquid.
-  Params: s = section.settings, el = element key, and EITHER sel = CSS selector (writes a rule)
+  Params: s = section.settings, el = element key, and EITHER sel = CSS selector (writes a rule),
+  OR prefix = text style key (writes --wd-st-<prefix>-* variables, read by wd-type-pick),
   OR vars = Horizon preset name (h1-h6, paragraph: writes Horizon's --font-<preset>--* variables).
   Optional <el>_phone setting = size on phones (fluid clamp, like Horizon's own).
   Font keys: body / broadacre (Regular under 450, Medium 450+), arsenica-variable(-italic),
@@ -52,7 +53,17 @@
     assign size_css = size | append: 'px'
   endif
 -%}
-{%- if vars != blank -%}
+{%- if prefix != blank -%}
+:root {
+  --wd-st-{{ prefix }}-family: {{ stack }};
+  --wd-st-{{ prefix }}-style: {{ style }};
+  --wd-st-{{ prefix }}-weight: {{ w }};
+  --wd-st-{{ prefix }}-size: {{ size_css }};
+  --wd-st-{{ prefix }}-lh: {{ lh }};
+  --wd-st-{{ prefix }}-trk: {{ trk }}em;
+  --wd-st-{{ prefix }}-case: {{ s[k_case] | default: 'none' }};
+}
+{%- elsif vars != blank -%}
 :root {
   --font-{{ vars }}--family: {{ stack }};
   --font-{{ vars }}--style: {{ style }};

@@ -696,6 +696,77 @@
         "padding-block-start": 48,
         "padding-block-end": 48
       }
+    },
+    "wd_canvas": {
+      "type": "wd-canvas",
+      "settings": {
+        "series_color": "#8A5A2B",
+        "row_height": 0
+      },
+      "blocks": {
+        "img": {
+          "type": "image",
+          "settings": {
+            "col": 1,
+            "span": 7,
+            "row": 1,
+            "rows": 3,
+            "aspect": "45",
+            "mat": 24
+          },
+          "blocks": {}
+        },
+        "panel": {
+          "type": "panel",
+          "settings": {
+            "col": 5,
+            "span": 8,
+            "row": 1,
+            "rows": 3,
+            "opacity": 12,
+            "nudge_y": 40
+          },
+          "blocks": {}
+        },
+        "head": {
+          "type": "heading",
+          "settings": {
+            "text": "We Lived in Brooklyn, Baby",
+            "col": 8,
+            "span": 5,
+            "row": 1,
+            "align_y": "end"
+          },
+          "blocks": {}
+        },
+        "txt": {
+          "type": "text",
+          "settings": {
+            "col": 8,
+            "span": 4,
+            "row": 2
+          },
+          "blocks": {}
+        },
+        "btn": {
+          "type": "button",
+          "settings": {
+            "label": "Shop the print",
+            "link": "/products/we-lived-in-brooklyn-print",
+            "col": 8,
+            "span": 5,
+            "row": 3
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "panel",
+        "img",
+        "head",
+        "txt",
+        "btn"
+      ]
     }
   },
   "order": [
@@ -703,6 +774,7 @@
     "hero_jVaWmY",
     "wd_editions",
     "wd_drop",
+    "wd_canvas",
     "wd_studio_note",
     "product_list_fa6P9H"
   ]

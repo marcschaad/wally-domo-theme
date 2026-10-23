@@ -1,0 +1,145 @@
+[
+ {
+  "key": "display",
+  "label": "Display: big italic headline",
+  "d": [
+   "arsenica-variable-italic",
+   48,
+   36,
+   300,
+   105,
+   -5,
+   "none"
+  ]
+ },
+ {
+  "key": "headline",
+  "label": "Headline",
+  "d": [
+   "arsenica-variable",
+   40,
+   32,
+   300,
+   110,
+   0,
+   "none"
+  ]
+ },
+ {
+  "key": "title_large",
+  "label": "Title large",
+  "d": [
+   "arsenica-text",
+   36,
+   28,
+   400,
+   110,
+   0,
+   "none"
+  ]
+ },
+ {
+  "key": "title",
+  "label": "Title: piece names",
+  "d": [
+   "arsenica-text",
+   24,
+   20,
+   400,
+   120,
+   0,
+   "none"
+  ]
+ },
+ {
+  "key": "title_small",
+  "label": "Title small",
+  "d": [
+   "arsenica-text",
+   18,
+   18,
+   400,
+   120,
+   0,
+   "none"
+  ]
+ },
+ {
+  "key": "body",
+  "label": "Body",
+  "d": [
+   "body",
+   14,
+   14,
+   300,
+   140,
+   0,
+   "none"
+  ]
+ },
+ {
+  "key": "note",
+  "label": "Note: italic aside",
+  "d": [
+   "arsenica-variable-italic",
+   15,
+   15,
+   300,
+   140,
+   0,
+   "none"
+  ]
+ },
+ {
+  "key": "label",
+  "label": "Label: small caps",
+  "d": [
+   "body",
+   12,
+   12,
+   500,
+   120,
+   80,
+   "uppercase"
+  ]
+ },
+ {
+  "key": "label_small",
+  "label": "Label small: tiny caps",
+  "d": [
+   "body",
+   11,
+   11,
+   500,
+   120,
+   100,
+   "uppercase"
+  ]
+ },
+ {
+  "key": "small",
+  "label": "Small print",
+  "d": [
+   "body",
+   12,
+   12,
+   300,
+   140,
+   10,
+   "none"
+  ]
+ },
+ {
+  "key": "price",
+  "label": "Price",
+  "d": [
+   "body",
+   14,
+   14,
+   600,
+   130,
+   35,
+   "none"
+  ]
+ }
+]

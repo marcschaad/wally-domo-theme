@@ -232,13 +232,13 @@
   assign wd_sel_ty_small = wd_scope | append: ' :is(.wd-ft__small, .wd-ft__small *)'
 -%}
 <style>
-  {%- render 'wd-type-el', s: section.settings, el: 'ty_top', sel: wd_sel_ty_top -%}
-  {%- render 'wd-type-el', s: section.settings, el: 'ty_name', sel: wd_sel_ty_name -%}
-  {%- render 'wd-type-el', s: section.settings, el: 'ty_line', sel: wd_sel_ty_line -%}
-  {%- render 'wd-type-el', s: section.settings, el: 'ty_head', sel: wd_sel_ty_head -%}
-  {%- render 'wd-type-el', s: section.settings, el: 'ty_link', sel: wd_sel_ty_link -%}
-  {%- render 'wd-type-el', s: section.settings, el: 'ty_cap', sel: wd_sel_ty_cap -%}
-  {%- render 'wd-type-el', s: section.settings, el: 'ty_small', sel: wd_sel_ty_small -%}
+  {%- render 'wd-type-pick', s: section.settings, el: 'ty_top', sel: wd_sel_ty_top -%}
+  {%- render 'wd-type-pick', s: section.settings, el: 'ty_name', sel: wd_sel_ty_name -%}
+  {%- render 'wd-type-pick', s: section.settings, el: 'ty_line', sel: wd_sel_ty_line -%}
+  {%- render 'wd-type-pick', s: section.settings, el: 'ty_head', sel: wd_sel_ty_head -%}
+  {%- render 'wd-type-pick', s: section.settings, el: 'ty_link', sel: wd_sel_ty_link -%}
+  {%- render 'wd-type-pick', s: section.settings, el: 'ty_cap', sel: wd_sel_ty_cap -%}
+  {%- render 'wd-type-pick', s: section.settings, el: 'ty_small', sel: wd_sel_ty_small -%}
 </style>
 {%- comment -%}WD-TYPE END{%- endcomment -%}
 
@@ -338,6 +338,63 @@
     },
     {
       "type": "select",
+      "id": "ty_top_style",
+      "label": "Style",
+      "options": [
+        {
+          "value": "display",
+          "label": "Display: big italic headline"
+        },
+        {
+          "value": "headline",
+          "label": "Headline"
+        },
+        {
+          "value": "title_large",
+          "label": "Title large"
+        },
+        {
+          "value": "title",
+          "label": "Title: piece names"
+        },
+        {
+          "value": "title_small",
+          "label": "Title small"
+        },
+        {
+          "value": "body",
+          "label": "Body"
+        },
+        {
+          "value": "note",
+          "label": "Note: italic aside"
+        },
+        {
+          "value": "label",
+          "label": "Label: small caps"
+        },
+        {
+          "value": "label_small",
+          "label": "Label small: tiny caps"
+        },
+        {
+          "value": "small",
+          "label": "Small print"
+        },
+        {
+          "value": "price",
+          "label": "Price"
+        },
+        {
+          "value": "custom",
+          "label": "Custom (own controls)"
+        }
+      ],
+      "default": "label",
+      "info": "Styles are set once in Header > Wally Domo fonts and type > Text styles."
+    },
+    {
+      "type": "select",
       "id": "ty_top_font",
       "label": "Font",
       "options": [
@@ -358,7 +415,8 @@
           "label": "Arsenica Text"
         }
       ],
-      "default": "body"
+      "default": "body",
+      "visible_if": "{{ section.settings.ty_top_style == 'custom' }}"
     },
     {
       "type": "range",
@@ -368,7 +426,8 @@
       "max": 24,
       "step": 1,
       "unit": "px",
-      "default": 12
+      "default": 12,
+      "visible_if": "{{ section.settings.ty_top_style == 'custom' }}"
     },
     {
       "type": "range",
@@ -378,7 +437,8 @@
       "max": 900,
       "step": 50,
       "default": 500,
-      "info": "Broadacre: under 450 = Regular, 450+ = Medium. Arsenica Text: 400 or 700."
+      "info": "Broadacre: under 450 = Regular, 450+ = Medium. Arsenica Text: 400 or 700.",
+      "visible_if": "{{ section.settings.ty_top_style == 'custom' }}"
     },
     {
       "type": "range",
@@ -388,7 +448,8 @@
       "max": 200,
       "step": 5,
       "unit": "%",
-      "default": 120
+      "default": 120,
+      "visible_if": "{{ section.settings.ty_top_style == 'custom' }}"
     },
     {
       "type": "range",
@@ -398,7 +459,8 @@
       "max": 300,
       "step": 5,
       "default": 80,
-      "info": "1/1000 em, as in Illustrator."
+      "info": "1/1000 em, as in Illustrator.",
+      "visible_if": "{{ section.settings.ty_top_style == 'custom' }}"
     },
     {
       "type": "select",
@@ -422,11 +484,69 @@
           "label": "Initial caps"
         }
       ],
-      "default": "uppercase"
+      "default": "uppercase",
+      "visible_if": "{{ section.settings.ty_top_style == 'custom' }}"
     },
     {
       "type": "header",
       "content": "Byline name type"
+    },
+    {
+      "type": "select",
+      "id": "ty_name_style",
+      "label": "Style",
+      "options": [
+        {
+          "value": "display",
+          "label": "Display: big italic headline"
+        },
+        {
+          "value": "headline",
+          "label": "Headline"
+        },
+        {
+          "value": "title_large",
+          "label": "Title large"
+        },
+        {
+          "value": "title",
+          "label": "Title: piece names"
+        },
+        {
+          "value": "title_small",
+          "label": "Title small"
+        },
+        {
+          "value": "body",
+          "label": "Body"
+        },
+        {
+          "value": "note",
+          "label": "Note: italic aside"
+        },
+        {
+          "value": "label",
+          "label": "Label: small caps"
+        },
+        {
+          "value": "label_small",
+          "label": "Label small: tiny caps"
+        },
+        {
+          "value": "small",
+          "label": "Small print"
+        },
+        {
+          "value": "price",
+          "label": "Price"
+        },
+        {
+          "value": "custom",
+          "label": "Custom (own controls)"
+        }
+      ],
+      "default": "custom",
+      "info": "Styles are set once in Header > Wally Domo fonts and type > Text styles."
     },
     {
       "type": "select",
@@ -450,7 +570,8 @@
           "label": "Arsenica Text"
         }
       ],
-      "default": "body"
+      "default": "body",
+      "visible_if": "{{ section.settings.ty_name_style == 'custom' }}"
     },
     {
       "type": "range",
@@ -460,7 +581,8 @@
       "max": 72,
       "step": 1,
       "unit": "px",
-      "default": 30
+      "default": 30,
+      "visible_if": "{{ section.settings.ty_name_style == 'custom' }}"
     },
     {
       "type": "range",
@@ -470,7 +592,8 @@
       "max": 900,
       "step": 50,
       "default": 300,
-      "info": "Broadacre: under 450 = Regular, 450+ = Medium. Arsenica Text: 400 or 700."
+      "info": "Broadacre: under 450 = Regular, 450+ = Medium. Arsenica Text: 400 or 700.",
+      "visible_if": "{{ section.settings.ty_name_style == 'custom' }}"
     },
     {
       "type": "range",
@@ -480,7 +603,8 @@
       "max": 200,
       "step": 5,
       "unit": "%",
-      "default": 100
+      "default": 100,
+      "visible_if": "{{ section.settings.ty_name_style == 'custom' }}"
     },
     {
       "type": "range",
@@ -490,7 +614,8 @@
       "max": 300,
       "step": 5,
       "default": -10,
-      "info": "1/1000 em, as in Illustrator."
+      "info": "1/1000 em, as in Illustrator.",
+      "visible_if": "{{ section.settings.ty_name_style == 'custom' }}"
     },
     {
       "type": "select",
@@ -514,11 +639,69 @@
           "label": "Initial caps"
         }
       ],
-      "default": "none"
+      "default": "none",
+      "visible_if": "{{ section.settings.ty_name_style == 'custom' }}"
     },
     {
       "type": "header",
       "content": "Studio line type"
+    },
+    {
+      "type": "select",
+      "id": "ty_line_style",
+      "label": "Style",
+      "options": [
+        {
+          "value": "display",
+          "label": "Display: big italic headline"
+        },
+        {
+          "value": "headline",
+          "label": "Headline"
+        },
+        {
+          "value": "title_large",
+          "label": "Title large"
+        },
+        {
+          "value": "title",
+          "label": "Title: piece names"
+        },
+        {
+          "value": "title_small",
+          "label": "Title small"
+        },
+        {
+          "value": "body",
+          "label": "Body"
+        },
+        {
+          "value": "note",
+          "label": "Note: italic aside"
+        },
+        {
+          "value": "label",
+          "label": "Label: small caps"
+        },
+        {
+          "value": "label_small",
+          "label": "Label small: tiny caps"
+        },
+        {
+          "value": "small",
+          "label": "Small print"
+        },
+        {
+          "value": "price",
+          "label": "Price"
+        },
+        {
+          "value": "custom",
+          "label": "Custom (own controls)"
+        }
+      ],
+      "default": "note",
+      "info": "Styles are set once in Header > Wally Domo fonts and type > Text styles."
     },
     {
       "type": "select",
@@ -542,7 +725,8 @@
           "label": "Arsenica Text"
         }
       ],
-      "default": "arsenica-variable-italic"
+      "default": "arsenica-variable-italic",
+      "visible_if": "{{ section.settings.ty_line_style == 'custom' }}"
     },
     {
       "type": "range",
@@ -552,7 +736,8 @@
       "max": 36,
       "step": 1,
       "unit": "px",
-      "default": 17
+      "default": 17,
+      "visible_if": "{{ section.settings.ty_line_style == 'custom' }}"
     },
     {
       "type": "range",
@@ -562,7 +747,8 @@
       "max": 900,
       "step": 50,
       "default": 300,
-      "info": "Broadacre: under 450 = Regular, 450+ = Medium. Arsenica Text: 400 or 700."
+      "info": "Broadacre: under 450 = Regular, 450+ = Medium. Arsenica Text: 400 or 700.",
+      "visible_if": "{{ section.settings.ty_line_style == 'custom' }}"
     },
     {
       "type": "range",
@@ -572,7 +758,8 @@
       "max": 200,
       "step": 5,
       "unit": "%",
-      "default": 135
+      "default": 135,
+      "visible_if": "{{ section.settings.ty_line_style == 'custom' }}"
     },
     {
       "type": "range",
@@ -582,7 +769,8 @@
       "max": 300,
       "step": 5,
       "default": 0,
-      "info": "1/1000 em, as in Illustrator."
+      "info": "1/1000 em, as in Illustrator.",
+      "visible_if": "{{ section.settings.ty_line_style == 'custom' }}"
     },
     {
       "type": "select",
@@ -606,7 +794,8 @@
           "label": "Initial caps"
         }
       ],
-      "default": "none"
+      "default": "none",
+      "visible_if": "{{ section.settings.ty_line_style == 'custom' }}"
     },
     {
       "type": "header",
@@ -671,6 +860,63 @@
     },
     {
       "type": "select",
+      "id": "ty_head_style",
+      "label": "Style",
+      "options": [
+        {
+          "value": "display",
+          "label": "Display: big italic headline"
+        },
+        {
+          "value": "headline",
+          "label": "Headline"
+        },
+        {
+          "value": "title_large",
+          "label": "Title large"
+        },
+        {
+          "value": "title",
+          "label": "Title: piece names"
+        },
+        {
+          "value": "title_small",
+          "label": "Title small"
+        },
+        {
+          "value": "body",
+          "label": "Body"
+        },
+        {
+          "value": "note",
+          "label": "Note: italic aside"
+        },
+        {
+          "value": "label",
+          "label": "Label: small caps"
+        },
+        {
+          "value": "label_small",
+          "label": "Label small: tiny caps"
+        },
+        {
+          "value": "small",
+          "label": "Small print"
+        },
+        {
+          "value": "price",
+          "label": "Price"
+        },
+        {
+          "value": "custom",
+          "label": "Custom (own controls)"
+        }
+      ],
+      "default": "label_small",
+      "info": "Styles are set once in Header > Wally Domo fonts and type > Text styles."
+    },
+    {
+      "type": "select",
       "id": "ty_head_font",
       "label": "Font",
       "options": [
@@ -691,7 +937,8 @@
           "label": "Arsenica Text"
         }
       ],
-      "default": "body"
+      "default": "body",
+      "visible_if": "{{ section.settings.ty_head_style == 'custom' }}"
     },
     {
       "type": "range",
@@ -701,7 +948,8 @@
       "max": 24,
       "step": 1,
       "unit": "px",
-      "default": 11
+      "default": 11,
+      "visible_if": "{{ section.settings.ty_head_style == 'custom' }}"
     },
     {
       "type": "range",
@@ -711,7 +959,8 @@
       "max": 900,
       "step": 50,
       "default": 500,
-      "info": "Broadacre: under 450 = Regular, 450+ = Medium. Arsenica Text: 400 or 700."
+      "info": "Broadacre: under 450 = Regular, 450+ = Medium. Arsenica Text: 400 or 700.",
+      "visible_if": "{{ section.settings.ty_head_style == 'custom' }}"
     },
     {
       "type": "range",
@@ -721,7 +970,8 @@
       "max": 200,
       "step": 5,
       "unit": "%",
-      "default": 120
+      "default": 120,
+      "visible_if": "{{ section.settings.ty_head_style == 'custom' }}"
     },
     {
       "type": "range",
@@ -731,7 +981,8 @@
       "max": 300,
       "step": 5,
       "default": 100,
-      "info": "1/1000 em, as in Illustrator."
+      "info": "1/1000 em, as in Illustrator.",
+      "visible_if": "{{ section.settings.ty_head_style == 'custom' }}"
     },
     {
       "type": "select",
@@ -755,11 +1006,69 @@
           "label": "Initial caps"
         }
       ],
-      "default": "uppercase"
+      "default": "uppercase",
+      "visible_if": "{{ section.settings.ty_head_style == 'custom' }}"
     },
     {
       "type": "header",
       "content": "Link type"
+    },
+    {
+      "type": "select",
+      "id": "ty_link_style",
+      "label": "Style",
+      "options": [
+        {
+          "value": "display",
+          "label": "Display: big italic headline"
+        },
+        {
+          "value": "headline",
+          "label": "Headline"
+        },
+        {
+          "value": "title_large",
+          "label": "Title large"
+        },
+        {
+          "value": "title",
+          "label": "Title: piece names"
+        },
+        {
+          "value": "title_small",
+          "label": "Title small"
+        },
+        {
+          "value": "body",
+          "label": "Body"
+        },
+        {
+          "value": "note",
+          "label": "Note: italic aside"
+        },
+        {
+          "value": "label",
+          "label": "Label: small caps"
+        },
+        {
+          "value": "label_small",
+          "label": "Label small: tiny caps"
+        },
+        {
+          "value": "small",
+          "label": "Small print"
+        },
+        {
+          "value": "price",
+          "label": "Price"
+        },
+        {
+          "value": "custom",
+          "label": "Custom (own controls)"
+        }
+      ],
+      "default": "body",
+      "info": "Styles are set once in Header > Wally Domo fonts and type > Text styles."
     },
     {
       "type": "select",
@@ -783,7 +1092,8 @@
           "label": "Arsenica Text"
         }
       ],
-      "default": "body"
+      "default": "body",
+      "visible_if": "{{ section.settings.ty_link_style == 'custom' }}"
     },
     {
       "type": "range",
@@ -793,7 +1103,8 @@
       "max": 28,
       "step": 1,
       "unit": "px",
-      "default": 15
+      "default": 15,
+      "visible_if": "{{ section.settings.ty_link_style == 'custom' }}"
     },
     {
       "type": "range",
@@ -803,7 +1114,8 @@
       "max": 900,
       "step": 50,
       "default": 300,
-      "info": "Broadacre: under 450 = Regular, 450+ = Medium. Arsenica Text: 400 or 700."
+      "info": "Broadacre: under 450 = Regular, 450+ = Medium. Arsenica Text: 400 or 700.",
+      "visible_if": "{{ section.settings.ty_link_style == 'custom' }}"
     },
     {
       "type": "range",
@@ -813,7 +1125,8 @@
       "max": 200,
       "step": 5,
       "unit": "%",
-      "default": 150
+      "default": 150,
+      "visible_if": "{{ section.settings.ty_link_style == 'custom' }}"
     },
     {
       "type": "range",
@@ -823,7 +1136,8 @@
       "max": 300,
       "step": 5,
       "default": 0,
-      "info": "1/1000 em, as in Illustrator."
+      "info": "1/1000 em, as in Illustrator.",
+      "visible_if": "{{ section.settings.ty_link_style == 'custom' }}"
     },
     {
       "type": "select",
@@ -847,7 +1161,8 @@
           "label": "Initial caps"
         }
       ],
-      "default": "none"
+      "default": "none",
+      "visible_if": "{{ section.settings.ty_link_style == 'custom' }}"
     },
     {
       "type": "header",
@@ -918,6 +1233,63 @@
     },
     {
       "type": "select",
+      "id": "ty_cap_style",
+      "label": "Style",
+      "options": [
+        {
+          "value": "display",
+          "label": "Display: big italic headline"
+        },
+        {
+          "value": "headline",
+          "label": "Headline"
+        },
+        {
+          "value": "title_large",
+          "label": "Title large"
+        },
+        {
+          "value": "title",
+          "label": "Title: piece names"
+        },
+        {
+          "value": "title_small",
+          "label": "Title small"
+        },
+        {
+          "value": "body",
+          "label": "Body"
+        },
+        {
+          "value": "note",
+          "label": "Note: italic aside"
+        },
+        {
+          "value": "label",
+          "label": "Label: small caps"
+        },
+        {
+          "value": "label_small",
+          "label": "Label small: tiny caps"
+        },
+        {
+          "value": "small",
+          "label": "Small print"
+        },
+        {
+          "value": "price",
+          "label": "Price"
+        },
+        {
+          "value": "custom",
+          "label": "Custom (own controls)"
+        }
+      ],
+      "default": "label_small",
+      "info": "Styles are set once in Header > Wally Domo fonts and type > Text styles."
+    },
+    {
+      "type": "select",
       "id": "ty_cap_font",
       "label": "Font",
       "options": [
@@ -938,7 +1310,8 @@
           "label": "Arsenica Text"
         }
       ],
-      "default": "body"
+      "default": "body",
+      "visible_if": "{{ section.settings.ty_cap_style == 'custom' }}"
     },
     {
       "type": "range",
@@ -948,7 +1321,8 @@
       "max": 20,
       "step": 1,
       "unit": "px",
-      "default": 10
+      "default": 10,
+      "visible_if": "{{ section.settings.ty_cap_style == 'custom' }}"
     },
     {
       "type": "range",
@@ -958,7 +1332,8 @@
       "max": 900,
       "step": 50,
       "default": 500,
-      "info": "Broadacre: under 450 = Regular, 450+ = Medium. Arsenica Text: 400 or 700."
+      "info": "Broadacre: under 450 = Regular, 450+ = Medium. Arsenica Text: 400 or 700.",
+      "visible_if": "{{ section.settings.ty_cap_style == 'custom' }}"
     },
     {
       "type": "range",
@@ -968,7 +1343,8 @@
       "max": 200,
       "step": 5,
       "unit": "%",
-      "default": 120
+      "default": 120,
+      "visible_if": "{{ section.settings.ty_cap_style == 'custom' }}"
     },
     {
       "type": "range",
@@ -978,7 +1354,8 @@
       "max": 300,
       "step": 5,
       "default": 100,
-      "info": "1/1000 em, as in Illustrator."
+      "info": "1/1000 em, as in Illustrator.",
+      "visible_if": "{{ section.settings.ty_cap_style == 'custom' }}"
     },
     {
       "type": "select",
@@ -1002,7 +1379,8 @@
           "label": "Initial caps"
         }
       ],
-      "default": "uppercase"
+      "default": "uppercase",
+      "visible_if": "{{ section.settings.ty_cap_style == 'custom' }}"
     },
     {
       "type": "header",
@@ -1039,6 +1417,63 @@
     },
     {
       "type": "select",
+      "id": "ty_small_style",
+      "label": "Style",
+      "options": [
+        {
+          "value": "display",
+          "label": "Display: big italic headline"
+        },
+        {
+          "value": "headline",
+          "label": "Headline"
+        },
+        {
+          "value": "title_large",
+          "label": "Title large"
+        },
+        {
+          "value": "title",
+          "label": "Title: piece names"
+        },
+        {
+          "value": "title_small",
+          "label": "Title small"
+        },
+        {
+          "value": "body",
+          "label": "Body"
+        },
+        {
+          "value": "note",
+          "label": "Note: italic aside"
+        },
+        {
+          "value": "label",
+          "label": "Label: small caps"
+        },
+        {
+          "value": "label_small",
+          "label": "Label small: tiny caps"
+        },
+        {
+          "value": "small",
+          "label": "Small print"
+        },
+        {
+          "value": "price",
+          "label": "Price"
+        },
+        {
+          "value": "custom",
+          "label": "Custom (own controls)"
+        }
+      ],
+      "default": "small",
+      "info": "Styles are set once in Header > Wally Domo fonts and type > Text styles."
+    },
+    {
+      "type": "select",
       "id": "ty_small_font",
       "label": "Font",
       "options": [
@@ -1059,7 +1494,8 @@
           "label": "Arsenica Text"
         }
       ],
-      "default": "body"
+      "default": "body",
+      "visible_if": "{{ section.settings.ty_small_style == 'custom' }}"
     },
     {
       "type": "range",
@@ -1069,7 +1505,8 @@
       "max": 20,
       "step": 1,
       "unit": "px",
-      "default": 12
+      "default": 12,
+      "visible_if": "{{ section.settings.ty_small_style == 'custom' }}"
     },
     {
       "type": "range",
@@ -1079,7 +1516,8 @@
       "max": 900,
       "step": 50,
       "default": 300,
-      "info": "Broadacre: under 450 = Regular, 450+ = Medium. Arsenica Text: 400 or 700."
+      "info": "Broadacre: under 450 = Regular, 450+ = Medium. Arsenica Text: 400 or 700.",
+      "visible_if": "{{ section.settings.ty_small_style == 'custom' }}"
     },
     {
       "type": "range",
@@ -1089,7 +1527,8 @@
       "max": 200,
       "step": 5,
       "unit": "%",
-      "default": 140
+      "default": 140,
+      "visible_if": "{{ section.settings.ty_small_style == 'custom' }}"
     },
     {
       "type": "range",
@@ -1099,7 +1538,8 @@
       "max": 300,
       "step": 5,
       "default": 10,
-      "info": "1/1000 em, as in Illustrator."
+      "info": "1/1000 em, as in Illustrator.",
+      "visible_if": "{{ section.settings.ty_small_style == 'custom' }}"
     },
     {
       "type": "select",
@@ -1123,7 +1563,8 @@
           "label": "Initial caps"
         }
       ],
-      "default": "none"
+      "default": "none",
+      "visible_if": "{{ section.settings.ty_small_style == 'custom' }}"
     },
     {
       "type": "header",
