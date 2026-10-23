@@ -38,6 +38,12 @@ near-white (series 1: #EDE7DF). Titles in the drop colour still pass AA.
 - `sections/wd-editions.liquid` ("WD Editions"): homepage print cards. Flat controls:
   heading, intro, series colour, card tint, card margin, gap, mat, print shape, title
   size, edition line, price, button label, spacing; one "Print" block per card.
+- `sections/wd-drop.liquid` ("WD Weekly drop", 2026-10-23): Portraits of an Urban Jungle. One "Portrait" block per
+  piece in drop order; First drop date + Days between drops + Drop time (store time zone; it is Eastern as of
+  2026-10-23). Flips next > out now > dropped / sold out by itself, in Liquid and again in the browser so cached
+  pages still flip. Newest drop = big card; before the first drop, the next one is. Teaser blurred / hidden / shown.
+  Own series colour (placeholder graphite until Marc eyedrops it). Sign-up link jumps to `#wd-signup` (studio note).
+- WD Editions also holds Coming soon cards (Print block Status) and a series name line ("Common Species" on the homepage).
 - `sections/wd-studio-note.liquid` ("WD Studio note"): portrait + note + email sign-up
   (customer tags) + link, flat controls.
 - `sections/wd-logo.liquid` ("Wally Domo logo", header group): WD26 wordmark drawn as a CSS mask over
