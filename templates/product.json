@@ -39,6 +39,7 @@
             "media_columns": "two",
             "image_gap": 4,
             "large_first_image": false,
+            "icons_style": "arrow",
             "slideshow_controls_style": "counter",
             "slideshow_mobile_controls_style": "dots",
             "thumbnail_position": "right",
@@ -117,6 +118,7 @@
                 "border_opacity": 100,
                 "border_color": "",
                 "border_radius": 0,
+                "link": "",
                 "open_in_new_tab": false,
                 "placeholder": "",
                 "padding-block-start": 0,
@@ -125,6 +127,14 @@
                 "padding-inline-end": 0
               },
               "blocks": {
+                "wd_product_type": {
+                  "type": "custom-liquid",
+                  "name": "Product type",
+                  "settings": {
+                    "custom_liquid": "{%- if closest.product.type != blank -%}<p class=\"wd-type-eyebrow\">{{ closest.product.type | escape }}</p>{%- endif -%}"
+                  },
+                  "blocks": {}
+                },
                 "text_xrnftG": {
                   "type": "text",
                   "name": "t:names.product_title",
@@ -170,14 +180,6 @@
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
                     "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                },
-                "wd_product_type": {
-                  "type": "custom-liquid",
-                  "name": "Product type",
-                  "settings": {
-                    "custom_liquid": "{%- if closest.product.type != blank -%}<p class=\"wd-type-eyebrow\">{{ closest.product.type | escape }}</p>{%- endif -%}"
                   },
                   "blocks": {}
                 }
@@ -398,6 +400,14 @@
               },
               "blocks": {}
             },
+            "wd_product_type": {
+              "type": "custom-liquid",
+              "name": "Product type",
+              "settings": {
+                "custom_liquid": "{%- if closest.product.type != blank -%}<p class=\"wd-type-eyebrow\">{{ closest.product.type | escape }}</p>{%- endif -%}"
+              },
+              "blocks": {}
+            },
             "product_title_M7MJkb": {
               "type": "product-title",
               "name": "t:names.product_title",
@@ -444,14 +454,6 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
-            },
-            "wd_product_type": {
-              "type": "custom-liquid",
-              "name": "Product type",
-              "settings": {
-                "custom_liquid": "{%- if closest.product.type != blank -%}<p class=\"wd-type-eyebrow\">{{ closest.product.type | escape }}</p>{%- endif -%}"
-              },
-              "blocks": {}
             }
           },
           "block_order": [
@@ -471,8 +473,8 @@
         "recommendation_type": "related",
         "layout_type": "grid",
         "carousel_on_mobile": false,
-        "max_products": 4,
-        "columns": 4,
+        "max_products": 3,
+        "columns": 3,
         "mobile_columns": "2",
         "columns_gap": 12,
         "rows_gap": 24,
