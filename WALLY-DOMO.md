@@ -43,6 +43,12 @@ near-white (series 1: #EDE7DF). Titles in the drop colour still pass AA.
 - `sections/wd-logo.liquid` ("Wally Domo logo", header group): WD26 wordmark drawn as a CSS mask over
   Horizon's logo link. Desktop one line, phones stacked (Marc), each with its own height; colour follows
   the header text colour unless set. Horizon's Theme settings > Logo stays empty (text fallback = store name for SEO).
+- `sections/wd-footer.liquid` ("WD Footer", footer group, 2026-10-23): replaces Horizon's Footer +
+  Utilities (both kept in footer-group.json, disabled, for rollback). No email sign-up (the homepage
+  has one). WD26 wordmark (CSS mask), "The Studio of Marc Schaad" byline + studio line, two menus +
+  a Studio column (Instagram, store email), one pig from wd-pig-line.png that turns once in view /
+  on hover and goes back to the top, copyright + Shopify policies + one fact line. Full type groups
+  via gen_wd_sections.py. The site-wide "Footer" style in the type panel doesn't reach it.
 - Rule (Marc, 2026-10-22): build our own flat sections instead of nesting Horizon's
   generic groups. Every control on one screen, named plainly.
 

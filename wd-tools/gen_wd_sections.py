@@ -1,5 +1,5 @@
 """Adds full type controls (font, size, weight, line height, tracking, case) to every text in
-sections/wd-editions.liquid and sections/wd-studio-note.liquid. Usage: python3 -I gen_wd_sections.py <repo>
+sections/wd-editions.liquid, sections/wd-studio-note.liquid and sections/wd-footer.liquid. Usage: python3 -I gen_wd_sections.py <repo>
 Idempotent: strips a previous run (between the WD-TYPE markers) before writing."""
 import json, re, sys
 repo = sys.argv[1]
@@ -42,6 +42,19 @@ SPECS = {
       ("ty_link", "Link type", ("body", 14, 300, 140, 0, "none"), (10, 28), ".wd-note__link", "space_top"),
     ],
   },
+  "sections/wd-footer.liquid": {
+    "drop": [],
+    "note": False,
+    "groups": [
+      ("ty_top", "Byline small line type", ("body", 12, 500, 120, 80, "uppercase"), (8, 24), ".wd-ft__top", "col1_heading"),
+      ("ty_name", "Byline name type", ("body", 30, 300, 100, -10, "none"), (14, 72), ".wd-ft__name", "col1_heading"),
+      ("ty_line", "Studio line type", ("arsenica-variable-italic", 17, 300, 135, 0, "none"), (10, 36), ".wd-ft__line", "col1_heading"),
+      ("ty_head", "Column heading type", ("body", 11, 500, 120, 100, "uppercase"), (8, 24), ".wd-ft__head", "show_pig"),
+      ("ty_link", "Link type", ("body", 15, 300, 150, 0, "none"), (10, 28), ":is(.wd-ft__link, .wd-ft__link *)", "show_pig"),
+      ("ty_cap", "Pig caption type", ("body", 10, 500, 120, 100, "uppercase"), (8, 20), ".wd-ft__cap", "copyright_name"),
+      ("ty_small", "Small print type", ("body", 12, 300, 140, 10, "none"), (8, 20), ":is(.wd-ft__small, .wd-ft__small *)", "bg_color"),
+    ],
+  },
 }
 NOTE = {"type": "paragraph", "content": "Product type label, buttons and email fields follow the site-wide styles in Header > Wally Domo fonts and type, so they match everywhere."}
 
@@ -61,7 +74,8 @@ for path, spec in SPECS.items():
         while idx > 0 and st[idx - 1].get("type") == "header" and st[idx-1].get("content") not in [g[1] for g in spec["groups"]]:
             idx -= 1
         st[idx:idx] = group(key, label, d, rng)
-    st.append(NOTE)
+    if spec.get("note", True):
+        st.append(NOTE)
     schema["settings"] = st
     calls = "\n".join(f"  {{%- render 'wd-type-el', s: section.settings, el: '{k}', sel: wd_sel_{k} -%}}" for k, *_ in spec["groups"])
     assigns = "\n".join(f"  assign wd_sel_{k} = wd_scope | append: ' {sel}'" for k, _l, _d, _r, sel, _b in spec["groups"])

@@ -11,6 +11,18 @@
   "type": "footer",
   "name": "t:names.footer",
   "sections": {
+    "wd_footer": {
+      "type": "wd-footer",
+      "settings": {
+        "col1_heading": "Shop",
+        "col1_menu": "wd-shop",
+        "col2_heading": "Info",
+        "col2_menu": "footer-info",
+        "col3_heading": "Studio",
+        "ig_url": "https://www.instagram.com/wallydomoart",
+        "ig_label": "Instagram"
+      }
+    },
     "footer_m9NzUG": {
       "type": "footer",
       "blocks": {
@@ -141,7 +153,8 @@
         "background_color": "{{ settings.color_palette.background }}",
         "padding-block-start": 30,
         "padding-block-end": 30
-      }
+      },
+      "disabled": true
     },
     "footer_utilities_jLGE8U": {
       "type": "footer-utilities",
@@ -189,10 +202,12 @@
         "background_color": "{{ settings.color_palette.background }}",
         "padding-block-start": 20,
         "padding-block-end": 48
-      }
+      },
+      "disabled": true
     }
   },
   "order": [
+    "wd_footer",
     "footer_m9NzUG",
     "footer_utilities_jLGE8U"
   ]
