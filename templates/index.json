@@ -9,6 +9,72 @@
  */
 {
   "sections": {
+    "wd_studio_banner": {
+      "type": "wd-studio-banner",
+      "settings": {
+        "centre": "wd26",
+        "background": "#E4E3DA",
+        "ink": "#000000",
+        "grain": 56,
+        "d_height": 180,
+        "d_layout": "stacked",
+        "d_lock_width": 270,
+        "d_lock_y": 0,
+        "d_pig_size": 72,
+        "d_pig_dist": 200,
+        "d_pig_y": 0,
+        "d_cloud": 115,
+        "m_height": 120,
+        "m_layout": "stacked",
+        "m_lock_width": 170,
+        "m_lock_y": 0,
+        "m_pig_size": 56,
+        "m_pig_spread": 85,
+        "m_pig_y": 0,
+        "m_cloud": 65,
+        "pig_light": "#f7e4ec",
+        "pig_shade": "#cfa6bf",
+        "intro_turns": 2,
+        "pig_rest": 4,
+        "secs_per_turn": 5,
+        "hover_boost": 60,
+        "clouds": true,
+        "cloud_count": 4,
+        "cloud_motion": "stepped",
+        "cloud_fps": 8,
+        "cloud_depth": 60,
+        "cloud_secs": 100,
+        "cloud_tint_1": "#ffeeed",
+        "cloud_tint_2": "#dbccd8",
+        "cloud_tint_3": "#DFEDE7",
+        "cloud_tint_4": "#ffeecc",
+        "day_night": false,
+        "day_secs": 153,
+        "spin_boost": 25,
+        "sky_night": "#663367",
+        "sky_dusk": "#fda79c",
+        "ink_night": "#d8ebfe",
+        "star_count": 14,
+        "star_light": "#fff8e7",
+        "star_dark": "#8a97c4",
+        "cs_heading": "Coming soon",
+        "cs_font": "arsenica-variable",
+        "cs_size": 52,
+        "cs_weight": 380,
+        "cs_italic": false,
+        "cs_line_height": 100,
+        "cs_tracking": 0,
+        "cs_case": "none",
+        "cs_gap": 14,
+        "cs_line": "Get on the list and you'll see it first.",
+        "cs_button": "Sign me up",
+        "cs_success": "You're on the list. Thanks.",
+        "cs_width": 360,
+        "cs_top": 30,
+        "cs_bottom": 30,
+        "fill_height": false
+      }
+    },
     "hero_jVaWmY": {
       "type": "hero",
       "blocks": {
@@ -93,6 +159,333 @@
         "reflection_opacity": 75,
         "padding-block-start": 100,
         "padding-block-end": 72
+      }
+    },
+    "wd_editions": {
+      "type": "wd-editions",
+      "blocks": {
+        "print_pigeon": {
+          "type": "print",
+          "settings": {
+            "status": "available",
+            "product": "pigeon-gone-west-studio-print",
+            "title": "Pigeon Gone West",
+            "eyebrow": "",
+            "note": "Summer 2026, before the drive west.",
+            "edition_line": "",
+            "coming_line": ""
+          }
+        },
+        "print_brooklyn": {
+          "type": "print",
+          "settings": {
+            "status": "available",
+            "product": "we-lived-in-brooklyn-print",
+            "title": "We Lived in Brooklyn, Baby",
+            "eyebrow": "",
+            "note": "",
+            "edition_line": "",
+            "coming_line": ""
+          }
+        },
+        "plate_03": {
+          "type": "print",
+          "settings": {
+            "status": "coming",
+            "product": "",
+            "title": "",
+            "eyebrow": "",
+            "note": "",
+            "edition_line": "",
+            "coming_line": ""
+          }
+        },
+        "plate_04": {
+          "type": "print",
+          "settings": {
+            "status": "coming",
+            "product": "",
+            "title": "",
+            "eyebrow": "",
+            "note": "",
+            "edition_line": "",
+            "coming_line": ""
+          }
+        }
+      },
+      "block_order": [
+        "print_pigeon",
+        "print_brooklyn",
+        "plate_03",
+        "plate_04"
+      ],
+      "settings": {
+        "series_line": "Common Species",
+        "heading": "Signed prints, in small numbers.",
+        "intro": "<p>Started in Brooklyn. Now made in a studio on the West Coast. Every print below is signed, numbered and dated by hand.</p>",
+        "ty_series_font": "body",
+        "ty_series_size": 12,
+        "ty_series_weight": 500,
+        "ty_series_lh": 120,
+        "ty_series_tracking": 80,
+        "ty_series_case": "uppercase",
+        "ty_heading_font": "arsenica-variable-italic",
+        "ty_heading_size": 48,
+        "ty_heading_weight": 300,
+        "ty_heading_lh": 105,
+        "ty_heading_tracking": -5,
+        "ty_heading_case": "none",
+        "ty_intro_font": "body",
+        "ty_intro_size": 14,
+        "ty_intro_weight": 300,
+        "ty_intro_lh": 140,
+        "ty_intro_tracking": 0,
+        "ty_intro_case": "none",
+        "series_color": "#8a5a2b",
+        "tint": 12,
+        "columns": "2",
+        "card_padding": 32,
+        "card_gap": 32,
+        "mat": 20,
+        "image_shape": "portrait",
+        "show_type": true,
+        "edition_line": "Edition of 15. Signed, numbered and dated by hand.",
+        "show_price": false,
+        "button_label": "Shop the print",
+        "coming_title": "In the studio",
+        "coming_line": "Coming soon",
+        "coming_blur": 0,
+        "ty_title_font": "arsenica-text",
+        "ty_title_size": 24,
+        "ty_title_weight": 400,
+        "ty_title_lh": 120,
+        "ty_title_tracking": 0,
+        "ty_title_case": "none",
+        "ty_note_font": "arsenica-variable-italic",
+        "ty_note_size": 15,
+        "ty_note_weight": 300,
+        "ty_note_lh": 140,
+        "ty_note_tracking": 0,
+        "ty_note_case": "none",
+        "ty_edition_font": "body",
+        "ty_edition_size": 12,
+        "ty_edition_weight": 500,
+        "ty_edition_lh": 120,
+        "ty_edition_tracking": 60,
+        "ty_edition_case": "uppercase",
+        "ty_price_font": "body",
+        "ty_price_size": 14,
+        "ty_price_weight": 600,
+        "ty_price_lh": 130,
+        "ty_price_tracking": 35,
+        "ty_price_case": "none",
+        "ty_coming_font": "body",
+        "ty_coming_size": 12,
+        "ty_coming_weight": 500,
+        "ty_coming_lh": 120,
+        "ty_coming_tracking": 60,
+        "ty_coming_case": "uppercase",
+        "space_top": 48,
+        "space_bottom": 80
+      }
+    },
+    "wd_drop": {
+      "type": "wd-drop",
+      "blocks": {
+        "portrait_sunday": {
+          "type": "portrait",
+          "settings": {
+            "name": "Sunday",
+            "product": "",
+            "line": "",
+            "date": "",
+            "edition_line": ""
+          }
+        },
+        "portrait_gjoob": {
+          "type": "portrait",
+          "settings": {
+            "name": "GJoob",
+            "product": "",
+            "line": "",
+            "date": "",
+            "edition_line": ""
+          }
+        },
+        "portrait_dan_d": {
+          "type": "portrait",
+          "settings": {
+            "name": "Dan D.",
+            "product": "",
+            "line": "",
+            "date": "",
+            "edition_line": ""
+          }
+        },
+        "portrait_virgil": {
+          "type": "portrait",
+          "settings": {
+            "name": "Virgil",
+            "product": "",
+            "line": "",
+            "date": "",
+            "edition_line": ""
+          }
+        },
+        "portrait_teo": {
+          "type": "portrait",
+          "settings": {
+            "name": "Téo",
+            "product": "",
+            "line": "",
+            "date": "",
+            "edition_line": ""
+          }
+        }
+      },
+      "block_order": [
+        "portrait_sunday",
+        "portrait_gjoob",
+        "portrait_dan_d",
+        "portrait_virgil",
+        "portrait_teo"
+      ],
+      "settings": {
+        "eyebrow": "One a week",
+        "heading": "Portraits of an Urban Jungle",
+        "intro": "<p>Five residents of the neighbourhood. One portrait goes up each week, in an edition of 20.</p>",
+        "ty_eyebrow_font": "body",
+        "ty_eyebrow_size": 12,
+        "ty_eyebrow_weight": 500,
+        "ty_eyebrow_lh": 120,
+        "ty_eyebrow_tracking": 80,
+        "ty_eyebrow_case": "uppercase",
+        "ty_heading_font": "arsenica-variable-italic",
+        "ty_heading_size": 48,
+        "ty_heading_weight": 300,
+        "ty_heading_lh": 105,
+        "ty_heading_tracking": -5,
+        "ty_heading_case": "none",
+        "ty_intro_font": "body",
+        "ty_intro_size": 14,
+        "ty_intro_weight": 300,
+        "ty_intro_lh": 140,
+        "ty_intro_tracking": 0,
+        "ty_intro_case": "none",
+        "start_date": "",
+        "every_days": 7,
+        "drop_time": "10:00",
+        "teaser": "blur",
+        "number_label": "No.",
+        "next_label": "Drops",
+        "tba_label": "Date to come",
+        "out_label": "Out now",
+        "past_label": "Dropped",
+        "soldout_label": "Sold out",
+        "edition_line": "Edition of 20. Signed, numbered and dated by hand.",
+        "show_price": true,
+        "button_label": "Shop the portrait",
+        "signup_label": "Get the drop email",
+        "signup_link": "#wd-signup",
+        "series_color": "#5e5a53",
+        "tint": 12,
+        "image_shape": "tall",
+        "card_padding": 32,
+        "card_gap": 24,
+        "mat": 20,
+        "ty_number_font": "body",
+        "ty_number_size": 11,
+        "ty_number_weight": 500,
+        "ty_number_lh": 120,
+        "ty_number_tracking": 100,
+        "ty_number_case": "uppercase",
+        "ty_name_font": "arsenica-text",
+        "ty_name_size": 36,
+        "ty_name_weight": 400,
+        "ty_name_lh": 110,
+        "ty_name_tracking": 0,
+        "ty_name_case": "none",
+        "ty_small_name_font": "arsenica-text",
+        "ty_small_name_size": 18,
+        "ty_small_name_weight": 400,
+        "ty_small_name_lh": 120,
+        "ty_small_name_tracking": 0,
+        "ty_small_name_case": "none",
+        "ty_line_font": "arsenica-variable-italic",
+        "ty_line_size": 16,
+        "ty_line_weight": 300,
+        "ty_line_lh": 140,
+        "ty_line_tracking": 0,
+        "ty_line_case": "none",
+        "ty_status_font": "body",
+        "ty_status_size": 12,
+        "ty_status_weight": 500,
+        "ty_status_lh": 120,
+        "ty_status_tracking": 60,
+        "ty_status_case": "uppercase",
+        "ty_edition_font": "body",
+        "ty_edition_size": 12,
+        "ty_edition_weight": 500,
+        "ty_edition_lh": 120,
+        "ty_edition_tracking": 60,
+        "ty_edition_case": "uppercase",
+        "ty_price_font": "body",
+        "ty_price_size": 14,
+        "ty_price_weight": 600,
+        "ty_price_lh": 130,
+        "ty_price_tracking": 35,
+        "ty_price_case": "none",
+        "ty_signup_font": "body",
+        "ty_signup_size": 14,
+        "ty_signup_weight": 300,
+        "ty_signup_lh": 140,
+        "ty_signup_tracking": 0,
+        "ty_signup_case": "none",
+        "space_top": 48,
+        "space_bottom": 80
+      }
+    },
+    "wd_studio_note": {
+      "type": "wd-studio-note",
+      "settings": {
+        "image": "shopify://shop_images/MS_HeadShot_FINAL_copy.png",
+        "image_width": 30,
+        "image_side": "left",
+        "eyebrow": "A note from the studio",
+        "heading": "FIRST LOOK",
+        "text": "<p>I’ve just landed on the West Coast after a lifetime in the Northeast. New work comes out in small batches, a few pieces at a time.</p><p>Sign up and you’ll see each edition before it goes public.</p>",
+        "ty_eyebrow_font": "body",
+        "ty_eyebrow_size": 12,
+        "ty_eyebrow_weight": 500,
+        "ty_eyebrow_lh": 120,
+        "ty_eyebrow_tracking": 60,
+        "ty_eyebrow_case": "uppercase",
+        "ty_heading_font": "arsenica-variable",
+        "ty_heading_size": 40,
+        "ty_heading_weight": 300,
+        "ty_heading_lh": 110,
+        "ty_heading_tracking": 0,
+        "ty_heading_case": "none",
+        "ty_text_font": "body",
+        "ty_text_size": 14,
+        "ty_text_weight": 300,
+        "ty_text_lh": 140,
+        "ty_text_tracking": 0,
+        "ty_text_case": "none",
+        "show_signup": true,
+        "signup_button": "Sign me up",
+        "signup_success": "You're on the list. Thanks.",
+        "signup_tags": "newsletter, first-look",
+        "link_label": "Follow the studio on Instagram",
+        "link": "https://www.instagram.com/wallydomoart",
+        "ty_link_font": "body",
+        "ty_link_size": 14,
+        "ty_link_weight": 300,
+        "ty_link_lh": 140,
+        "ty_link_tracking": 0,
+        "ty_link_case": "none",
+        "space_top": 64,
+        "space_bottom": 80
       }
     },
     "product_list_fa6P9H": {
@@ -217,6 +610,14 @@
               },
               "blocks": {}
             },
+            "wd_product_type": {
+              "type": "custom-liquid",
+              "name": "Product type",
+              "settings": {
+                "custom_liquid": "{%- if closest.product.type != blank -%}<p class=\"wd-type-eyebrow\">{{ closest.product.type | escape }}</p>{%- endif -%}"
+              },
+              "blocks": {}
+            },
             "product_title_YXxMTj": {
               "type": "product-title",
               "name": "t:names.product_title",
@@ -264,14 +665,6 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
-            },
-            "wd_product_type": {
-              "type": "custom-liquid",
-              "name": "Product type",
-              "settings": {
-                "custom_liquid": "{%- if closest.product.type != blank -%}<p class=\"wd-type-eyebrow\">{{ closest.product.type | escape }}</p>{%- endif -%}"
-              },
-              "blocks": {}
             }
           },
           "block_order": [
@@ -282,6 +675,7 @@
           ]
         }
       },
+      "disabled": true,
       "name": "t:names.product_list",
       "settings": {
         "collection": "all",
@@ -301,209 +695,7 @@
         "background_color": "{{ settings.color_palette.background }}",
         "padding-block-start": 48,
         "padding-block-end": 48
-      },
-      "disabled": true
-    },
-    "wd_studio_banner": {
-      "type": "wd-studio-banner",
-      "settings": {
-        "centre": "wd26",
-        "background": "#bdc0cd",
-        "ink": "#000000",
-        "grain": 56,
-        "d_height": 130,
-        "d_layout": "stacked",
-        "d_lock_width": 270,
-        "d_lock_y": 0,
-        "d_pig_size": 72,
-        "d_pig_dist": 310,
-        "d_pig_y": 0,
-        "d_cloud": 115,
-        "m_height": 120,
-        "m_layout": "stacked",
-        "m_lock_width": 170,
-        "m_lock_y": 0,
-        "m_pig_size": 56,
-        "m_pig_spread": 85,
-        "m_pig_y": 0,
-        "m_cloud": 65,
-        "pig_light": "#f7e4ec",
-        "pig_shade": "#cfa6bf",
-        "intro_turns": 2,
-        "pig_rest": 4,
-        "secs_per_turn": 5,
-        "hover_boost": 60,
-        "clouds": true,
-        "cloud_count": 4,
-        "cloud_motion": "stepped",
-        "cloud_fps": 8,
-        "cloud_depth": 60,
-        "cloud_secs": 100,
-        "cloud_tint_1": "#ffeeed",
-        "cloud_tint_2": "#dbccd8",
-        "cloud_tint_3": "#fff7e0",
-        "cloud_tint_4": "#ffeecc",
-        "day_night": false,
-        "day_secs": 153,
-        "spin_boost": 25,
-        "sky_night": "#663367",
-        "sky_dusk": "#fda79c",
-        "ink_night": "#d8ebfe",
-        "star_count": 14,
-        "star_light": "#fff8e7",
-        "star_dark": "#8a97c4",
-        "cs_heading": "Coming soon",
-        "cs_font": "arsenica-variable",
-        "cs_size": 52,
-        "cs_weight": 380,
-        "cs_italic": false,
-        "cs_line_height": 100,
-        "cs_tracking": 0,
-        "cs_case": "none",
-        "cs_gap": 14,
-        "cs_line": "Get on the list and you'll see it first.",
-        "cs_button": "Sign me up",
-        "cs_success": "You're on the list. Thanks.",
-        "cs_width": 360,
-        "cs_top": 30,
-        "cs_bottom": 30,
-        "fill_height": false
       }
-    },
-    "wd_editions": {
-      "type": "wd-editions",
-      "settings": {
-        "heading": "Signed prints, in small numbers.",
-        "intro": "<p>Started in Brooklyn. Now made in a studio on the West Coast. Every print below is signed, numbered and dated by hand.</p>",
-        "series_color": "#8A5A2B",
-        "tint": 12,
-        "columns": "2",
-        "card_padding": 32,
-        "card_gap": 32,
-        "mat": 20,
-        "image_shape": "portrait",
-        "edition_line": "Edition of 15. Signed, numbered and dated by hand.",
-        "show_price": false,
-        "button_label": "Shop the print",
-        "space_top": 48,
-        "space_bottom": 80,
-        "series_line": "Common Species",
-        "coming_title": "In the studio",
-        "coming_line": "Coming soon",
-        "coming_blur": 0
-      },
-      "blocks": {
-        "print_pigeon": {
-          "type": "print",
-          "settings": {
-            "product": "pigeon-gone-west-studio-print",
-            "title": "Pigeon Gone West",
-            "note": "Summer 2026, before the drive west.",
-            "edition_line": "",
-            "status": "available"
-          }
-        },
-        "print_brooklyn": {
-          "type": "print",
-          "settings": {
-            "product": "we-lived-in-brooklyn-print",
-            "title": "We Lived in Brooklyn, Baby",
-            "note": "",
-            "edition_line": "",
-            "status": "available"
-          }
-        },
-        "plate_03": {
-          "type": "print",
-          "settings": {
-            "status": "coming"
-          }
-        },
-        "plate_04": {
-          "type": "print",
-          "settings": {
-            "status": "coming"
-          }
-        }
-      },
-      "block_order": [
-        "print_pigeon",
-        "print_brooklyn",
-        "plate_03",
-        "plate_04"
-      ]
-    },
-    "wd_studio_note": {
-      "type": "wd-studio-note",
-      "settings": {
-        "image": "shopify://shop_images/MS_HeadShot_FINAL_copy.png",
-        "image_width": 30,
-        "image_side": "left",
-        "eyebrow": "A note from the studio",
-        "heading": "FIRST LOOK",
-        "text": "<p>I’ve just landed on the West Coast after a lifetime in the Northeast. New work comes out in small batches, a few pieces at a time.</p><p>Sign up and you’ll see each edition before it goes public.</p>",
-        "show_signup": true,
-        "signup_button": "Sign me up",
-        "signup_success": "You're on the list. Thanks.",
-        "signup_tags": "newsletter, first-look",
-        "link_label": "Follow the studio on Instagram",
-        "link": "https://www.instagram.com/wallydomoart",
-        "space_top": 64,
-        "space_bottom": 80
-      }
-    },
-    "wd_drop": {
-      "type": "wd-drop",
-      "settings": {
-        "eyebrow": "One a week",
-        "heading": "Portraits of an Urban Jungle",
-        "intro": "<p>Five residents of the neighbourhood. One portrait goes up each week, in an edition of 20.</p>",
-        "start_date": "",
-        "every_days": 7,
-        "drop_time": "10:00",
-        "teaser": "blur",
-        "series_color": "#5E5A53",
-        "tint": 12
-      },
-      "blocks": {
-        "portrait_sunday": {
-          "type": "portrait",
-          "settings": {
-            "name": "Sunday"
-          }
-        },
-        "portrait_gjoob": {
-          "type": "portrait",
-          "settings": {
-            "name": "GJoob"
-          }
-        },
-        "portrait_dan_d": {
-          "type": "portrait",
-          "settings": {
-            "name": "Dan D."
-          }
-        },
-        "portrait_virgil": {
-          "type": "portrait",
-          "settings": {
-            "name": "Virgil"
-          }
-        },
-        "portrait_teo": {
-          "type": "portrait",
-          "settings": {
-            "name": "Téo"
-          }
-        }
-      },
-      "block_order": [
-        "portrait_sunday",
-        "portrait_gjoob",
-        "portrait_dan_d",
-        "portrait_virgil",
-        "portrait_teo"
-      ]
     }
   },
   "order": [
