@@ -1,6 +1,116 @@
+{% doc %}
+  @prompt
+    breadcrumb, i want to be able to pad and change the color of this band 
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-breadcrumb-{{ ai_gen_id }} {
+    display: block;
+    box-sizing: border-box;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    padding: {{ block.settings.padding_vertical }}px {{ block.settings.padding_horizontal }}px;
+    background-color: {{ block.settings.band_background }};
+    color: {{ block.settings.text_color }};
+    font-family: inherit;
+    font-size: {{ block.settings.font_size }}px;
+    line-height: 1.5;
+  }
+
+  .ai-breadcrumb-{{ ai_gen_id }} ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ai-breadcrumb-{{ ai_gen_id }} li {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ai-breadcrumb-{{ ai_gen_id }} a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .ai-breadcrumb-{{ ai_gen_id }} a:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  .ai-breadcrumb-{{ ai_gen_id }} a:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+  }
+
+  .ai-breadcrumb-{{ ai_gen_id }}__separator {
+    opacity: 0.7;
+    user-select: none;
+  }
+
+  .ai-breadcrumb-{{ ai_gen_id }} [aria-current='page'] {
+    font-weight: 600;
+  }
+{% endstyle %}
+
+<nav class="ai-breadcrumb-{{ ai_gen_id }}" aria-label="Breadcrumb" {{ block.shopify_attributes }}>
+  <ol>
+    <li>
+      <a href="{{ routes.root_url }}">{{ block.settings.home_label | escape }}</a>
+      <span class="ai-breadcrumb-{{ ai_gen_id }}__separator" aria-hidden="true">{{ block.settings.separator | escape }}</span>
+    </li>
+    {% if template.name == 'product' and product != blank %}
+      {% if collection != blank %}
+        <li>
+          <a href="{{ collection.url }}">{{ collection.title | escape }}</a>
+          <span class="ai-breadcrumb-{{ ai_gen_id }}__separator" aria-hidden="true">{{ block.settings.separator | escape }}</span>
+        </li>
+      {% endif %}
+      <li aria-current="page">{{ product.title | escape }}</li>
+    {% elsif template.name == 'collection' and collection != blank %}
+      <li aria-current="page">{{ collection.title | escape }}</li>
+    {% elsif template.name == 'article' and article != blank %}
+      {% if blog != blank %}
+        <li>
+          <a href="{{ blog.url }}">{{ blog.title | escape }}</a>
+          <span class="ai-breadcrumb-{{ ai_gen_id }}__separator" aria-hidden="true">{{ block.settings.separator | escape }}</span>
+        </li>
+      {% endif %}
+      <li aria-current="page">{{ article.title | escape }}</li>
+    {% elsif template.name == 'blog' and blog != blank %}
+      <li aria-current="page">{{ blog.title | escape }}</li>
+    {% elsif template.name == 'page' and page != blank %}
+      <li aria-current="page">{{ page.title | escape }}</li>
+    {% elsif template.name == 'search' %}
+      <li aria-current="page">{{ block.settings.search_label | escape }}</li>
+    {% else %}
+      <li aria-current="page">{{ page_title | escape }}</li>
+    {% endif %}
+  </ol>
+</nav>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Breadcrumb navigation",
+  "settings": [
+    { "type": "text", "id": "home_label", "label": "Home label", "default": "Home" },
+    { "type": "text", "id": "search_label", "label": "Search label", "default": "Search results" },
+    { "type": "text", "id": "separator", "label": "Separator", "default": "/" },
+    { "type": "color", "id": "band_background", "label": "Band background", "default": "#FAFAF7" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#1A1A1A" },
+    { "type": "range", "id": "padding_vertical", "label": "Vertical padding", "min": 0, "max": 40, "step": 2, "unit": "px", "default": 12 },
+    { "type": "range", "id": "padding_horizontal", "label": "Horizontal padding", "min": 0, "max": 60, "step": 5, "unit": "px", "default": 15 },
+    { "type": "range", "id": "font_size", "label": "Font size", "min": 10, "max": 20, "step": 1, "unit": "px", "default": 14 },
+    { "type": "range", "id": "desktop_width_percent", "label": "Desktop width", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 100 }
+  ],
+  "presets": [{ "name": "Breadcrumb navigation" }],
+  "tag": null,
+  "class": "breadcrumb-navigation"
+}
 {% endschema %}
