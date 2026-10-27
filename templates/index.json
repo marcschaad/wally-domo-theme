@@ -11,6 +11,7 @@
   "sections": {
     "wd_studio_banner": {
       "type": "wd-studio-banner",
+      "disabled": true,
       "settings": {
         "centre": "wd26",
         "background": "#e4e3da",
